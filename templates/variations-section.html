@@ -1,0 +1,12 @@
+<h3>Variations</h3>
+<ul>
+  {{#each data.variations as |variation key|}}
+  <li class="item flexrow list-item" data-item-id="{{variation._id}}" data-item-type="variations">
+    <span class="competence-label"><a class="variation-name">{{variation.name}}</a></span>
+    <div class="item-controls">
+      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+    </div>
+  </li>                  
+  {{/each}}
+</ul>          
+</select> 

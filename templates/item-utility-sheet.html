@@ -1,0 +1,53 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+
+          {{> "systems/fvtt-fragged-empire/templates/variations-section.html"}}
+
+          <h3> Keywords</h3>
+          <div class="grid grid-3col">
+            {{#each keywords as |keywordArray key|}}
+            <div>
+              <ul>
+                {{#each keywordArray as |keyword key|}}
+                <li class="item-list item flexrow stack-left">
+                  <input type="checkbox" name="data.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
+                  <label class="generic-label keyword-label packed-left">{{keyword.label}}</label>
+                  {{#if keyword.X}}
+                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
+                  {{/if}}
+                  {{#if keyword.Y}}
+                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
+                  {{/if}}
+                </li>
+                {{/each}}
+              </ul>
+            </div>
+            {{/each}}
+          </div>
+
+          <h3>Stats</h3>
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.statstotal isfinal=true title="Final stats" header=true}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.stats  isbase=true title="Utility stats"}}
+          {{#each data.variations as |variation key|}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=variation.data.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{/each}}
+          {{#each data.modifications as |modification key|}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=modification.data.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{/each}}
+
+          <label class="generic-label">Description</label>
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+    </section>
+</form>

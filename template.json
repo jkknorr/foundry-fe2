@@ -1,0 +1,1402 @@
+{
+"Actor": {
+  "types": ["character", "spacecraft", "npc"],
+  "templates": {
+    "biodata": {
+      "biodata": {
+        "name": "",
+        "age": 0,
+        "size": 0,
+        "weight": 0,
+        "description": "",
+        "notes": "",
+        "gmnotes": ""
+      }
+    },
+    "core": {
+      "subactors": [],
+      "level": {
+        "value": 0,
+        "traitId": ""
+      },
+      "resources": {
+        "value":0,
+        "alloted": 0,
+        "bonus": 0,
+        "total": 0,
+        "traitId": ""
+      },
+      "influence": {
+        "value":0,
+        "bonus": 0,
+        "total": 0,
+        "traitId": ""
+      },
+      "sparetimepoints": {
+        "value": 0
+      },
+      "attributes": {
+        "strength":{ 
+          "label": "Strength",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "reflexes":{ 
+          "label": "Reflexes",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "movement":{ 
+          "label": "Movement",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "focus":{ 
+          "label": "Focus",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "intelligence":{ 
+          "label": "Intelligence",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "perception":{ 
+          "label": "Perception",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        }
+      },
+      "fate": {
+        "value": 0,
+        "max": 0,
+        "traitId": ""
+      },
+      "defensebonus": {
+        "defense": 0,
+        "total": 0,
+        "vsimpair": 0,
+        "vsimpairbonus": 0,
+        "vspsionic": 0,
+        "vspsionicbonus": 0,
+        "vsstealth": 0,
+        "ally": 0,
+        "cover": "nocover"
+      },
+      "armourbonus": {
+        "armour": 0,
+        "total": 0,
+        "vsenergy": 0,
+        "vsslow": 0,
+        "zeroendurance": 0
+      },
+      "endurance": {
+        "endurancebonus": 0,
+        "value": 0,
+        "max": 0,
+        "recoverybonus": 0,  
+        "recovery": 0  
+      },
+      "stealthbonus": {
+        "stealth": 0
+      },
+      "equipmentslots": {
+        "bonus": 0,
+        "current": 0
+      }
+    },
+    "npc": {
+      "npctype": "",
+      "description": "",
+      "spec": {
+        "resources": {
+          "value": 0,
+          "max": 0,
+          "label": "Resources"
+        },
+        "bodies": {
+          "value": 0,
+          "max": 0,
+          "label": "Bodies"
+        },
+        "slots": {
+          "value": 0,
+          "max": 0,
+          "label": "Slots"
+        },
+        "avgplayerres": {
+          "value": 0,
+          "max": 0,
+          "label": "Average Player Resource"
+        }
+      },
+      "fight": {        
+        "combatorder": {
+          "value": 0,
+          "label": "Combat order"
+        },        
+        "lockon" : {
+          "value": 0,
+          "label": "Lock On"
+        },
+        "movement": {
+          "value": 0,
+          "label": "Movement"
+        },
+        "armour": {
+          "value": 0,
+          "label": "Armour"
+        },
+        "defence": {
+          "value": 0,
+          "label": "Defence",
+          "derivated": {
+            "vsstealth": {
+              "value": 0,
+              "label": "vs Stealth"
+            },
+            "vsimpair": {
+              "value": 0,
+              "label": "vs Impair"
+            }
+          }
+        }
+      },
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "enddmg": {
+          "value": "",
+          "label": "Endurance Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        }
+      }
+    },
+    "spacecraftcore": {
+      "size": {
+        "label": "Size",
+        "value": 3
+      },
+      "fightActorId": "",
+      "description": "",
+      "notes": "",
+      "influence": 0,
+      "build": "",
+      "attributes": {
+        "hull":{ 
+          "label": "Hull",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "engines":{ 
+          "label": "Engines",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "crew":{ 
+          "label": "Crew",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "power":{ 
+          "label": "Power",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "cpu":{ 
+          "label": "CPU",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "sensors":{ 
+          "label": "Sensors",
+          "value": 0,
+          "current": 0,
+          "traitId": ""
+        },
+        "velocity": {
+          "value": 0,
+          "current": 0,
+          "label": "Velocity",
+          "traitId": ""
+        }
+      },
+      "stats": {
+        "cargo": { 
+          "label": "Cargo", 
+          "value": 0,
+          "bonus": 0,
+          "max": 0
+        },
+        "secretcargo": { 
+          "label": "Secret Cargo", 
+          "value": 0
+        },
+        "weaponsslot": { 
+          "label": "Weapons slot", 
+          "value": 0,
+          "bonus": 0,
+          "max": 0
+        },
+        "resupply": { 
+          "label": "Resupply", 
+          "value": 0,
+          "max": 0,
+          "bonus": 0
+        }
+      },
+      "fight": {
+        "defence": { 
+          "label": "Defence", 
+          "total": 0,
+          "bonus": 0,
+          "derivated": { 
+            "vsordinance": {
+              "label": "Vs Ordinance",
+              "bonus": 0,
+              "total": 0
+            },
+            "vsboarding": {
+              "label": "Vs Boarding",
+              "bonus": 0,
+              "total": 0
+            }
+          }
+        },
+        "armour": { 
+          "label": "Armour", 
+          "total": 0,
+          "bonus": 0,
+          "derivated": { 
+            "vsboarding": {
+              "label": "Vs Boarding",
+              "bonus": 0,
+              "total": 0
+            },
+            "at0shield": {
+              "label": "At 0 Shield",
+              "bonus": 0,
+              "total": 0
+            }
+          }
+        },
+        "boarded": { 
+          "label": "Boarded", 
+          "valueonly": true,
+          "value": 0
+        },
+        "launchedbodies": { 
+          "label": "Launched Bodies", 
+          "valueonly": true,
+          "value": 0
+        },
+        "bodies": { 
+          "label": "Bodies", 
+          "valueonly": true,
+          "value": 0
+        },
+        "shield": { 
+          "label": "Shield", 
+          "total": 0,
+          "bonus": 0,
+          "derivated": { 
+            "regen": {
+              "label": "Regen",
+              "valueonly": true,
+              "value": 0
+            }
+          }
+        }
+      }
+    }  
+  },
+  "character": {
+    "templates": [ "biodata", "core" ]
+  },
+  "spacecraft": {
+    "templates": [ "spacecraftcore" ]
+  },
+  "npc": {
+    "templates": [ "npc" ]
+  }
+},
+"Item": {
+    "types": [ "race", "skill", "perk", "trait", "equipment", "weapon", "race", "complication", "tradegood", "research", "language", "spacecraftperk", "outfit", "utility", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecrafttrait", "spacecraftweapon", 
+    "spacecraftweaponvariation", "spacecraftweaponmodification", "stronghit" ],
+    "race": {
+      "requirements": "",
+      "benefits": "",
+      "disadvantages": ""
+    },
+    "stronghit": {
+      "requirements": "",
+      "description": ""
+    },
+    "language": {
+    },
+    "tradegood": {
+      "tradebox": 0,
+      "description": ""
+    },
+    "research": {
+      "researchunit": 0,
+      "research12": "none",
+      "research16": "none",
+      "description": ""
+    },
+    "skill": {
+      "type": "",
+      "trained": false,
+      "bonus": 0,
+      "toolkit": false,
+      "toolbox": false,
+      "workshop": false,
+      "dedicatedworkshop": false,
+      "description": "",
+      "traitId": "",
+      "traits": []
+    },
+    "perk": {
+      "type": "",
+      "influence": ""
+    },
+    "spacecraftperk": {
+      "type": "",
+      "spaceshipsize": ""
+    },
+    "complication": {
+      "type": "",
+      "influence": ""
+    },
+    "trait": {
+      "requirements": "",
+      "type": "",
+      "subtype": "",
+      "benefits": "",
+      "disadvantages": ""
+    },
+    "spacecrafttrait": {
+      "requirements": "",
+      "type": "",
+      "benefits": "",
+      "disadvantages": ""
+    },
+    "modification": {
+      "type": "",
+      "weapontype": "",
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "enddmg": {
+          "value": "",
+          "label": "Endurance Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "description": ""
+    },
+    "variation": {
+      "type": "",
+      "weapontype": "",
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "enddmg": {
+          "value": "",
+          "label": "Endurance Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "description": ""
+    },
+    "weapon": {
+      "type": "",
+      "variations": [],
+      "modifications": [],
+      "equipped": false,
+      "defaultskill": "",
+      "keywords": {
+        "arcoffire": {
+          "label": "Arc of Fire",
+          "flag": false,
+          "X":"0"
+        },
+        "attribute": {
+          "label": "Attribute 1d3",
+          "flag": false,
+          "X": "0"
+        },
+        "biotech" :{ 
+          "label": "Bio Tech",
+          "flag": false
+        },
+        "blunt" :{ 
+          "label": "Blunt",
+          "flag": false
+        },
+        "burn" :{ 
+          "label": "Burn",
+          "flag": false
+        },
+        "costspare" :{ 
+          "label": "Cost Spare TP",
+          "flag": false,
+          "X": "0"
+        },
+        "electrogravity" :{ 
+          "label": "Electro-Gravity",
+          "flag": false
+        },
+        "energy" :{ 
+          "label": "Energy",
+          "flag": false
+        },
+        "foronesession" :{ 
+          "label": "For 1 Session Only",
+          "flag": false
+        },
+        "gauntlet" :{ 
+          "label": "Gauntlet",
+          "flag": false
+        },
+        "jam" :{ 
+          "label": "Jam",
+          "flag": false,
+          "X": "0",
+          "Y": "0"
+        },
+        "lockon" :{ 
+          "label": "Lock On",
+          "flag": false,
+          "X": "0"
+        },
+        "lose" :{ 
+          "label": "Lose",
+          "flag": false,
+          "X": "0"
+        },
+        "lowtech" :{ 
+          "label": "Low Tech",
+          "flag": false
+        },
+        "modroll" :{ 
+          "label": "Mod. Rolls",
+          "flag": false,
+          "X": "0"
+        },
+        "natural" :{ 
+          "label": "Natural",
+          "flag": false
+        },
+        "norvarmod" :{ 
+          "label": "No Var. or Mod.",
+          "flag": false
+        },
+        "optionnal" :{ 
+          "label": "Optional",
+          "flag": false
+        },
+        "only" :{ 
+          "label": "Only",
+          "flag": false,
+          "X": "0"
+        },
+        "pen" :{ 
+          "label": "Pen",
+          "flag": false,
+          "X": "0",
+          "labelY": "Min",
+          "Y": "0"
+        },
+        "prototype" :{ 
+          "label": "Prototype",
+          "flag": false
+        },
+        "requires" :{ 
+          "label": "Requires",
+          "flag": false,
+          "X": "0"
+        },
+        "robot" :{ 
+          "label": "Robot",
+          "flag": false
+        },
+        "setup" :{ 
+          "label": "Setup ",
+          "flag": false,
+          "X": "0",
+          "labelY": "Pull Down",
+          "Y": "0"
+        },
+        "slow" :{ 
+          "label": "Slow",
+          "flag": false
+        },
+        "small" :{ 
+          "label": "Small",
+          "flag": false
+        },
+        "splash" :{ 
+          "label": "Splash",
+          "flag": false,
+          "X": "0"
+        },
+        "stealth" :{ 
+          "label": "Stealth",
+          "flag": false,
+          "X": "0"
+        },
+        "stronghit" :{ 
+          "label": "Strong Hit",
+          "flag": false,
+          "X": "0",
+          "labelY": "-",
+          "Y": "0"
+        },
+        "worksinliquid" :{ 
+          "label": "Works in Liquid",
+          "flag": false
+        },
+        "novoid": {
+          "label": "Not in the void",
+          "flag": false
+        }
+      },
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "enddmg": {
+          "value": "",
+          "label": "Endurance Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "statstotal": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "enddmg": {
+          "value": "",
+          "label": "Endurance Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },      
+      "description": ""
+    },
+    "variationoutfit": {
+      "stats": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "description": ""
+    },
+    "modificationoutfit": {
+      "stats": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "description": ""
+    },
+    "outfit": {
+      "variations": [],
+      "modifications": [],
+      "stats": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "statstotal": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      }, 
+      "keywords":  {
+        "biotech": {
+          "label": "Bio Tech"
+        },
+        "commshort": {
+          "label": "Communications Short"
+        },
+        "commlong": {
+          "label": "Communications Long"
+        },
+        "costspare": {
+          "label": "Cost Spare Time Point",
+          "X": "0"
+        },
+        "envgear": {
+          "label": "Environmental Gear",
+          "X": "0"
+        },
+        "flight": {
+          "label": "Flight"
+        },
+        "gauntlet": {
+          "label": "Gauntlet"
+        },
+        "modroll": {
+          "label": "Modification Rolls",
+          "X": "0"
+        },
+        "setup": {
+          "label": "Set Up, Pull Down",
+          "X": "0",
+          "Y": "0"
+        },
+        "shield": {
+          "label": "Shield"
+        }
+      },
+      "equipped": false,
+      "description": ""
+    },
+    "utility": {
+      "stats": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "statstotal": {
+        "armour": {
+          "value": "",
+          "label": "Armour"
+        },
+        "defence": {
+          "value": "",
+          "label": "Defence"
+        },
+        "endurance": {
+          "value": "",
+          "label": "Endurance"
+        },
+        "cover": {
+          "value": "",
+          "label": "Cover"
+        },
+        "frontcover": {
+          "value": "",
+          "label": "Front Cover"
+        },
+        "equipmentslots": {
+          "value": "",
+          "label": "Equipped Equipment Slots"
+        },
+        "weight": {
+          "value": "",
+          "label": "Weight"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "keywords":  {
+        "biotech": {
+          "label": "Bio Tech"
+        },
+        "commshort": {
+          "label": "Communications Short"
+        },
+        "commlong": {
+          "label": "Communications Long"
+        },
+        "costspare": {
+          "label": "Cost Spare Time Point",
+          "X": "0"
+        },
+        "envgear": {
+          "label": "Environmental Gear",
+          "X": "0"
+        },
+        "flight": {
+          "label": "Environmental Gear"
+        },
+        "gauntlet": {
+          "label": "Gauntlet"
+        },
+        "modroll": {
+          "label": "Modification Rolls",
+          "X": "0"
+        },
+        "setup": {
+          "label": "Set Up, Pull Down",
+          "X": "0",
+          "Y": "0"
+        },
+        "shield": {
+          "label": "Shield"
+        }
+      },
+      "equipped": false,
+      "description": ""
+    },
+    "equipment": {
+      "equipped": false,
+      "weight": 0,
+      "cost": 0,
+      "description": ""
+    },
+    "spacecraftweapon": {
+      "type": "",
+      "variations": [],
+      "modifications": [],
+      "equipped": false,
+      "keywords": {
+        "arcoffire": {
+          "label": "Arc of Fire",
+          "flag": false,
+          "X":"0"
+        },
+        "attribute": {
+          "label": "Attribute 1d3",
+          "flag": false,
+          "X": "0"
+        },
+        "biotech" :{ 
+          "label": "Bio Tech",
+          "flag": false
+        },
+        "blunt" :{ 
+          "label": "Blunt",
+          "flag": false
+        },
+        "burn" :{ 
+          "label": "Burn",
+          "flag": false
+        },
+        "costspare" :{ 
+          "label": "Cost Spare Time Point",
+          "flag": false,
+          "X": "0"
+        },
+        "electrogravity" :{ 
+          "label": "Electro-Gravity",
+          "flag": false
+        },
+        "energy" :{ 
+          "label": "Energy",
+          "flag": false
+        },
+        "foronesession" :{ 
+          "label": "For One Session Only",
+          "flag": false
+        },
+        "gauntlet" :{ 
+          "label": "Gauntlet",
+          "flag": false
+        },
+        "jam" :{ 
+          "label": "Jam",
+          "flag": false,
+          "X": "0",
+          "Y": "0"
+        },
+        "lockon" :{ 
+          "label": "Lock On",
+          "flag": false,
+          "X": "0"
+        },
+        "lose" :{ 
+          "label": "Lose",
+          "flag": false,
+          "X": "0"
+        },
+        "lowtech" :{ 
+          "label": "Low Tech",
+          "flag": false
+        },
+        "modroll" :{ 
+          "label": "Modification Rolls",
+          "flag": false,
+          "X": "0"
+        },
+        "natural" :{ 
+          "label": "Natural",
+          "flag": false
+        },
+        "norvarmod" :{ 
+          "label": "No Variation or Modifications",
+          "flag": false
+        },
+        "optionnal" :{ 
+          "label": "Optional",
+          "flag": false
+        },
+        "only" :{ 
+          "label": "Only",
+          "flag": false,
+          "X": "0"
+        },
+        "pen" :{ 
+          "label": "Pen",
+          "flag": false,
+          "X": "0",
+          "labelY": "Min",
+          "Y": "0"
+        },
+        "prototype" :{ 
+          "label": "Prototype",
+          "flag": false
+        },
+        "requires" :{ 
+          "label": "Requires",
+          "flag": false,
+          "X": "0"
+        },
+        "robot" :{ 
+          "label": "Robot",
+          "flag": false
+        },
+        "setup" :{ 
+          "label": "Setup ",
+          "flag": false,
+          "X": "0",
+          "labelY": "Pull Down",
+          "Y": "0"
+        },
+        "slow" :{ 
+          "label": "Slow",
+          "flag": false
+        },
+        "small" :{ 
+          "label": "Small",
+          "flag": false
+        },
+        "splash" :{ 
+          "label": "Splash",
+          "flag": false,
+          "X": "0"
+        },
+        "stealth" :{ 
+          "label": "Stealth",
+          "flag": false,
+          "X": "0"
+        },
+        "stronghit" :{ 
+          "label": "Strong Hit",
+          "flag": false,
+          "X": "0",
+          "labelY": "-",
+          "Y": "0"
+        },
+        "worksinliquid" :{ 
+          "label": "Works in Liquid",
+          "flag": false
+        },
+        "novoid": {
+          "label": "Does not work in the void",
+          "flag": false
+        }
+      },
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "shielddmg": {
+          "value": "",
+          "label": "Shield Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "mount": {
+          "value": "",
+          "label": "Mount"
+        },
+        "weapontype": {
+          "value": "",
+          "label": "Weapon Type"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }
+      },
+      "statstotal": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "shielddmg": {
+          "value": "",
+          "label": "Shield Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "mount": {
+          "value": "",
+          "label": "Mount"
+        },
+        "weapontype": {
+          "value": "",
+          "label": "Weapon Type"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }        
+      },
+      "description": ""
+    },
+    "spacecraftweaponmodification": {
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "shielddmg": {
+          "value": "",
+          "label": "Shield Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "mount": {
+          "value": "",
+          "label": "Mount"
+        },
+        "weapontype": {
+          "value": "",
+          "label": "Weapon Type"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }        
+      },
+      "description": ""
+    },
+    "spacecraftweaponvariation": {
+      "stats": {
+        "hit": {
+          "value": "",
+          "label": "Hit Bonus"
+        },
+        "shielddmg": {
+          "value": "",
+          "label": "Shield Damage"
+        },
+        "crit": {
+          "value": "",
+          "label": "Critical Damage"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },
+        "clips": {
+          "value": "",
+          "label": "Clips"
+        },
+        "ammo": {
+          "value": "",
+          "label": "Ammunition"
+        },
+        "load": {
+          "value": "",
+          "label": "Load Time"
+        },
+        "rof": {
+          "value": "",
+          "label": "Rate of Fire"
+        },        
+        "mount": {
+          "value": "",
+          "label": "Mount"
+        },
+        "weapontype": {
+          "value": "",
+          "label": "Weapon Type"
+        },
+        "cost": {
+          "value": "",
+          "label": "Cost"
+        }        
+      },
+      "description": ""
+    }
+  }
+}

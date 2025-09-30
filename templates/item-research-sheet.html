@@ -1,0 +1,41 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+          <ul>
+            <li class="flexrow"><label class="generic-label">Research Unit</label>
+              <input type="text" name="data.researchunit" value="{{data.researchunit}}" data-dtype="Number"/>
+            </li>
+            <li class="flexrow"><label class="generic-label">Gain at 12</label>
+              <select class="competence-base flexrow" type="text" name="data.research12" value="{{data.research12}}" data-dtype="String">
+                {{#select data.research12}}
+                <option value="none">None</option>
+                <option value="secret">Secret Knowledge</option>
+                <option value="perk">Minor Perk</option>
+                {{/select}}
+              </select> 
+            </li>
+            <li class="flexrow"><label class="generic-label">Gain at 16</label>
+              <select class="competence-base flexrow" type="text" name="data.research16" value="{{data.research16}}" data-dtype="String">
+                {{#select data.research16}}
+                <option value="none">None</option>
+                <option value="secret">Secret Knowledge</option>
+                <option value="perk">Minor Perk</option>
+                {{/select}}
+              </select> 
+            </li>
+          </ul>
+          <label class="generic-label">Description</label>
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+    </section>
+</form>

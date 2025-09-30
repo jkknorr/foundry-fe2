@@ -1,0 +1,711 @@
+<form class="{{cssClass}}" autocomplete="off">
+
+    {{!-- Sheet Header --}}
+    <header class="sheet-header">
+      <div class="header-fields">
+        <div class="flexrow">
+          <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}" />
+          <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+      </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="attribute">Attributes</a>
+        <a class="item" data-tab="skill">Skills</a>
+        <a class="item" data-tab="fight">Fight</a>
+        <a class="item" data-tab="features">Features</a>
+        <a class="item" data-tab="equipment">Equipment</a>
+        <a class="item" data-tab="researchtrade">Research&Trade</a>        
+        <a class="item" data-tab="biodata">Biography</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        {{!-- Carac Tab --}}
+        <div class="tab items" data-group="primary" data-tab="attribute">
+          <span><a class="lock-unlock-sheet"><img class="small-button-container" 
+            src="systems/fvtt-fragged-empire/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
+            >{{#if editScore}}Unlocked{{else}}Locked{{/if}}</a>
+          </span>
+          <div class="grid grid-2col">
+            <div class="">
+              
+              <span class="generic-label"><h3>Attributes (current/max)</h3></span>
+              <ul>
+                {{#each data.attributes as |attr key|}}
+                <li class="item flexrow list-item" data-attr-key="{{key}}" data-item-id="{{attr.traitId}}">
+                  <span class="stat-label flexrow" name="{{key}}"><a class="carac-roll">{{attr.label}}</a></span>
+                  <select class="carac-base flexrow" type="text" name="data.attributes.{{key}}.current" value="{{attr.current}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
+                    {{#select attr.current}}
+                    <option value="-5">-5</option>
+                    <option value="-4">-4</option>
+                    <option value="-3">-3</option>
+                    <option value="-2">-2</option>
+                    <option value="-1">-1</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    {{/select}}
+                  </select> 
+                  &nbsp;/&nbsp;
+                  <select class="carac-base flexrow" type="text" name="data.attributes.{{key}}.value" value="{{attr.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
+                    {{#select attr.value}}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="5">6</option>
+                    {{/select}}
+                  </select> 
+                  <div class="item-controls">
+                    {{#if (ne attr.traitId "")}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>
+                </li>
+                {{/each}}
+              </ul>  
+
+              <span class="generic-label"><h3>Level</h3></span>
+              <ul>
+                <li class="item flexrow list-item stack-left" data-attr-key="level" data-item-id="{{data.level.traitId}}">
+                  <span class="stat-label padd-right packed-left" name="level">Level</span>
+                  <input type="text" class="input-numeric-short" name="data.level.value" value="{{data.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
+                  <div class="item-controls">
+                    {{#if (ne data.level.traitId "")}}
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>                  
+                </li>
+              </ul>
+
+              <span class="generic-label"><h3>Fate</h3></span>
+              <ul>
+                <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{data.fate.traitId}}">
+                  <span class="stat-label stack-left padd-right">Current</span>
+                  <select class="input-numeric-short stack-left" type="text" name="data.fate.value" value="{{data.fate.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
+                    {{#select data.fate.value}}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    {{/select}}
+                  </select> 
+                  <span class="stat-label stack-left padd-right"> Max</span>
+                  <select class="input-numeric-short stack-left" type="text" name="data.fate.max" value="{{data.fate.max}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
+                    {{#select data.fate.max}}
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    {{/select}}
+                  </select> 
+                  <div class="item-controls">
+                    {{#if (ne data.fate.traitId "")}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>
+                </li>
+              </ul>
+
+            </div>
+
+            <div class="">
+
+              <span class="generic-label"><h3>Resources</h3></span>
+              <ul>
+                <li class="item flexrow list-item packed-left" data-attr-key="fate" data-item-id="{{data.resources.traitId}}">
+                  <span class="stat-label packed-left" name="level">Current :</span>                
+                  <input type="text" class="input-numeric-short" name="data.resources.value" value="{{data.resources.value}}" data-dtype="Number"/>
+                  <span class="stat-label packed-left" name="level">Alloted :</span>                
+                  <input type="text" class="input-numeric-short" name="data.resources.alloted" value="{{data.resources.alloted}}" data-dtype="Number"/>
+                  <span class="stat-label padd-left packed-left" name="level ">Bonus : </span>
+                  <input type="text" class="input-numeric-short" name="data.resources.bonus" value="{{data.resources.bonus}}" data-dtype="Number"/>
+                  <span class="stat-label padd-left packed-left" name="level">Max : {{data.resources.total}}</span>
+                  <div class="item-controls"> 
+                    {{#if (ne data.resources.traitId "")}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>
+              </li>
+            </ul>
+
+              <span class="generic-label"><h3>Influence</h3></span>
+              <ul>
+                <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{data.influence.traitId}}">
+                  <span class="stat-label" name="level">Current : </span>
+                  <input type="text" class="input-numeric-short" name="data.influence.value" value="{{data.influence.value}}" data-dtype="Number"/>
+                  <span class="stat-label padd-left" name="level">Bonus : </span>
+                  <input type="text" class="input-numeric-short" name="data.influence.bonus" value="{{data.influence.bonus}}" data-dtype="Number"/>
+                  <span class="stat-label padd-left" name="level">Max : {{data.influence.total}}</span>
+                  <div class="item-controls">
+                    {{#if (ne data.influence.traitId "")}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>
+                </li>
+              </ul>
+
+              <span class="generic-label"><h3>Spare Time Points</h3></span>
+              <ul>
+                <li class="item flexrow list-item stack-left" data-item-id="{{lang.id}}">
+                  <span class="stat-label padd-right packed-left">Spare Time Points : </span>
+                  <input type="text" class="input-numeric-short" name="data.sparetimepoints.value" value="{{data.sparetimepoints.value}}" data-dtype="Number"/>
+                </li>                  
+              </ul>
+
+              <span class="generic-label"><h3>Languages</h3></span>
+              <ul>
+                {{#each languages as |lang key|}}
+                <li class="item flexrow list-item  stack-left" data-item-id="{{lang.id}}">
+                  <img class="sheet-competence-img" src="{{lang.img}}"/>
+                  <span class="competence-label">{{lang.name}}</span>
+                  <div class="item-controls">
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                  </div>
+                </li>                  
+                {{/each}}
+              </ul>  
+            </div>
+          </div>
+        </div>
+        
+        {{!-- Skills Tab --}}
+        <div class="tab skill" data-group="primary" data-tab="skill">
+          <div class="flexrow">
+            <span><a class="lock-unlock-sheet"><img class="small-button-container" 
+              src="systems/fvtt-fragged-empire/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
+              >{{#if editScore}}Unlocked{{else}}Locked{{/if}}</a>
+            </span>
+          </div>
+          <div class="grid grid-2col">
+            <div>
+              <h3>Everyday Skills</h3>
+              <ul class="item-list alterne-list">
+                
+                {{> "systems/fvtt-fragged-empire/templates/partial-skill-list-header.html"}}
+                 
+                {{#each sortedSkills.everyday as |skill key|}}
+                  <li class="item flexrow list-item" data-item-id="{{skill.id}}">
+                    <img class="sheet-competence-img" src="{{skill.img}}"/>
+                    <span class="competence-label"><a>{{skill.name}}</a></span>
+                    <span class="specialisation-label">{{skill.data.data.trainedValue}}</span>
+                    <span class="specialisation-label">{{skill.data.data.bonus}}</span>
+                    <span class="specialisation-label">{{skill.data.data.total}}</span>
+                    
+                    {{#if skill.data.data.isTrait}}
+                    <span class="specialisation-label tooltip">Trait
+                      <div class="tooltiptext">
+                        {{#each skill.data.data.traits as |trait idx|}}
+                        <span>{{trait.name}}</span>
+                        <div>{{{trait.data.description}}}
+                        </div>
+                        {{/each}}
+                      </div>
+                    </span>
+                    {{else}}
+                    <span class="specialisation-label tooltip">-</span>
+                    {{/if}}
+
+                    <div class="item-controls">
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>                  
+                {{/each}}
+              </ul>
+
+              <h3>Personnal Combat Skills</h3>
+              <ul class="item-list alterne-list">
+
+                {{> "systems/fvtt-fragged-empire/templates/partial-skill-list-header.html"}}
+
+                {{#each sortedSkills.combat as |skill key|}}
+                  <li class="item flexrow list-item" data-item-id="{{skill.id}}">
+                    <img class="sheet-competence-img" src="{{skill.img}}"/>
+                    <span class="competence-label"><a>{{skill.name}}</a></span>
+                    <span class="specialisation-label">{{skill.data.data.trainedValue}}</span>
+                    <span class="specialisation-label">{{skill.data.data.bonus}}</span>
+                    <span class="specialisation-label">{{skill.data.data.total}}</span>
+                    {{#if skill.data.data.isTrait}}
+                    <span class="specialisation-label tooltip">Trait
+                      <div class="tooltiptext">
+                        {{#each skill.data.data.traits as |trait idx|}}
+                        <span>{{trait.name}}</span>
+                        <div>{{{trait.data.description}}}
+                        </div>
+                        {{/each}}
+                      </div>
+                    </span>
+                    {{else}}
+                    <span class="specialisation-label tooltip">-</span>
+                    {{/if}}
+                    <div class="item-controls">
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>                  
+                {{/each}}
+              </ul>
+
+            </div>
+
+            <div>
+
+              <h3>Professional Skills</h3>
+              <ul class="item-list alterne-list">
+
+                {{> "systems/fvtt-fragged-empire/templates/partial-skill-list-header.html"}}
+
+                {{#each sortedSkills.professional as |skill key|}}
+                  <li class="item flexrow list-item" data-item-id="{{skill.id}}">
+                    <img class="sheet-competence-img" src="{{skill.img}}"/>
+                    <span class="competence-label"><a>{{skill.name}}</a></span>
+                    <span class="specialisation-label">{{skill.data.data.trainedValue}}</span>
+                    <span class="specialisation-label">{{skill.data.data.bonus}}</span>
+                    <span class="specialisation-label">{{skill.data.data.total}}</span>
+
+                    {{#if skill.data.data.isTrait}}
+                    <span class="specialisation-label tooltip">Trait
+                      <div class="tooltiptext">
+                        {{#each skill.data.data.traits as |trait idx|}}
+                        <span>{{trait.name}}</span>
+                        <div>{{{trait.data.description}}}
+                        </div>
+                        {{/each}}
+                      </div>
+                    </span>
+                    {{else}}
+                    <span class="specialisation-label tooltip">-</span>
+                    {{/if}}
+
+                    <div class="item-controls">
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>                  
+                {{/each}}
+              </ul>
+
+              <h3>Vehicle Skills</h3>
+              <ul class="item-list alterne-list">
+
+                {{> "systems/fvtt-fragged-empire/templates/partial-skill-list-header.html"}}
+
+                {{#each sortedSkills.vehicle as |skill key|}}
+                  <li class="item flexrow list-item" data-item-id="{{skill.id}}">
+                    <img class="sheet-competence-img" src="{{skill.img}}"/>
+                    <span class="competence-label"><a>{{skill.name}}</a></span>
+                    <span class="specialisation-label">{{skill.data.data.trainedValue}}</span>
+                    <span class="specialisation-label">{{skill.data.data.bonus}}</span>
+                    <span class="specialisation-label">{{skill.data.data.total}}</span>
+                    {{#if skill.data.data.isTrait}}
+                    <span class="specialisation-label tooltip">Trait
+                      <div class="tooltiptext">
+                        {{#each skill.data.data.traits as |trait idx|}}
+                        <span>{{trait.name}}</span>
+                        <div>{{{trait.data.description}}}
+                        </div>
+                        {{/each}}
+                      </div>
+                    </span>
+                    {{else}}
+                    <span class="specialisation-label tooltip">-</span>
+                    {{/if}}
+                    <div class="item-controls">
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                </li>                  
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+      </div>
+
+      {{!-- Combat Tab --}}
+      <div class="tab fight" data-group="primary" data-tab="fight">
+        <div class="flexcol">
+
+          <span class="generic-label"><h3>Endurance</h3></span>
+          <ul>
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label padd-right packed-left">Current :</span>
+              <input type="text" class="input-numeric-short" name="data.endurance.value" value="{{data.endurance.value}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">Bonus :</span>
+              <input type="text" class="input-numeric-short"  name="data.endurance.endurancebonus" value="{{data.endurance.endurancebonus}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">Max : {{data.endurance.max}}</span>
+            </li>
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label pad-right packed-left">Recovery</span>
+              <span class="stat-label padd-left packed-left">Bonus :</span>
+              <input type="text" class="input-numeric-short" name="data.endurance.recoverybonus padd-left test-css" value="{{data.endurance.recoverybonus}}" data-dtype="Number"/>
+              <span class="stat-label padd-left padd-right packed-left">Max&nbsp; &nbsp;:{{data.endurance.recovery}}</span>
+            </li>
+          </ul>
+
+          <span class="generic-label"><h3>Defence</h3></span>
+          <ul>
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label padd-right packed-left">Base : {{defenseBase}}</span>
+              <span class="stat-label padd-right packed-left">Bonus :</span>
+              <input type="text" class="input-numeric-short packed-left" name="data.defensebonus.defense" value="{{data.defensebonus.defense}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">CoverBonus :</span>
+              <select class="stat-label padd-left packed-left" type="text" name="data.defensebonus.cover" value="{{data.defensebonus.cover}}" data-dtype="String">
+                {{#select data.defensebonus.cover}}
+                <option value="nocover">No Cover</option>
+                <option value="lightcover">Light Cover</option>
+                <option value="heavycover">Heavy Cover</option>
+                <option value="entrenchedcover">Entrenched Cover</option>
+                {{/select}}
+              </select> 
+              <span class="stat-label padd-left packed-left">Total : {{defenseTotal}}</span>
+            </li>
+
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label padd-right packed-left">vs Impair</span>
+              <span class="stat-label padd-left packed-left">Bonus : </span>
+              <input type="text"  class="input-numeric-short padd-right" name="data.defensebonus.vsimpairbonus" value="{{data.defensebonus.vsimpairbonus}}" data-dtype="Number"/>
+              <span class="stat-label padd-left padd-right packed-left">&nbsp;{{data.defensebonus.vsimpair}}</span>
+
+              <span class="stat-label padd-right padd-left packed-left">vs Psionic</span>
+              <span class="stat-label padd-left packed-left">Bonus : </span>
+              <input type="text" class="input-numeric-short padd-right" name="data.defensebonus.vspsionicbonus" value="{{data.defensebonus.vspsionicbonus}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">{{data.defensebonus.vspsionic}}</span>
+
+              <span class="stat-label padd-right padd-left packed-left">vs Stealths</span>
+              <span class="stat-label padd-left packed-left">Ally : </span>
+              <input type="text" class="input-numeric-short padd-right" name="data.defensebonus.ally" value="{{data.defensebonus.ally}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">{{data.defensebonus.vsstealth}}</span>
+            </li>
+          </ul>
+
+          <span class="generic-label"><h3>Armour</h3></span>
+          <ul class="list-item">
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label packed-left">Base : {{armourBase}}</span>
+              <span class="stat-label padd-left packed-left">Bonus :</span>
+              <input type="text" class="input-numeric-short padd-right" name="data.armourbonus.armour" value="{{data.armourbonus.armour}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">Total : {{armourTotal}}</span>
+              <span></span>
+            </li>
+            <li class="item flexrow list-item stack-left">
+              <span class="stat-label flexrow packed-left">vs Energy : </span>
+              <input type="text" class="input-numeric-short padd-right" name="data.armourbonus.vsenergy" value="{{data.armourbonus.vsenergy}}" data-dtype="Number"/>
+              <span class="stat-label padd-left packed-left">vs Slow : </span>
+              <input type="text" class="input-numeric-short padd-right" name="data.armourbonus.vsslow" value="{{data.armourbonus.vsslow}}" data-dtype="Number"/>              
+              <span class="stat-label padd-left packed-left">at 0 Endurance : </span>
+              <input type="text" class="input-numeric-short padd-right" name="data.armourbonus.zeroendurance" value="{{data.armourbonus.zeroendurance}}" data-dtype="Number"/>
+            </li>
+          </ul>
+
+          <span class="generic-label"><h3>Weapons</h3></span>
+          <ul class="stat-list alternate-list">
+            {{#each weapons as |weapon key|}}
+            <li class="item stat flexrow list-item" data-arme-id="{{arme.id}}" data-item-id="{{weapon.id}}">
+              <img class="sheet-competence-img" src="{{weapon.img}}"/>
+              <span class="stat-label weapon-label"><a name="{{weapon.name}}">{{weapon.name}}</a></span>
+              <div class="item-controls">
+                <a class="item-control item-equip" title="Worn">{{#if weapon.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>
+            <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
+              {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false header=true}}
+            </li>
+            {{/each}}                
+          </ul>          
+
+          <span class="generic-label"><h3>Drones/Companions</h3></span>
+          <ul>
+            {{#each subActors as |subActor key|}}
+            <li class="item stat flexrow list-item" data-actor-id="{{subActor._id}}">
+              <img class="sheet-competence-img" src="{{subActor.img}}"/>
+              <span class="stat-label npc-fight"><a name="{{subActor.name}}">{{subActor.name}}</a></span>
+              <div class="item-controls">
+                <a class="item-control subactor-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control subactor-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>
+            <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
+              {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=subActor.data.stats isfinal=false header=true}}
+            </li>
+            {{/each}}
+          </ul>  
+
+          <span class="generic-label"><h3>Outfits</h3></span>
+          <ul class="item-list alternate-list">
+            {{#each outfits as |outfit key|}}
+            <li class="item stat flexrow list-item" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
+              <img class="sheet-competence-img" src="{{outfit.img}}"/>
+              <span class="stat-label outfit-label">{{outfit.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-equip" title="Worn">{{#if outfit.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>
+            <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
+              {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=outfit.data.data.statstotal isfinal=false header=true}}
+            </li>
+            {{/each}}
+          </ul>
+
+          <span class="generic-label"><h3>Utilities</h3></span>
+          <ul class="item-list alternate-list">
+            {{#each utilities as |utility key|}}
+            <li class="item stat flexrow list-item" data-armure-id="{{utility.id}}" data-item-id="{{utility.id}}">
+              <img class="sheet-competence-img" src="{{utility.img}}"/>
+              <span class="stat-label outfit-label">{{utility.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-equip" title="Worn">{{#if utility.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>
+            <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
+              {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=utility.data.data.statstotal isfinal=false header=true}}
+            </li>
+            {{/each}}
+          </ul>
+
+        </div>
+      </div>
+
+      {{!-- Features Tab --}}
+      <div class="tab features" data-group="primary" data-tab="features">
+        <div class="flexcol">
+
+          <span class="generic-label"><h3>Perks</h3></span>
+          <ul>
+            {{#each perks as |perk key|}}
+            <li class="item flexrow list-item" data-item-id="{{perk.id}}">
+              <img class="sheet-competence-img" src="{{perk.img}}"/>
+              <span class="competence-label">{{perk.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+
+          <span class="generic-label"><h3>Complications</h3></span>
+          <ul>
+            {{#each complications as |complication key|}}
+            <li class="item flexrow list-item" data-item-id="{{complication.id}}">
+              <img class="sheet-competence-img" src="{{complication.img}}"/>
+              <span class="competence-label">{{complication.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+
+          <span class="generic-label"><h3>Strong Hits</h3></span>
+          <ul>
+            {{#each strongHits as |stronghit key|}}
+            <li class="item flexrow list-item" data-item-id="{{stronghit.id}}">
+              <img class="sheet-competence-img" src="{{stronghit.img}}"/>
+              <span class="competence-label">{{stronghit.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+
+          <span class="generic-label"><h3>Henchmen/Drones</h3></span>
+          <ul>
+            {{#each subActors as |subActor key|}}
+            <li class="item flexrow list-item" data-actor-id="{{subActor._id}}">
+              <img class="sheet-competence-img" src="{{subActor.img}}"/>
+              <span class="competence-label">{{subActor.name}}</span>
+              <div class="item-controls">
+                <a class="item-control subactor-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control subactor-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+          
+          <span class="generic-label"><h3>Character Traits List</h3></span>
+          <ul>
+            {{#each traits as |trait key|}}
+            <li class="item flexrow list-item" data-item-id="{{trait.id}}">
+              <img class="sheet-competence-img" src="{{trait.img}}"/>
+              <span class="competence-label">{{trait.name}}</span>
+              <span class="competence-label">{{trait.data.data.type}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul> 
+
+          <span class="generic-label"><h3>Skills Traits List</h3></span>
+          <ul>
+            {{#each skillsTraits as |trait key|}}
+            <li class="item flexrow list-item" data-item-id="{{trait._id}}">
+              <img class="sheet-competence-img" src="{{trait.img}}"/>
+              <span class="competence-label">{{trait.name}}</span>
+              <span class="competence-label">{{trait.associatedSkill}}</span>
+              <div class="item-controls">
+                <a class="item-control skill-trait-view" title="Edit Item"><i class="fas fa-edit"></i></a>
+             </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+
+        </div>
+      </div>
+
+      {{!-- Equipement Tab --}}
+      <div class="tab equipment" data-group="primary" data-tab="equipment">
+        <div><h4>Slots</h4></div>
+        <ul class="item-list alternate-list">
+          <li class="item flexrow list-item stack-left">
+            <span class="equipement-label packed-left padd-right">Base : {{equipmentsSlotsBase}}</span>
+            <span class="equipement-label packed-left padd-right padd-left">Bonus : </span>
+            <input type="text" class="input-numeric-short padd-right"  name="data.equipmentslots.bonus" value="{{data.equipmentslots.bonus}}" data-dtype="Number"/>
+            <span class="equipement-label packed-left padd-right padd-left">Total : {{equipmentsSlotsTotal}}</span>
+            <span class="equipement-label packed-left padd-right padd-left">Current : </span>
+            <input type="text" class="input-numeric-short padd-right" name="data.equipmentslots.current" value="{{data.equipmentslots.current}}" data-dtype="Number"/>
+          </li>
+          </ul>
+
+          <div><h4>Equipment</h4></div>
+          <ul class="item-list alternate-list">
+            <li class="item flexrow list-item">
+              <span class="equipement-label">Name</span>
+              <span class="equipement-label">Type</span>
+              <div class="item-controls">
+                <span class="equipement-label">&nbsp;</span>
+                <span class="equipement-label">&nbsp;</span>
+                <span class="equipement-label">&nbsp;</span>
+              </div>
+            </li>
+            {{#each equipments as |equip key|}}
+            <li class="item flexrow list-item" data-item-id="{{equip.id}}">
+              <img class="sheet-competence-img" src="{{equip.img}}"/>
+              <span class="equipement-label">{{equip.name}}</span>
+              <span class="equipement-label">{{equip.type}}</span>
+              <div class="item-controls">
+                <a class="item-control item-equip" title="Worn">{{#if equip.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+          {{/each}}
+          </ul>
+      </div>
+
+      {{!-- Reaserch/Trade Tab --}}
+      <div class="tab researchtrade" data-group="primary" data-tab="researchtrade">
+          
+        <div><h4>Trade goods</h4></div>
+          <ul class="item-list alternate-list">
+            <li class="item flexrow list-item">
+              <span class="equipement-label">Name</span>
+              <span class="equipement-label">Tradebox</span>
+              <span class="equipement-label">Cargo Space</span>
+              <div class="item-controls">
+                <span class="equipement-label">&nbsp;</span>
+                <span class="equipement-label">&nbsp;</span>
+              </div>
+            </li>
+            {{#each tradeGoods as |good key|}}
+            <li class="item flexrow list-item" data-item-id="{{good.id}}">
+              <img class="sheet-competence-img" src="{{good.img}}"/>
+              <span class="equipement-label">{{good.name}}</span>
+              <span class="equipement-label">{{good.data.data.tradebox}}</span>
+              <span class="equipement-label">{{good.cargoSpace}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+          {{/each}}
+          </ul>
+
+        <div><h4>Research</h4></div>
+          <ul class="item-list alternate-list">
+            <li class="item flexrow list-item">
+              <span class="equipement-label">Name</span>
+              <span class="equipement-label">Research Unit</span>
+              <div class="item-controls">
+                <span class="equipement-label">&nbsp;</span>
+                <span class="equipement-label">&nbsp;</span>
+              </div>
+            </li>
+            {{#each researches as |research key|}}
+            <li class="item flexrow list-item" data-item-id="{{research.id}}">
+              <img class="sheet-competence-img" src="{{research.img}}"/>
+              <span class="equipement-label">{{research.name}}</span>
+              <span class="equipement-label">{{research.data.data.researchunit}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+          {{/each}}
+          </ul>
+
+      </div>
+
+      {{!-- Biography Tab --}}
+      <div class="tab biodata" data-group="primary" data-tab="biodata">        
+
+        <article class="flexcol">
+
+          <span class="generic-label"><h3>Race</h3></span>
+          <ul>
+            {{#each races as |race key|}}
+            <li class="item flexrow list-item" data-item-id="{{race.id}}">
+              <img class="sheet-competence-img" src="{{race.img}}"/>
+              <span class="competence-label">{{race.name}}</span>
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
+            </li>                  
+            {{/each}}
+          </ul>  
+
+          <hr>
+          <h3>Biography : </h3>
+          <div class="form-group editor">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+          </div>
+          <hr>
+          <h3>Notes : </h3>
+          <div class="form-group editor">
+            {{editor content=data.notes target="data.notes" button=true owner=owner editable=editable}}
+          </div>
+          <hr>
+          {{>"systems/fvtt-fragged-empire/templates/editor-notes-gm.html"}}
+        </article>
+      </div>
+
+    </section>
+</form>
+

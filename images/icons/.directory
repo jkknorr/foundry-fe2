@@ -1,0 +1,6 @@
+[Dolphin]
+SortRole=creationtime
+Timestamp=2021,4,13,9,23,48.267
+Version=4
+ViewMode=1
+VisibleRoles=Details_text,Details_size,Details_modificationtime,Details_creationtime,CustomizedDetails

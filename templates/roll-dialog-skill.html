@@ -1,0 +1,57 @@
+<form class="skill-roll-dialog">
+  <h2 class="dialog-roll-title">{{title}}</h2>
+
+  <div class="floxrow">
+    <div class="flexrow">
+      <span class="competence-base flexrow" >{{#if skill.data.data.trained}}Trained (+1){{else}}Not Trained (-2){{/if}}</span>
+      <span class="competence-base flexrow" >Bonus : {{skill.data.data.bonus}}</span>
+      <span class="competence-base flexrow" ><strong>Total : {{skill.data.data.total}}</strong></span>
+    </div>
+
+    <h3>Available tools : </h3>
+    <div class="flexrow">
+      <label class="generic-label">Toolkit ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" name="data.toolkit" {{checked skill.data.data.toolkit}} disabled/></label>
+      <label class="generic-label">Toolbox ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" name="data.toolbox" {{checked skill.data.data.toolbox}} disabled/></label>
+      <label class="generic-label">Workshop ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" name="data.workshop" {{checked skill.data.data.workshop}} disabled/></label>
+      <label class="generic-label">Dedicated Workshop ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" name="data.dedicatedworkshop" {{checked skill.data.data.dedicatedworkshop}} disabled/></label>
+    </div>
+
+    {{#if toolsAvailable}}
+    <h3>Apply Tools Bonus : </h3>
+    <div class="flexrow">
+      {{#if skill.data.data.toolbox}}
+      <label class="generic-label">Apply Toolbox bonus (+1) ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" id="useToolbox" name="useToolbox" {{checked useToolbox}}/></label>
+      {{/if}}
+      {{#if skill.data.data.dedicatedworkshop}}
+      <label class="generic-label">Apply Dedicated Workshop bonus (+2) ?</label>
+      <label class="attribute-value checkbox"><input type="checkbox" id="useDedicatedworkshop" name="useDedicatedworkshop" {{checked useDedicatedworkshop}}/></label>
+      {{/if}}
+    </div>
+    {{/if}}
+
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
+        {{#select bonusMalus}}
+        {{{optionsBonusMalus}}}
+        {{/select}}
+      </select> 
+    </div>
+
+    <!-- <div class="flexrow">
+      <span class="competence-base flexrow" >Difficulty : </span>
+      <select class="competence-base flexrow" type="text" id="difficulty" name="difficulty" value="difficulty" data-dtype="Number">
+        {{#select difficulty}}
+        {{{optionsDifficulty}}}
+        {{/select}}
+      </select> 
+    </div> -->
+
+  </div>
+  
+</form>

@@ -1,0 +1,73 @@
+
+<div class="chat-message-header">
+  <img class="actor-icon" src="{{actorImg}}" alt="{{alias}}" />
+  <h4 class=chat-actor-name>{{alias}}</h4>
+</div>
+
+<hr>
+
+<div>
+<img class="chat-icon" src="{{img}}" alt="{{name}}" />
+<h4>
+  {{#if (eq mode "skill")}}  
+  Skill : {{skill.name}} ({{skill.data.data.total}}) {{#if nbStrongHitUsed}}(Strong Hit Reroll){{/if}}
+  {{else}}
+    {{#if (eq mode "weapon")}}
+    Weapon attack : {{weapon.name}}  ({{weapon.data.data.statstotal.hit.value}}) / {{skill.name}} ({{skill.data.data.total}}) 
+    {{else}}
+      {{#if (eq mode "spacecraftweapon")}}
+        Spacecraft Weapon attack : {{weapon.name}}  ({{weapon.data.data.statstotal.hit.value}}) / {{skill.name}} ({{skill.data.data.total}})
+      {{else}}
+        {{#if (eq mode "npcfight")}}
+        NPC attack : {{npc.name}}  ({{npcstats.hit.value}})  
+        {{else}}
+        NPC Generic Skill roll : {{npc.name}}
+        {{/if}}
+        {{/if}}
+      {{/if}}
+  {{/if}}
+  {{#if hasFate}}
+  <a class="fate-reroll" data-actor-id={{actorId}}><i class="fas fa-undo"></i></a>
+  {{/if}}
+
+</h4>
+
+<div class="limit-line padding-dice">
+  {{#each diceResults as |value key|}}
+  <span class="dice-image">
+    {{#if @root.strongHitAvailable}}
+      {{#if (ne value 6)}}
+      <a class="link-reroll" data-dice-index={{key}} data-actor-id={{@root.actorId}}><img class='dice-image-reroll chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'></a>
+      {{else}}
+      <img class='dice-image chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'>
+      {{/if}}
+      {{else}}
+    <img class='dice-image chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'>
+    {{/if}}
+  </span>
+  {{/each}}
+</div>
+
+<div>
+  <ul>
+    <li>Bonus/Malus : {{finalBM}}</li>
+    {{#if difficulty}}
+    <li>Difficulty : {{difficulty}}</li>
+    {{/if}}
+    
+    {{#if (eq mode "weapon")}}
+    <li>End Damage : {{weapon.data.data.statstotal.enddmg.value}}</li>
+    <li>Crit Damage : {{weapon.data.data.statstotal.crit.value}}</li>
+    {{/if}}
+    {{#if (eq mode "spacecraftweapon")}}
+    <li>Shield Damage : {{weapon.data.data.statstotal.shielddmg.value}}</li>
+    <li>Crit Damage : {{weapon.data.data.statstotal.crit.value}}</li>
+    {{/if}}
+
+    <li><strong>Total Roll : {{rollTotal}}</strong>
+    {{#if nbStrongHit}}
+    <strong> - Strong Hits : {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
+    {{/if}}
+  </ul>  
+</div>
+</div>

@@ -1,0 +1,48 @@
+{
+  "author": "jkknorr",
+  "compatibleCoreVersion": "13",
+  "description": "Fragged Empire 2E system for FoundryVTT",
+  "download": "https://gitlab.com/iamelodin/foundry-fe2/-/archive/master/fvtt-fragged-empire.zip",
+  "esmodules": [
+    "modules/fragged-empire-main.js"
+  ],
+  "gridDistance": 5,
+  "gridUnits": "m",
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "library": false,
+  "license": "LICENSE.txt",
+  "manifest": "https://gitlab.com/jkknorr/foundry-fe2/raw/master/system.json",
+  "manifestPlusVersion": "1.0.0",
+  "media": [],
+  "minimumCoreVersion": "0.8.0",
+  "name": "foundry-fe2",
+  "packs": [
+    {
+      "entity": "Item",
+      "label": "Skills",
+      "name": "skills",
+      "path": "./packs/skills.db",
+      "system": "foundry-fe2",
+      "tags": [
+        "skill"
+      ]
+    }
+  ],
+  "primaryTokenAttribute": "endurance.endurance",
+  "secondaryTokenAttribute": "fate.value",
+  "socket": true,
+  "styles": [
+    "styles/simple.css"
+  ],
+  "templateVersion": 60,
+  "title": "Fragged Empire 2E",
+  "url": "https://gitlab.com/jkknorr/foundry-fe2",
+  "version": "0..0",
+  "background" : "./images/ui/FE_Welcome_Page.webp"
+}

@@ -1,0 +1,12 @@
+<h3>Modifications</h3>
+<ul>
+  {{#each data.modifications as |modification key|}}
+  <li class="item flexrow list-item" data-item-id="{{modification._id}}" data-item-type="modifications">
+    <span class="competence-label"><a class="modification-name">{{modification.name}}</a></span>
+    <div class="item-controls">
+      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+    </div>
+  </li>                  
+  {{/each}}
+</ul>          
+</select> 

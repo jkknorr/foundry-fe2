@@ -1,0 +1,14 @@
+  <table>
+    <tr>
+      <td>Name</td>
+      <td>Value</td>
+    </tr>
+    
+    {{#each stats as |stat key|}}
+    <tr>
+      <td>{{stat.label}}</td>
+      <td>{{stat.value}}</td>
+    </tr>
+    {{/each}}
+
+  </table>

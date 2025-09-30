@@ -1,0 +1,51 @@
+
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+          <ul>
+            <li class="flexrow"><label class="item-sheet-label">Type</label>
+              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
+                {{#select data.type}}
+                <option value="build">Build</option>
+                <option value="npc">NPC Build</option>
+                <option value="hull">Hull</option>
+                <option value="engines">Engines</option>
+                <option value="crew">Crew</option>
+                <option value="power">Power</option>
+                <option value="cpu">CPU</option>
+                <option value="sensors">Sensors</option>
+                <option value="size">Size</option>
+                {{/select}}
+              </select> 
+            </li>
+          </ul>
+          <ul>
+            <li class="flexrow"><label class="item-sheet-label">Requirements</label>
+              <span class="small-editor item-text-long-line">
+              {{editor content=data.requirements target="data.requirements" button=true owner=owner editable=editable}}
+              </span>
+            </li>
+            <li class="flexrow"><label class="item-sheet-label">Benefits</label>
+              <span class="small-editor item-text-long-line">
+                {{editor content=data.benefits target="data.benefits" button=true owner=owner editable=editable}}
+              </span>
+            </li>
+            <li class="flexrow"><label class="item-sheet-label">Disadvantages</label>
+              <span class="small-editor item-text-long-line">
+                {{editor content=data.disadvantages target="data.disadvantages" button=true owner=owner editable=editable}}
+              </span>
+            </li>
+          </ul>
+        </div>
+
+    </section>
+</form>

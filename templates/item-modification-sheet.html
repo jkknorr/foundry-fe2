@@ -1,0 +1,46 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+          <h3>Type</h3>
+            <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
+              {{#select data.type}}
+              <option value="weapon">Weapon Modification</option>
+              <option value="melee">Melee Modification</option>
+              <option value="drone">Drone & Companion Modification</option>
+              {{/select}}
+            </select> 
+
+            <h3>Weapon Type</h3>
+            <select class="competence-base flexrow" type="text" name="data.weapontype" value="{{data.weapontype}}" data-dtype="String">
+              {{#select data.weapontype}}
+              <option value="all">All</option>
+              <option value="analytical">Analytical</option>
+              <option value="chemical">Chemical</option>
+              <option value="combatcomputer">Combat Computer</option>
+              <option value="disruptor">Disruptor</option>
+              <option value="gun">Gun</option>
+              <option value="shell">Shell</option>
+              <option value="impairment">Impairment</option>
+              <option value="melee">Melee</option>
+              <option value="psionic">Psionic</option>
+              <option value="thrown">Thrown</option>
+              {{/select}}
+            </select> 
+          
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.stats isbase=true title="Modification Stats" header=true}}
+
+          <label class="generic-label">Description</label>
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+    </section>
+</form>

@@ -1,0 +1,35 @@
+<div class="post-item" data-transfer="{{transfer}}">
+  <h3><b>{{name}}</b></h3>
+  {{#if img}}
+  <img class="chat-img" src="{{img}}" title="{{name}}" />
+  {{/if}}
+  
+  {{#if data.statstotal}}
+    {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section-tchat.html" stats=data.statstotal isfinal=false title="" header=true}}
+  {{else}}
+    {{#if data.stats}}
+    {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section-tchat.html" stats=data.stats isfinal=false title="" header=true}}
+    {{/if}}
+  {{/if}}
+  
+  {{#if data.requirements}}
+  <h4><b>Requirements : </b></h4>
+  <p class="card-content">{{{data.requirements}}}</p>
+  {{/if}}
+
+  {{#if data.disadvantages}}
+  <h4><b>Disadvantages : </b></h4>
+  <p class="card-content">{{{data.disadvantages}}}</p>
+  {{/if}}
+
+  {{#if data.benefits}}
+  <h4><b>Benefits : </b></h4>
+  <p class="card-content">{{{data.benefits}}}</p>
+  {{/if}}
+
+  {{#if (ne data.description "")}}
+  <h4><b>Description : </b></h4>
+  <p class="card-content">{{{data.description}}}</p>
+  {{/if}}
+
+</div>

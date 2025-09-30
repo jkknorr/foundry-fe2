@@ -1,0 +1,29 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+          <ul>
+            <li class="flexrow"><label class="generic-label">Equipped ?</label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="data.equipped" {{checked data.equipped}}/></label>
+            </li>
+            <li class="flexrow"><label class="generic-label">Weight</label>
+              <input type="text" name="data.weight" value="{{data.weight}}" data-dtype="Number"/>
+            </li>
+            <li class="flexrow"><label class="generic-label">Cost</label>
+              <input type="text" name="data.cost" value="{{data.cost}}" data-dtype="Number"/>
+            </li>
+          </ul>
+          <label class="generic-label">Description</label>
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+    </section>
+</form>

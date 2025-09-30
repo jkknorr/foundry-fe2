@@ -1,0 +1,27 @@
+
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+      <ul>
+        <li class="flexrow"><label class="generic-label">Type</label>
+        <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
+          {{#select data.type}}
+          <option value="minor">Minor</option>
+          <option value="moderate">Moderate</option>
+          <option value="major">Major</option>
+          {{/select}}
+        </select> 
+        </li>
+        <li class="flexrow"><label class="generic-label">Influence level</label>
+          <input type="text" name="data.influence" value="{{data.influence}}" data-dtype="String"/>
+        </li>
+      </ul>
+    </section>
+</form>

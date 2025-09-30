@@ -1,0 +1,50 @@
+<form class="skill-roll-dialog">
+  <h2 class="dialog-roll-title">{{title}}</h2>
+
+  <div class="floxrow">
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Hit bonus : {{weapon.data.data.statstotal.hit.value}}</span>
+      <span class="competence-base flexrow" >Rate of Fire : {{rofValue}}</span>
+    </div>
+    
+    {{#if weaponRoFOptions}}
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Rate of Fire : </span>
+      <select class="competence-base flexrow" type="text" id="rof" name="rof" value="rofValue" data-dtype="Number">
+        {{#select rofValue}}
+          {{#each weaponRoFOptions as |rof idx|}}
+          <option value="{{idx}}">{{rof}}</option>
+          {{/each}}
+        {{/select}}
+      </select> 
+    </div>
+    {{/if}}
+
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Skill to use : </span>
+      <select class="competence-base flexrow" type="text" id="skill-spacecraft" name="skill" value="skill" data-dtype="String">
+        {{#select skill}}
+          {{#each actorList as |actor key|}}
+            {{#each actor.skills as |skill key|}}
+            <option value="{{skill.id}}">{{actor.name}} - {{skill.name}} ({{skill.data.data.total}})</option>
+            {{/each}}
+          {{/each}}
+        {{/select}}
+      </select> 
+    </div>
+
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
+        {{#select bonusMalus}}
+        {{{optionsBonusMalus}}}
+        {{/select}}
+      </select> 
+    </div>
+
+    <h3>Stats</h3>
+    {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false title="Final stats reminder" header=true}}
+
+  </div>
+  
+</form>

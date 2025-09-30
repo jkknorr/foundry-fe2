@@ -1,0 +1,85 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        <div class="tab" data-group="primary">
+          <span class="flexrow">
+            <h3>Type</h3>
+              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
+                {{#select data.type}}
+                <option value="analytical">Analytical</option>
+                <option value="chemical">Chemical</option>
+                <option value="combatcomputer">Combat Computer</option>
+                <option value="disruptor">Disruptor</option>
+                <option value="gun">Gun</option>
+                <option value="shell">Shell</option>
+                <option value="impairment">Impairment</option>
+                <option value="melee">Melee</option>
+                <option value="psionic">Psionic</option>
+                <option value="thrown">Thrown</option>
+                {{/select}}
+              </select> 
+          </span>
+
+          <span class="flexrow">
+            <h3>Default Skill</h3>
+              <select class="competence-base flexrow" type="text" name="data.defaultskill" value="{{data.defaultskill}}" data-dtype="String">
+                {{#select data.defaultskill}}
+                  {{#each combatSkills as |skill key|}}
+                  <option value="{{skill.name}}">{{skill.name}}</option>
+                  {{/each}}
+                {{/select}}
+              </select> 
+          </span>
+
+          {{> "systems/fvtt-fragged-empire/templates/variations-section.html"}}
+          {{> "systems/fvtt-fragged-empire/templates/modifications-section.html"}}
+
+          <h3> Keywords</h3>
+          <div class="grid grid-3col">
+            {{#each keywords as |keywordArray key|}}
+            <div>
+              <ul>
+                {{#each keywordArray as |keyword key|}}
+                <li class="item-list item flexrow stack-left">
+                  <input type="checkbox" name="data.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
+                  <label class="generic-label keyword-label packed-left">{{keyword.label}}</label>
+                  {{#if keyword.X}}
+                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
+                  {{/if}}
+                  {{#if keyword.Y}}
+                    {{#if keyword.labelY}}
+                    <label class="generic-label keyword-label  packed-left">{{keyword.labelY}}</label>
+                    {{/if}}
+                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
+                  {{/if}}
+                </li>
+                {{/each}}
+              </ul>
+            </div>
+            {{/each}}
+          </div>
+
+          <h3>Stats</h3>
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.statstotal isfinal=true title="Final stats" header=true}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.stats  isbase=true title="Weapon stats"}}
+          {{#each data.variations as |variation key|}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=variation.data.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{/each}}
+          {{#each data.modifications as |modification key|}}
+          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=modification.data.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{/each}}
+        
+          <h3>Description</h3>
+          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+    </section>
+</form>

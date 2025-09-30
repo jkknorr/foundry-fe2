@@ -1,0 +1,31 @@
+{{#if title}}
+<span class="competence-name">{{title}} {{subtitle}}</span>
+{{/if}}
+
+<div class="stats-table">
+  <table class="stats-table">
+    {{#if header}}
+    <tr>
+      {{#each stats as |stat key|}}
+        <td>{{stat.label}}</td>
+      {{/each}}
+    </tr>
+    {{/if}}
+    <tr>
+      {{#each stats as |stat key|}}
+        <td>
+          <input type="text" value="{{stat.value}}" data-dtype="String" 
+            {{#if ../isfinal}}
+            name="data.statstotal.{{key}}.value"{{else}}
+            {{#if ../isbase}}
+              name="data.stats.{{key}}.value"
+              {{else}}
+              disabled
+              {{/if}}
+            {{/if}}
+            />
+        </td>
+      {{/each}}
+    </tr>
+  </table>
+</div>
