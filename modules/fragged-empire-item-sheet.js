@@ -4,14 +4,14 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class FraggedEmpireItemSheet extends ItemSheet {
+export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
 
   /** @override */
 	static get defaultOptions() {
 
     return mergeObject(super.defaultOptions, {
-			classes: ["fvtt-fragged-empire", "sheet", "item"],
-			template: "systems/fvtt-fragged-empire/templates/item-sheet.html",
+			classes: ["foundry-fe2", "sheet", "item"],
+			template: "systems/foundry-fe2/templates/item-sheet.html",
       dragDrop: [{dragSelector: null, dropSelector: null}],
 			width: 620,
 			height: 550
@@ -131,7 +131,7 @@ export class FraggedEmpireItemSheet extends ItemSheet {
         payload: chatData,
       });
 
-    renderTemplate('systems/fvtt-fragged-empire/templates/post-item.html', chatData).then(html => {
+    renderTemplate('systems/foundry-fe2/templates/post-item.html', chatData).then(html => {
       let chatOptions = FraggedEmpireUtility.chatDataSetup(html);
       ChatMessage.create(chatOptions)
     });
@@ -244,7 +244,7 @@ export class FraggedEmpireItemSheet extends ItemSheet {
   /* -------------------------------------------- */
   get template() {
     let type = this.item.type;
-    return `systems/fvtt-fragged-empire/templates/item-${type}-sheet.html`;
+    return `systems/foundry-fe2/templates/item-${type}-sheet.html`;
   }
 
   /* -------------------------------------------- */

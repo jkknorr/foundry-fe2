@@ -7,14 +7,14 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireItemSheet } from "./fragged-empire-item-sheet.js";
 
 /* -------------------------------------------- */
-export class FraggedEmpireNPCSheet extends ActorSheet {
+export class FraggedEmpireNPCSheet extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   static get defaultOptions() {
 
     return mergeObject(super.defaultOptions, {
       classes: ["fragged-empire", "sheet", "actor"],
-      template: "systems/fvtt-fragged-empire/templates/npc-sheet.html",
+      template: "systems/foundry-fe2/templates/npc-sheet.html",
       width: 640,
       height: 720,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],

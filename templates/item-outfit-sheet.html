@@ -11,8 +11,8 @@
 
         <div class="tab" data-group="primary">
 
-          {{> "systems/fvtt-fragged-empire/templates/variations-section.html"}}
-          {{> "systems/fvtt-fragged-empire/templates/modifications-section.html"}}
+          {{> "systems/foundry-fe2/templates/variations-section.html"}}
+          {{> "systems/foundry-fe2/templates/modifications-section.html"}}
 
           <h3> Keywords</h3>
           <div class="grid grid-3col">
@@ -37,13 +37,13 @@
           </div>
 
           <h3>Stats</h3>
-          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.statstotal isfinal=true title="Final stats" header=true}}
-          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=data.stats  isbase=true title="Outfit stats"}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.statstotal isfinal=true title="Final stats" header=true}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.stats  isbase=true title="Outfit stats"}}
           {{#each data.variations as |variation key|}}
-          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=variation.data.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.data.stats  isfinal=false title="Variation" subtitle=variation.name}}
           {{/each}}
           {{#each data.modifications as |modification key|}}
-          {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=modification.data.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.data.stats  isfinal=false title="Modification" subtitle=modification.name}}
           {{/each}}
 
           <label class="generic-label">Description</label>

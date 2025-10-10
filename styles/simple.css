@@ -997,7 +997,7 @@ ul, li {
 /*--------------------------------------------------------------------------*/
 /* Control, Tool, hotbar & navigation */
 
-#controls .scene-control, #controls .control-tool {
+/* #controls .scene-control, #controls .control-tool {
   box-shadow: 0 0 3px #000;
   margin: 0 0 8px;
   border-radius: 0;
@@ -1007,15 +1007,15 @@ ul, li {
   border-image-width: 4px;
   border-image-outset: 0px;
 }
-
-#controls .scene-control.active, #controls .control-tool.active, #controls .scene-control:hover, #controls .control-tool:hover {
+ */
+/* #controls .scene-control.active, #controls .control-tool.active, #controls .scene-control:hover, #controls .control-tool:hover {
   background: rgba(72, 46, 28, 1);
   background-origin: padding-box;
   border-image: url(img/ui/footer-button.png) 10 repeat;
   border-image-width: 4px;
   border-image-outset: 0px;
   box-shadow: 0 0 3px #ff6400;
-}
+} */
 
 #hotbar #action-bar #macro-list {
   border: 1px solid rgba(72, 46, 28, 1);
@@ -1035,42 +1035,42 @@ ul, li {
   border: 1px solid rgba(72, 46, 28, 1);
 }
 
-#players {
+/* #players {
   border-image: url(img/ui/footer-button.png) 10 repeat;
   border-image-width: 4px;
   border-image-outset: 0px;
   background: rgba(30, 25, 20, 1);
-}
+} */
 
 #navigation #scene-list .scene.nav-item.active {
   background: rgba(72, 46, 28, 1);
 }
 
-#navigation #scene-list .scene.nav-item {
+/* #navigation #scene-list .scene.nav-item {
   background: rgba(30, 25, 20, 1);
   background-origin: padding-box;
   border-image: url(img/ui/footer-button.png) 10 repeat;
   border-image-width: 4px;
   border-image-outset: 0px;
-}
+} */
 
-#navigation #scene-list .scene.view, #navigation #scene-list .scene.context {
+/* #navigation #scene-list .scene.view, #navigation #scene-list .scene.context {
   background: rgba(72, 46, 28, 1);
   background-origin: padding-box;
   border-image: url(img/ui/footer-button.png) 10 repeat;
   border-image-width: 4px;
   border-image-outset: 0px;
   box-shadow: 0 0 3px #ff6400;
-}
+} */
 
-#navigation #nav-toggle {
+/* #navigation #nav-toggle {
   background: rgba(30, 25, 20, 1);
   background-origin: padding-box;
   border-image: url(img/ui/footer-button.png) 10 repeat;
   border-image-width: 4px;
   border-image-outset: 0px;
 }
-
+ */
 /* Tooltip container */
 .tooltip {
   position: relative;

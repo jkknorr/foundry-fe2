@@ -11,7 +11,7 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static async ready() {
-    const skills = await FraggedEmpireUtility.loadCompendium("fvtt-fragged-empire.skills");
+    const skills = await FraggedEmpireUtility.loadCompendium("foundry-fe2.skills");
     this.compendiumSkills  = skills.map(i => i.toObject());
   }
 
@@ -41,16 +41,16 @@ export class FraggedEmpireUtility  {
   static async preloadHandlebarsTemplates() {
     
     const templatePaths = [
-      'systems/fvtt-fragged-empire/templates/actor-sheet.html',
-      'systems/fvtt-fragged-empire/templates/editor-notes-gm.html',
-      'systems/fvtt-fragged-empire/templates/weapon-stats-section.html',
-      'systems/fvtt-fragged-empire/templates/variations-section.html',
-      'systems/fvtt-fragged-empire/templates/modifications-section.html',
-      'systems/fvtt-fragged-empire/templates/skill-traits-section.html',
-      'systems/fvtt-fragged-empire/templates/weapon-stats-section-tchat.html',
-      'systems/fvtt-fragged-empire/templates/partial-skill-list-header.html'
+      'systems/foundry-fe2/templates/actor-sheet.html',
+      'systems/foundry-fe2/templates/editor-notes-gm.html',
+      'systems/foundry-fe2/templates/weapon-stats-section.html',
+      'systems/foundry-fe2/templates/variations-section.html',
+      'systems/foundry-fe2/templates/modifications-section.html',
+      'systems/foundry-fe2/templates/skill-traits-section.html',
+      'systems/foundry-fe2/templates/weapon-stats-section-tchat.html',
+      'systems/foundry-fe2/templates/partial-skill-list-header.html'
     ]
-    return loadTemplates(templatePaths);    
+    return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
 
   /* -------------------------------------------- */
@@ -244,7 +244,7 @@ export class FraggedEmpireUtility  {
     actor.saveRollData( rollData );
   
     this.createChatWithRollMode( rollData.alias, {
-      content: await renderTemplate(`systems/fvtt-fragged-empire/templates/chat-generic-result.html`, rollData)
+      content: await renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData)
     });
   }
 
@@ -292,7 +292,7 @@ export class FraggedEmpireUtility  {
     chatGM.whisper = this.getUsers(user => user.isGM);
     chatGM.content = "Blinde message of " + game.user.name + "<br>" + chatOptions.content;
     console.log("blindMessageToGM", chatGM);
-    game.socket.emit("system.fvtt-fragged-empire", { msg: "msg_gm_chat_message", data: chatGM });
+    game.socket.emit("system.foundry-fe2", { msg: "msg_gm_chat_message", data: chatGM });
   }
 
   /* -------------------------------------------- */

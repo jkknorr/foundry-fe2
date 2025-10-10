@@ -13,6 +13,33 @@ const coverBonusTable = { "nocover": 0, "lightcover": 2, "heavycover": 4, "entre
  */
 export class FraggedEmpireActor extends Actor {
 
+  static defineSchema() {
+
+    const fields = foundry.data.fields;
+    return {
+      level: new fields.NumberField({ initial: 1 }),
+      resources: new fields.SchemaField({
+        value: new fields.NumberField({ initial: 0 }),
+        alloted: new fields.NumberField({ initial: 0 }),
+        bonus: new fields.NumberField({ initial: 0 }),
+        total: new fields.NumberField({ initial: 0 })
+      }),
+      influence: new fields.SchemaField({
+        value: new fields.NumberField({ initial: 0 }),
+        bonus: new fields.NumberField({ initial: 0 }),
+        total: new fields.NumberField({ initial: 0 })
+      }),
+      sparetimepoints: new fields.NumberField({ initial: 1 }),
+      attributes: new fields.SchemaField({
+        strength: new fields.SchemaField({
+          label: new fields.StringField({ initial: "Strength" }),
+          value: new fields.NumberField({ initial: 0 }),
+          current: new fields.NumberField({ initial: 0 })
+        }),
+      })
+    }
+  }
+
   /* -------------------------------------------- */
   /**
    * Override the create() function to provide additional SoS functionality.
@@ -38,7 +65,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     if ( data.type == 'character') {
-      const skills = await FraggedEmpireUtility.loadCompendium("fvtt-fragged-empire.skills");
+      const skills = await FraggedEmpireUtility.loadCompendium("foundry-fe2.skills");
       data.items = skills.map(i => i.toObject());
     }
 
@@ -58,112 +85,112 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   prepareDerivedData() {
     if (this.type == 'character') {
-      let restotal = this.data.data.level.value + 2 + this.data.data.resources.bonus;
-      if ( restotal != this.data.data.resources.total) {
-        this.data.data.resources.total = restotal;
+      let restotal = this.data.level.value + 2 + this.system.resources.bonus;
+      if ( restotal != this.system.resources.total) {
+        this.system.resources.total = restotal;
         this.update( { 'data.resources.total': restotal } );
       }
-      let inftotal = this.data.data.level.value + 2 + this.data.data.influence.bonus;
-      if ( inftotal != this.data.data.influence.total) {
-        this.data.data.influence.total = inftotal;
+      let inftotal = this.system.level.value + 2 + this.system.influence.bonus;
+      if ( inftotal != this.system.influence.total) {
+        this.system.influence.total = inftotal;
         this.update( { 'data.influence.total': inftotal } );
       }
-      let endmax = 10 + (this.data.data.attributes.strength.value * 5) + this.data.data.endurance.endurancebonus;
-      if (endmax != this.data.data.endurance.max) {
-        this.data.data.endurance.max = endmax;
+      let endmax = 10 + (this.system.attributes.strength.value * 5) + this.system.endurance.endurancebonus;
+      if (endmax != this.system.endurance.max) {
+        this.system.endurance.max = endmax;
         this.update( { 'data.endurance.max': endmax } );
       }
-      let coverBonus = coverBonusTable[this.data.data.defensebonus.cover];
-      let defTotal = this.getDefenseBase() + coverBonus + this.data.data.defensebonus.defense;
-      if ( defTotal != this.data.data.defensebonus.total) {
-        this.data.data.defensebonus.total = defTotal;
+      let coverBonus = coverBonusTable[this.system.defensebonus.cover];
+      let defTotal = this.getDefenseBase() + coverBonus + this.system.defensebonus.defense;
+      if ( defTotal != this.system.defensebonus.total) {
+        this.system.defensebonus.total = defTotal;
         this.update( { 'data.defensebonus.total': defTotal } );
       }
-      let vsimpair = this.getDefenseBase() + this.data.data.attributes.strength.value + this.data.data.defensebonus.vsimpairbonus;
-      if (vsimpair != this.data.data.defensebonus.vsimpair) {
-        this.data.data.defensebonus.vsimpair = vsimpair;
+      let vsimpair = this.getDefenseBase() + this.system.attributes.strength.value + this.system.defensebonus.vsimpairbonus;
+      if (vsimpair != this.system.defensebonus.vsimpair) {
+        this.system.defensebonus.vsimpair = vsimpair;
         this.update( { 'data.defensebonus.vsimpair': vsimpair } );
       }
-      let vspsionic = this.getDefenseBase() + this.data.data.attributes.focus.value + this.data.data.defensebonus.vspsionicbonus;
-      if (vspsionic != this.data.data.defensebonus.vspsionic) {
-        this.data.data.defensebonus.vspsionic = vspsionic;
+      let vspsionic = this.getDefenseBase() + this.system.attributes.focus.value + this.system.defensebonus.vspsionicbonus;
+      if (vspsionic != this.system.defensebonus.vspsionic) {
+        this.system.defensebonus.vspsionic = vspsionic;
         this.update( { 'data.defensebonus.vspsionic': vspsionic } );
       }
-      let vsstealth = 10 + this.data.data.attributes.perception.value + this.data.data.defensebonus.ally;
-      if (vsstealth != this.data.data.defensebonus.vsstealth) {
-        this.data.data.defensebonus.vsstealth = vsstealth;
+      let vsstealth = 10 + this.system.attributes.perception.value + this.system.defensebonus.ally;
+      if (vsstealth != this.system.defensebonus.vsstealth) {
+        this.system.defensebonus.vsstealth = vsstealth;
         this.update( { 'data.defensebonus.vsstealth': vsstealth } );
       }
-      let recovery = this.data.data.attributes.focus.value + this.data.data.endurance.recoverybonus;
-      if (recovery != this.data.data.endurance.recovery) {
-        this.data.data.endurance.recovery = recovery;
+      let recovery = this.system.attributes.focus.value + this.system.endurance.recoverybonus;
+      if (recovery != this.system.endurance.recovery) {
+        this.system.endurance.recovery = recovery;
         this.update( { 'data.endurance.recovery': recovery } );
       }      
     }
     if (this.type == 'spacecraft') {
-      let cargomax = (this.data.data.size.value*4) + this.data.data.attributes.hull.value - 10 + this.data.data.stats.cargo.bonus;
-      if  ( cargomax != this.data.data.stats.cargo.max) {
-        this.data.data.stats.cargo.max = cargomax;
+      let cargomax = (this.system.size.value*4) + this.system.attributes.hull.value - 10 + this.system.stats.cargo.bonus;
+      if  ( cargomax != this.system.stats.cargo.max) {
+        this.system.stats.cargo.max = cargomax;
         this.update( { 'data.stats.cargo.max': cargomax } );
       }
-      let slotmax = this.data.data.size.value + this.data.data.stats.weaponsslot.bonus;
-      if ( slotmax != this.data.data.stats.weaponsslot.max) {
-        this.data.data.stats.weaponsslot.max = slotmax;
+      let slotmax = this.system.size.value + this.system.stats.weaponsslot.bonus;
+      if ( slotmax != this.system.stats.weaponsslot.max) {
+        this.system.stats.weaponsslot.max = slotmax;
         this.update( { 'data.stats.weaponsslot.max': slotmax } );
       }
-      let resupmax = (this.data.data.size.value*2) + this.data.data.stats.resupply.bonus;
-      if ( resupmax != this.data.data.stats.resupply.max) {
-        this.data.data.stats.resupply.max = resupmax;
+      let resupmax = (this.system.size.value*2) + this.system.stats.resupply.bonus;
+      if ( resupmax != this.system.stats.resupply.max) {
+        this.system.stats.resupply.max = resupmax;
         this.update( { 'data.stats.resupply.max': resupmax } );
       }
       let velomax = 6 
-      if ( velomax != this.data.data.attributes.velocity.value) {
-        this.data.data.attributes.velocity.value = velomax;
+      if ( velomax != this.system.attributes.velocity.value) {
+        this.system.attributes.velocity.value = velomax;
         this.update( { 'data.attributes.velocity.value': velomax } );
       }
       let defenceb = this.getDefenseBase();
-      if ( defenceb != this.data.data.fight.defence.base) {
-        this.data.data.fight.defence.base = defenceb;
+      if ( defenceb != this.system.fight.defence.base) {
+        this.system.fight.defence.base = defenceb;
         this.update( { 'data.fight.defence.base': defenceb } );
       }
-      let defencet = defenceb + this.data.data.fight.defence.bonus;
-      if ( defencet != this.data.data.fight.defence.total) {
-        this.data.data.fight.defence.total = defencet;
+      let defencet = defenceb + this.system.fight.defence.bonus;
+      if ( defencet != this.system.fight.defence.total) {
+        this.system.fight.defence.total = defencet;
         this.update( { 'data.fight.defence.total': defencet } );
       }
       let armourb = this.getBaseArmour();
-      if ( armourb != this.data.data.fight.armour.base) {
-        this.data.data.fight.armour.base = armourb;
+      if ( armourb != this.system.fight.armour.base) {
+        this.system.fight.armour.base = armourb;
         this.update( { 'data.fight.armour.base': armourb } );
       }
-      let armourt = armourb + this.data.data.fight.armour.bonus;
-      if ( armourt != this.data.data.fight.armour.total) {
-        this.data.data.fight.armour.total = armourt;
+      let armourt = armourb + this.system.fight.armour.bonus;
+      if ( armourt != this.system.fight.armour.total) {
+        this.system.fight.armour.total = armourt;
         this.update( { 'data.fight.armour.total': armourt } );
       }
-      let shieldb = 10 + (this.data.data.attributes.power.value*this.data.data.size.value) ;
-      if ( shieldb != this.data.data.fight.shield.base) {
-        this.data.data.fight.shield.base = shieldb;
+      let shieldb = 10 + (this.system.attributes.power.value*this.system.size.value) ;
+      if ( shieldb != this.system.fight.shield.base) {
+        this.system.fight.shield.base = shieldb;
         this.update( { 'data.fight.shield.base': shieldb } );        
       }
-      let shieldt = shieldb  + this.data.data.fight.shield.bonus;
-      if ( shieldt != this.data.data.fight.shield.total) {
-        this.data.data.fight.shield.total = shieldt;
+      let shieldt = shieldb  + this.system.fight.shield.bonus;
+      if ( shieldt != this.system.fight.shield.total) {
+        this.system.fight.shield.total = shieldt;
         this.update( { 'data.fight.shield.total': shieldt } );        
       }
-      let vsordinance = this.data.data.fight.defence.total + this.data.data.fight.defence.derivated.vsordinance.bonus;
-      if ( vsordinance != this.data.data.fight.defence.derivated.vsordinance.total) {
-        this.data.data.fight.defence.derivated.vsordinance.total = vsordinance;
+      let vsordinance = this.system.fight.defence.total + this.system.fight.defence.derivated.vsordinance.bonus;
+      if ( vsordinance != this.system.fight.defence.derivated.vsordinance.total) {
+        this.system.fight.defence.derivated.vsordinance.total = vsordinance;
         this.update( { 'data.fight.defence.derivated.vsordinance.total': vsordinance } );        
       }
-      let vsboarding = 10 + this.data.data.size.value + this.data.data.attributes.crew.value + this.data.data.fight.defence.derivated.vsboarding.bonus;
-      if ( vsboarding != this.data.data.fight.defence.derivated.vsboarding.total) {
-        this.data.data.fight.defence.derivated.vsboarding.total = vsboarding;
+      let vsboarding = 10 + this.system.size.value + this.system.attributes.crew.value + this.system.fight.defence.derivated.vsboarding.bonus;
+      if ( vsboarding != this.system.fight.defence.derivated.vsboarding.total) {
+        this.system.fight.defence.derivated.vsboarding.total = vsboarding;
         this.update( { 'data.fight.defence.derivated.vsboarding.total': vsboarding } );        
       }
-      let at0shield = -1 + this.data.data.fight.armour.derivated.at0shield.bonus;
-      if ( at0shield != this.data.data.fight.armour.derivated.at0shield.total) {
-        this.data.data.fight.armour.derivated.at0shield.total = at0shield;
+      let at0shield = -1 + this.system.fight.armour.derivated.at0shield.bonus;
+      if ( at0shield != this.system.fight.armour.derivated.at0shield.total) {
+        this.system.fight.armour.derivated.at0shield.total = at0shield;
         this.update( { 'data.fight.armour.derivated.at0shield.total': at0shield } );        
       }
     }
@@ -176,14 +203,14 @@ export class FraggedEmpireActor extends Actor {
     if ( changed.data?.resources?.value ) {
       if ( changed.data.resources.value < 0 ) 
         changed.data.resources.value = 0;
-      if ( changed.data.resources.value > this.data.data.resources.total ) 
-        changed.data.resources.value = this.data.data.resources.total; 
+      if ( changed.data.resources.value > this.system.resources.total ) 
+        changed.data.resources.value = this.system.resources.total; 
     }
     if ( changed.data?.influence?.value ) {
       if ( changed.data.influence.value < 0 ) 
         changed.data.influence.value = 0;
-      if ( changed.data.influence.value > this.data.data.influence.total ) 
-        changed.data.influence.value = this.data.data.influence.total; 
+      if ( changed.data.influence.value > this.system.influence.total ) 
+        changed.data.influence.value = this.system.influence.total; 
     }
 
     super._preUpdate(changed, options, user);
@@ -192,7 +219,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getPerks() {
     let search =(this.type == 'character') ? 'perk' : 'spacecraftperk';
-    let comp = this.data.items.filter( item => item.type == search);
+    let comp = this.items.filter( item => item.type == search);
     return comp;
   }
   /* -------------------------------------------- */
@@ -203,42 +230,42 @@ export class FraggedEmpireActor extends Actor {
     } else {
       search = 'spacecrafttrait';
     }
-    let comp = this.data.items.filter( item => item.type == search);
+    let comp = this.items.filter( item => item.type == search);
     return comp;
   }
   /* -------------------------------------------- */
   getComplications() {
-    let comp = this.data.items.filter( item => item.type == 'complication');
+    let comp = this.items.filter( item => item.type == 'complication');
     return comp;
   }
   /* -------------------------------------------- */
   getSkills() {
-    let comp = this.data.items.filter( item => item.type == 'skill');
+    let comp = this.items.filter( item => item.type == 'skill');
     return comp;
   }
 
   /* -------------------------------------------- */
   prepareSkill( item, type) {
-    if (item.type == 'skill' && item.data.data.type == type) {
-      item.data.data.trainedValue = (item.data.data.trained) ? 1 : -2
-      item.data.data.total = item.data.data.trainedValue + item.data.data.bonus;
-      item.data.data.isTrait = item.data.data.traits.length > 0;
+    if (item.type == 'skill' && item.system.type == type) {
+      item.system.trainedValue = (item.system.trained) ? 1 : -2
+      item.system.total = item.system.trainedValue + item.system.bonus;
+      item.system.isTrait = item.system.traits.length > 0;
       return item;
     }
   }
 
   /* -------------------------------------------- */
   async equipItem(itemId ) {
-    let item = this.data.items.find( item => item.id == itemId );
+    let item = this.items.find( item => item.id == itemId );
     if ( item &&  item.type == 'outfit' || item.type == 'utility') {
-      let itemUnequipped = this.data.items.find( item2 => item2.type == item.type && item2.data.data.equipped );
+      let itemUnequipped = this.items.find( item2 => item2.type == item.type && item2.system.equipped );
       if ( itemUnequipped) {
         let update = { _id: itemUnequipped.id, "data.equipped": false };
         await this.updateEmbeddedDocuments('Item', [update]); 
       }
     }
-    if (item && item.data.data) {
-      let update = { _id: item.id, "data.equipped": !item.data.data.equipped };
+    if (item && item.system) {
+      let update = { _id: item.id, "data.equipped": !item.system.equipped };
       await this.updateEmbeddedDocuments('Item', [update]); // Updates one EmbeddedEntity
     }
   }
@@ -246,16 +273,16 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getSortedSkills() {
     let comp = {};
-    comp['everyday'] = this.data.items.filter( item => this.prepareSkill(item, 'everyday') );
-    comp['professional'] = this.data.items.filter( item => this.prepareSkill(item, 'professional') );
-    comp['combat'] = this.data.items.filter( item => this.prepareSkill(item, 'combat') );
-    comp['vehicle'] = this.data.items.filter( item => this.prepareSkill(item, 'vehicle')) ;
+    comp['everyday'] = this.items.filter( item => this.prepareSkill(item, 'everyday') );
+    comp['professional'] = this.items.filter( item => this.prepareSkill(item, 'professional') );
+    comp['combat'] = this.items.filter( item => this.prepareSkill(item, 'combat') );
+    comp['vehicle'] = this.items.filter( item => this.prepareSkill(item, 'vehicle')) ;
     return comp;
   }
  
   /* -------------------------------------------- */
   prepareTraitSpecific( actorData, key, traitsAttr ) {
-    let trait = traitsAttr.find( item => item.data.data.subtype == key); // Get the first attribute trait
+    let trait = traitsAttr.find( item => item.system.subtype == key); // Get the first attribute trait
     if (trait ) {
       actorData[key].traitId = trait.id;
     } else {
@@ -264,7 +291,7 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   prepareSpacecraftTraitSpecific( actorData, key, traitsAttr ) {
-    let trait = traitsAttr.find( item => item.data.data.type == key); // Get the first attribute trait
+    let trait = traitsAttr.find( item => item.system.type == key); // Get the first attribute trait
     if (trait ) {
       actorData[key].traitId = trait.id;
     } else {
@@ -274,14 +301,14 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   prepareTraitsAttributes() {
     let search = (this.type == 'character') ? 'trait' : 'spacecrafttrait';
-    let traitsAttr = this.data.items.filter( item => item.type == search);
-    let actorData = this.data.data;
+    console.log("Test",this.system.level);
+    let traitsAttr = this.items.filter( item => item.type == search);
+    let actorData = this.system;
     
     if ( this.type == 'character') {
       for( let key in actorData.attributes) {
         this.prepareTraitSpecific( actorData.attributes, key, traitsAttr);
       }
-      this.prepareTraitSpecific(actorData, "fate", traitsAttr);
       this.prepareTraitSpecific(actorData, "influence", traitsAttr);
       this.prepareTraitSpecific(actorData, "resources", traitsAttr);
       this.prepareTraitSpecific(actorData, "level", traitsAttr);
@@ -294,18 +321,18 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   getEquipmentSlotsBase() {
-    let equipSlots = this.data.items.filter( item => item.type == 'outfit' || item.type == 'utility');
+    let equipSlots = this.items.filter( item => item.type == 'outfit' || item.type == 'utility');
     let equipmentSlots = 0;
     for (let equip of equipSlots) {
-      if ( equip.data.data.statstotal?.equipmentslots?.value && !isNaN( equip.data.data.statstotal.equipmentslots.value)) {
-        equipmentSlots+= Number(equip.data.data.statstotal.equipmentslots.value);
+      if ( equip.system.statstotal?.equipmentslots?.value && !isNaN( equip.system.statstotal.equipmentslots.value)) {
+        equipmentSlots+= Number(equip.system.statstotal.equipmentslots.value);
       }
     }
     return equipmentSlots;
   }
   /* -------------------------------------------- */
   getEquipmentSlotsTotal() {
-    return this.getEquipmentSlotsBase() + this.data.data.equipmentslots.bonus;
+    return this.getEquipmentSlotsBase() + this.system.equipmentslots.bonus;
   }
 
   /* -------------------------------------------- */
@@ -313,10 +340,10 @@ export class FraggedEmpireActor extends Actor {
     let skills = this.getSkills();
     let skillsTraits = [];
     for( let skill of skills) {
-      for (let trait of skill.data.data.traits) {
+      for (let trait of skill.system.traits) {
         trait.associatedSkill = skill.name;
       }
-      skillsTraits = skillsTraits.concat( skill.data.data.traits );
+      skillsTraits = skillsTraits.concat( skill.system.traits );
     }
     //console.log("Consolidated skills", skillsTraits);
     return skillsTraits;
@@ -324,7 +351,7 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   getTrait( traitId  ) {
-    let trait = this.data.items.find( item => item.id == traitId );
+    let trait = this.items.find( item => item.id == traitId );
     return trait;
   }
   
@@ -340,44 +367,44 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   getLanguages() {
-    return this.data.items.filter( item => item.type == 'language'  );
+    return this.items.filter( item => item.type == 'language'  );
   }
   /* -------------------------------------------- */
   getStrongHits() {
-    return this.data.items.filter( item => item.type == 'stronghit'  );
+    return this.items.filter( item => item.type == 'stronghit'  );
   }
   /* ------------------------------------------- */
   getUtilities() {
-    return this.data.items.filter( item => item.type == 'utility'  );
+    return this.items.filter( item => item.type == 'utility'  );
   }
   /* ------------------------------------------- */
   getEquipments() {
-    return this.data.items.filter( item => item.type == 'utility' || item.type == 'outfit' || item.type == "weapon" );
+    return this.items.filter( item => item.type == 'utility' || item.type == 'outfit' || item.type == "weapon" );
   }
   
   /* -------------------------------------------- */
   updateWeaponStat( weapon) {
-    weapon.data.data.totalHit = weapon.data.data.stats.hit.value;
-    for (let variation of weapon.data.data.variations) {
+    weapon.system.totalHit = weapon.system.stats.hit.value;
+    for (let variation of weapon.system.variations) {
       if (!isNaN(variation.data.stats.hit) ) {
-        weapon.data.data.totalHit += Number(variation.data.data.stats.hit.value)
+        weapon.system.totalHit += Number(variation.system.stats.hit.value)
       }
     }
-    for (let mod of weapon.data.data.modifications) {
+    for (let mod of weapon.system.modifications) {
       if (!isNaN(mod.data.stats.hit) ) {
-        weapon.data.data.totalHit += Number(mod.data.data.stats.hit.value)
+        weapon.system.totalHit += Number(mod.system.stats.hit.value)
       }
     }
   }
 
   /* -------------------------------------------- */
   getRaces( ) {
-    return this.data.items.filter( item => item.type == 'race' );
+    return this.items.filter( item => item.type == 'race' );
   }
 
   /* -------------------------------------------- */
   getWeapons() {
-    let weapons = this.data.items.filter( item => item.type == 'weapon' );
+    let weapons = this.items.filter( item => item.type == 'weapon' );
     for (let weapon of weapons) {
       this.updateWeaponStat(weapon);
     }
@@ -386,12 +413,12 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   getSpacecraftWeapons() {
-    let weapons = this.data.items.filter( item => item.type == 'spacecraftweapon' );
+    let weapons = this.items.filter( item => item.type == 'spacecraftweapon' );
     return weapons;
   }
   /* -------------------------------------------- */
   getOutfits() {
-    return this.data.items.filter( item => item.type == 'outfit' );
+    return this.items.filter( item => item.type == 'outfit' );
   }
 
   /* -------------------------------------------- */
@@ -411,7 +438,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getAttribute( attrName ) {
     for( let key in this.data.attributes) {
-      let attr = this.data.data.carac[key];
+      let attr = this.system.carac[key];
       if (attr.label.toLowerCase() == attrName.toLowerCase() ) {
         return deepClone(categ.carac[carac]);
       }
@@ -420,9 +447,9 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   async equipGear( equipmentId ) {    
-    let item = this.data.items.find( item => item.id == equipmentId );
-    if (item && item.data.data) {
-      let update = { _id: item.id, "data.equipe": !item.data.data.equipe };
+    let item = this.items.find( item => item.id == equipmentId );
+    if (item && item.system) {
+      let update = { _id: item.id, "data.equipe": !item.system.equipe };
       await this.updateEmbeddedDocuments('Item', [update]); // Updates one EmbeddedEntity
     }
   }
@@ -444,9 +471,9 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getInitiativeScore( )  {
     if ( this.type == 'character') {
-      return this.data.data.attributes.intelligence.current + (this.data.data.attributes.reflexes.current/10)
+      return this.system.attributes.intelligence.current + (this.system.attributes.reflexes.current/10)
     } else if (this.type == 'spacecraft') {
-      return this.data.data.attributes.velocity.value + (this.data.data.size.value/10)
+      return this.system.attributes.velocity.value + (this.system.size.value/10)
     }
     return 0.0;
   }
@@ -455,16 +482,16 @@ export class FraggedEmpireActor extends Actor {
   getDefenseBase() {
     if (this.type == 'character') {
       let outfitBonus = 0;
-      let outfits = this.data.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.data.data.equipped );
+      let outfits = this.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped );
       for (let item of outfits) {
-        if ( !isNaN(item.data.data.statstotal?.defence?.value)) {
-          outfitBonus += Number(item.data.data.statstotal.defence.value);
+        if ( !isNaN(item.system.statstotal?.defence?.value)) {
+          outfitBonus += Number(item.system.statstotal.defence.value);
         }
       }
-      return 10 + this.data.data.attributes.reflexes.value + outfitBonus;
+      return 10 + this.system.attributes.reflexes.value + outfitBonus;
     }
     if (this.type == 'spacecraft') {
-      return 12 - this.data.data.size.value + this.data.data.attributes.engines.value;
+      return 12 - this.system.size.value + this.system.attributes.engines.value;
     }
     return 0;
   }
@@ -472,24 +499,24 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getDefenseTotal() {
     if (this.type == 'character') {
-      return this.data.data.defensebonus.total;
+      return this.system.defensebonus.total;
     }
     return 0;
   }
   /* -------------------------------------------- */
   getVsOrdinance() {
     if (this.type == 'spacecraft') {
-      return this.data.data.fight.defence.value + this.data.data.fight.defence.vsordinance;
+      return this.system.fight.defence.value + this.system.fight.defence.vsordinance;
     }
   }
   /* -------------------------------------------- */
   getBaseArmour( ) {
     if (this.type == 'character') {
       let armour = 0;
-      let outfits = this.data.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.data.data.equipped );
+      let outfits = this.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped );
       for (let item of outfits) {
-        if ( !isNaN(item.data.data.statstotal?.armour?.value)) {
-          armour += Number(item.data.data.statstotal.armour.value);
+        if ( !isNaN(item.system.statstotal?.armour?.value)) {
+          armour += Number(item.system.statstotal.armour.value);
         }
       }
       return armour;
@@ -502,49 +529,49 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getTotalArmour( ) {
     if (this.type == 'character') {
-      this.data.data.armourbonus.total = this.getBaseArmour() + this.data.data.armourbonus.armour;
-      return this.data.data.armourbonus.total;
+      this.system.armourbonus.total = this.getBaseArmour() + this.system.armourbonus.armour;
+      return this.system.armourbonus.total;
     }
     if (this.type == 'spacecraft') {
-      this.data.data.fight.armour.total = this.getBaseArmour() + this.data.data.fight.armour.bonus
-      return this.data.data.fight.armour.total;
+      this.system.fight.armour.total = this.getBaseArmour() + this.system.fight.armour.bonus
+      return this.system.fight.armour.total;
     }
     return 0;
   }
   /* -------------------------------------------- */
   getTradeGoods( ) {
-    let tradeGoods = this.data.items.filter( item => item.type == 'tradegood' );
+    let tradeGoods = this.items.filter( item => item.type == 'tradegood' );
     for (let good of tradeGoods) {
-      good.cargoSpace = Math.ceil(good.data.data.tradebox / 4); 
+      good.cargoSpace = Math.ceil(good.system.tradebox / 4); 
     }
     return tradeGoods;
 
   }
   /* -------------------------------------------- */
   getResearch( ) {
-    let research = this.data.items.filter( item => item.type == 'research' );
+    let research = this.items.filter( item => item.type == 'research' );
     return research;
 
   }
   /* -------------------------------------------- */
   getSubActors() {
     let subActors = [];
-    for (let id of this.data.data.subactors) {
+    for (let id of this.system.subactors) {
       subActors.push(duplicate(game.actors.get(id)));
     }
     return subActors;
   }
   /* -------------------------------------------- */
   async addSubActor( subActorId) {
-    let subActors = duplicate( this.data.data.subactors);
+    let subActors = duplicate( this.system.subactors);
     subActors.push( subActorId);
     await this.update( { 'data.subactors': subActors } );
   }
   /* -------------------------------------------- */
   async delSubActor( subActorId) {
     let newArray = [];
-    console.log("ID; ", this.data.data.subactors, subActorId);
-    for (let id of this.data.data.subactors) {
+    console.log("ID; ", this.system.subactors, subActorId);
+    for (let id of this.system.subactors) {
       if ( id != subActorId) {
         newArray.push( id);
       }
@@ -553,9 +580,9 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   decrementFate() {
-    if ( this.type == 'character' && this.data.data.fate.value > 0 ) {
-      let newFate = this.data.data.fate.value - 1;
-      this.data.data.fate.value = newFate;
+    if ( this.type == 'character' && this.system.fate.value > 0 ) {
+      let newFate = this.system.fate.value - 1;
+      this.system.fate.value = newFate;
       this.update( { 'data.fate.value': newFate } );
       return newFate;
     }
@@ -563,15 +590,15 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   getFate() {
-    if ( this.type == 'character' && this.data.data.fate.value > 0 ) {
-      return this.data.data.fate.value;
+    if ( this.type == 'character' && this.system.fate.value > 0 ) {
+      return this.system.fate.value;
     }
     return false;
   }
 
   /* -------------------------------------------- */
   async rollSkill( competenceId ) {
-    let skill = this.data.items.find( item => item.type == 'skill' && item.id == competenceId);
+    let skill = this.items.find( item => item.type == 'skill' && item.id == competenceId);
     if (skill) {
       let rollData = {
         mode: "skill",
@@ -581,7 +608,7 @@ export class FraggedEmpireActor extends Actor {
         img: skill.img,
         hasFate: this.getFate(),
         rollMode: game.settings.get("core", "rollMode"),
-        title: `Skill ${skill.name} : ${skill.data.data.total}`,
+        title: `Skill ${skill.name} : ${skill.system.total}`,
         skill: skill,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
         bonusMalus: 0,
@@ -589,7 +616,7 @@ export class FraggedEmpireActor extends Actor {
         difficulty: 0,
         useToolbox: false,
         useDedicatedworkshop: false,
-        toolsAvailable: skill.data.data.toolbox || skill.data.data.useDedicatedworkshop
+        toolsAvailable: skill.system.toolbox || skill.system.useDedicatedworkshop
       }
       let rollDialog = await FraggedEmpireRoll.create( this, rollData);
       console.log(rollDialog);
@@ -622,7 +649,7 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   async rollWeapon( weaponId ) {
-    let weapon = this.data.items.find( item => item.id == weaponId);
+    let weapon = this.items.find( item => item.id == weaponId);
     console.log("WEAPON :", weaponId, weapon );
         
     this.updateWeaponStat( weapon);
@@ -645,11 +672,11 @@ export class FraggedEmpireActor extends Actor {
       }
       // Add skill for character only
       if (this.type == 'character') {
-        let weaponSkills = this.data.items.filter( item => item.type == 'skill' && item.data.data.type == 'combat');
+        let weaponSkills = this.items.filter( item => item.type == 'skill' && item.system.type == 'combat');
         rollData.weaponSkills =  weaponSkills;
         let combatSkill = weaponSkills[0];
-        if ( weapon.data.data.defaultskill != "") {
-          combatSkill = this.data.items.find( item => item.type == 'skill' && item.data.data.type == 'combat' && item.name == weapon.data.data.defaultskill);
+        if ( weapon.system.defaultskill != "") {
+          combatSkill = this.items.find( item => item.type == 'skill' && item.system.type == 'combat' && item.name == weapon.system.defaultskill);
         }
         rollData.skillId = combatSkill.id;
         rollData.skill = combatSkill;
@@ -663,8 +690,8 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   buildNPCRoFArray( ) {
-    let bodiesBase = Number(this.data.data.spec.bodies.value);
-    let rofMax = bodiesBase + Number(this.data.data.stats.rof.value) || 1;
+    let bodiesBase = Number(this.system.spec.bodies.value);
+    let rofMax = bodiesBase + Number(this.system.stats.rof.value) || 1;
     return FraggedEmpireUtility.createDirectOptionList(1, rofMax);
   }
 
@@ -677,7 +704,7 @@ export class FraggedEmpireActor extends Actor {
       actorId: this.id,
       img: this.img,
       hasFate: this.getFate(),
-      npcstats: duplicate(this.data.data.stats),
+      npcstats: duplicate(this.system.stats),
       rollMode: game.settings.get("core", "rollMode"),
       title: "Attack : " + this.name,
       weaponRoFOptions: this.buildNPCRoFArray(), 
@@ -693,25 +720,25 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   async rollSpacecraftWeapon( weaponId ) {
-      let weapon = this.data.items.find( item => item.id == weaponId);
+      let weapon = this.items.find( item => item.id == weaponId);
       console.log("SPACECRAFT WEAPON :", weaponId, weapon );
       
       // Build available actor/skills
       let actorList = []
       if (game.user.isGM )  {
         for (let actor of game.actors) {
-          actorList.push( { id:actor.id, name:actor.name, skills:actor.data.items.filter( item => item.type == 'skill' && item.data.data.type == 'vehicle') } );
+          actorList.push( { id:actor.id, name:actor.name, skills:actor.data.items.filter( item => item.type == 'skill' && item.system.type == 'vehicle') } );
         }
       } else {      
         let actorWeapon = game.user.character;
-        actorList.push( { id:actorWeapon.id, name:actorWeapon.name, skills:actorWeapon.data.items.filter( item => item.type == 'skill' && item.data.data.type == 'vehicle') } );
+        actorList.push( { id:actorWeapon.id, name:actorWeapon.name, skills:actorWeapon.data.items.filter( item => item.type == 'skill' && item.system.type == 'vehicle') } );
       }
 
       // Skill prepare
       let skill = actorList[0].skills[0];
-      skill.data.data.trainedValue = (skill.data.data.trained) ? 1 : -2
-      skill.data.data.total = skill.data.data.trainedValue + skill.data.data.bonus;
-      skill.data.data.isTrait = skill.data.data.traits.length > 0; 
+      skill.system.trainedValue = (skill.system.trained) ? 1 : -2
+      skill.system.total = skill.system.trainedValue + skill.system.bonus;
+      skill.system.isTrait = skill.system.traits.length > 0; 
 
       if ( weapon ) {      
         let rollData = {
@@ -731,7 +758,7 @@ export class FraggedEmpireActor extends Actor {
           bonusMalus: 0,
           isGM: game.user.isGM
         }
-        let rofMax = Number(weapon.data.data.statstotal.rof.value) || 1;
+        let rofMax = Number(weapon.system.statstotal.rof.value) || 1;
         rollData.rofValue = rofMax;
 
         let rollDialog = await FraggedEmpireRoll.create( this, rollData);
@@ -744,7 +771,7 @@ export class FraggedEmpireActor extends Actor {
   
   /* -------------------------------------------- */
   async incrementeArgent( arme ) {
-    let monnaie = this.data.items.find( item => item.type == 'monnaie' && item.name == arme.name);
+    let monnaie = this.items.find( item => item.type == 'monnaie' && item.name == arme.name);
     if (monnaie) {
       let newValeur = monnaie.data.nombre + 1;
       await this.updateOwnedItem( { _id: monnaie._id, 'data.nombre': newValeur } );
@@ -752,7 +779,7 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   async decrementeArgent( arme ) {
-    let monnaie = this.data.items.find( item => item.type == 'monnaie' && item.name == arme.name);
+    let monnaie = this.items.find( item => item.type == 'monnaie' && item.name == arme.name);
     if (monnaie) {
       let newValeur = monnaie.data.nombre - 1;
       newValeur = (newValeur <= 0) ? 0 : newValeur;
@@ -762,18 +789,18 @@ export class FraggedEmpireActor extends Actor {
   
   /* -------------------------------------------- */
   async incrementeQuantite( objetId ) {
-    let objetQ = this.data.items.find( item => item.id == objetId );
+    let objetQ = this.items.find( item => item.id == objetId );
     if (objetQ) {
-      let newQ = objetQ.data.data.quantite + 1;
+      let newQ = objetQ.system.quantite + 1;
       const updated = await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'data.quantite': newQ }]); // pdates one EmbeddedEntity
     }
   }
   
   /* -------------------------------------------- */
   async decrementeQuantite( objetId ) {
-    let objetQ = this.data.items.find( item => item.id == objetId );
+    let objetQ = this.items.find( item => item.id == objetId );
     if (objetQ) {
-      let newQ = objetQ.data.data.quantite - 1;
+      let newQ = objetQ.system.quantite - 1;
       newQ = (newQ <= 0) ? 0 : newQ;
       const updated = await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'data.quantite': newQ }]); // pdates one EmbeddedEntity
     }

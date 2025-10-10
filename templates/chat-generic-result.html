@@ -37,12 +37,12 @@
   <span class="dice-image">
     {{#if @root.strongHitAvailable}}
       {{#if (ne value 6)}}
-      <a class="link-reroll" data-dice-index={{key}} data-actor-id={{@root.actorId}}><img class='dice-image-reroll chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'></a>
+      <a class="link-reroll" data-dice-index={{key}} data-actor-id={{@root.actorId}}><img class='dice-image-reroll chat-dice' src='systems/foundry-fe2/images/dice/d6_{{value}}.png'></a>
       {{else}}
-      <img class='dice-image chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'>
+      <img class='dice-image chat-dice' src='systems/foundry-fe2/images/dice/d6_{{value}}.png'>
       {{/if}}
       {{else}}
-    <img class='dice-image chat-dice' src='systems/fvtt-fragged-empire/images/dice/d6_{{value}}.png'>
+    <img class='dice-image chat-dice' src='systems/foundry-fe2/images/dice/d6_{{value}}.png'>
     {{/if}}
   </span>
   {{/each}}

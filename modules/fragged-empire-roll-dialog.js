@@ -8,21 +8,21 @@ export class FraggedEmpireRoll extends Dialog {
     let html
     let options = { classes: ["fraggedempiredialog"], width: 600, height: 320, 'z-index': 99999 };
     if ( rollData.mode == "skill") {
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-skill.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-skill.html', rollData);
       options.height = 360;
     } else if (rollData.mode == "weapon") {
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-weapon.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-weapon.html', rollData);
       options.height = 460;
     } else if (rollData.mode == "spacecraftweapon") {
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-spacecraftweapon.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-spacecraftweapon.html', rollData);
     } else if (rollData.mode == "npcfight") {
       options.height = 360;
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-npcfight.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-npcfight.html', rollData);
     } else if (rollData.mode == "genericskill") {
       options.height = 240;
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-genericskill.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-genericskill.html', rollData);
     } else {
-      html = await renderTemplate('systems/fvtt-fragged-empire/templates/roll-dialog-skill.html', rollData);
+      html = await renderTemplate('systems/foundry-fe2/templates/roll-dialog-skill.html', rollData);
     }
     return new FraggedEmpireRoll(actor, rollData, html, options );
   }

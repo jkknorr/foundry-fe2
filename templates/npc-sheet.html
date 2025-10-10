@@ -25,7 +25,7 @@
         {{!-- Carac Tab --}}
         <div class="tab items" data-group="primary" data-tab="attribute">
           <span><a class="lock-unlock-sheet"><img class="small-button-container" 
-            src="systems/fvtt-fragged-empire/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
+            src="systems/foundry-fe2/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
             >{{#if editScore}}Unlocked{{else}}Locked{{/if}}</a>
           </span>
           <div class="grid grid-2col">
@@ -104,7 +104,7 @@
               </div>
             </li>
             <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
-              {{> "systems/fvtt-fragged-empire/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false header=true}}
+              {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false header=true}}
             </li>
             {{/each}}                
           </ul>          
@@ -177,7 +177,7 @@
             {{editor content=data.notes target="data.notes" button=true owner=owner editable=editable}}
           </div>
           <hr>
-          {{>"systems/fvtt-fragged-empire/templates/editor-notes-gm.html"}}
+          {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
         </article>
       </div>
 

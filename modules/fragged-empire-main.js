@@ -36,7 +36,7 @@ Hooks.once("init", async function () {
   };
 
   /* -------------------------------------------- */
-  game.socket.on("system.fvtt-fragged-empire", data => {
+  game.socket.on("system.foundry-fe2", data => {
     FraggedEmpireUtility.onSocketMesssage(data);
   });
 
@@ -49,13 +49,13 @@ Hooks.once("init", async function () {
 
   /* -------------------------------------------- */
   // Register sheet application classes
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("fvtt-fragged-empire", FraggedEmpireActorSheet, { types: ["character"], makeDefault: true });
-  Actors.registerSheet("fvtt-fragged-empire", FraggedEmpireSpacecraftSheet, { types: ["spacecraft"], makeDefault: false });
-  Actors.registerSheet("fvtt-fragged-empire", FraggedEmpireNPCSheet, { types: ["npc"], makeDefault: false });
+  foundry.documents.collections.Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
+  foundry.documents.collections.Actors.registerSheet("foundry-fe2", FraggedEmpireActorSheet, { types: ["character"], makeDefault: true });
+  foundry.documents.collections.Actors.registerSheet("foundry-fe2", FraggedEmpireSpacecraftSheet, { types: ["spacecraft"], makeDefault: false });
+  foundry.documents.collections.Actors.registerSheet("foundry-fe2", FraggedEmpireNPCSheet, { types: ["npc"], makeDefault: false });
 
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("fvtt-fragged-empire", FraggedEmpireItemSheet, { makeDefault: true });
+  foundry.documents.collections.Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
+  foundry.documents.collections.Items.registerSheet("foundry-fe2", FraggedEmpireItemSheet, { makeDefault: true });
 
   FraggedEmpireUtility.init();
   

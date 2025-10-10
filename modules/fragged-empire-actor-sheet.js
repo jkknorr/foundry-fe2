@@ -7,14 +7,14 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireItemSheet } from "./fragged-empire-item-sheet.js";
 
 /* -------------------------------------------- */
-export class FraggedEmpireActorSheet extends ActorSheet {
+export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   static get defaultOptions() {
 
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["fragged-empire", "sheet", "actor"],
-      template: "systems/fvtt-fragged-empire/templates/actor-sheet.html",
+      template: "systems/foundry-fe2/templates/actor-sheet.html",
       width: 640,
       height: 720,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
@@ -25,10 +25,11 @@ export class FraggedEmpireActorSheet extends ActorSheet {
 
   /* -------------------------------------------- */
   async getData() {
-    const objectData = FraggedEmpireUtility.data(this.object);
+    // const objectData = FraggedEmpireUtility.data(this.object);
+    const objectData = this.object
     
     this.actor.prepareTraitsAttributes();
-    let actorData = duplicate(FraggedEmpireUtility.templateData(this.object));
+    let actorData = foundry.utils.duplicate(FraggedEmpireUtility.templateData(this.object));
     let sortedSkills = this.actor.getSortedSkills();
 
     let formData = {
@@ -71,7 +72,7 @@ export class FraggedEmpireActorSheet extends ActorSheet {
       isGM: game.user.isGM
     }
     this.formData = formData;
-
+    
     console.log("FE : ", formData, this.object);
     return formData;
   }

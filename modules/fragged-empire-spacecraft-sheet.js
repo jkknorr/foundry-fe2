@@ -7,14 +7,14 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireItemSheet } from "./fragged-empire-item-sheet.js";
 
 /* -------------------------------------------- */
-export class FraggedEmpireSpacecraftSheet extends ActorSheet {
+export class FraggedEmpireSpacecraftSheet extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   static get defaultOptions() {
 
     return mergeObject(super.defaultOptions, {
       classes: ["fragged-empire", "sheet", "spacecraft"],
-      template: "systems/fvtt-fragged-empire/templates/spacecraft-sheet.html",
+      template: "systems/foundry-fe2/templates/spacecraft-sheet.html",
       width: 640,
       height: 720,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }],
