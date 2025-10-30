@@ -9,7 +9,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
   /** @override */
 	static get defaultOptions() {
 
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
 			classes: ["foundry-fe2", "sheet", "item"],
 			template: "systems/foundry-fe2/templates/item-sheet.html",
       dragDrop: [{dragSelector: null, dropSelector: null}],
@@ -50,16 +50,17 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
   async getData() {
     const objectData = FraggedEmpireUtility.data(this.object);
     
-    let itemData = foundry.utils.deepClone(FraggedEmpireUtility.templateData(this.object));
+    // let itemData = foundry.utils.deepClone(FraggedEmpireUtility.templateData(this.object));
+    let itemData = foundry.utils.duplicate(this.object);
     let formData = {
       title: this.title,
       id: this.id,
-      type: objectData.type,
-      img: objectData.img,
-      name: objectData.name,
+      type: this.type,
+      img: this.img,
+      name: this.title,
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
-      data: itemData, 
+      system: itemData.system, 
       combatSkills: FraggedEmpireUtility.getSkillsType('combat'),
       keywords: FraggedEmpireUtility.split3Columns(itemData.keywords),
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),
@@ -69,7 +70,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
       isGM: game.user.isGM      
     }
     
-    this.options.editable = !(this.object.data.origin == "embeddedItem");
+    this.options.editable = !(this.object.system.origin == "embeddedItem");
     console.log("ITEM DATA", formData, this);
     return formData;
   }

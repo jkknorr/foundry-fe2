@@ -12,7 +12,7 @@ export class FraggedEmpireSpacecraftSheet extends foundry.appv1.sheets.ActorShee
   /** @override */
   static get defaultOptions() {
 
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["fragged-empire", "sheet", "spacecraft"],
       template: "systems/foundry-fe2/templates/spacecraft-sheet.html",
       width: 640,

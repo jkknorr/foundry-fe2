@@ -49,7 +49,7 @@
           "traitId": ""
         },
         "movement":{ 
-          "label": "Movement",
+          "label": "Mobility",
           "value": 0,
           "current": 0,
           "traitId": ""
@@ -66,8 +66,8 @@
           "current": 0,
           "traitId": ""
         },
-        "perception":{ 
-          "label": "Perception",
+        "grit":{ 
+          "label": "Grit",
           "value": 0,
           "current": 0,
           "traitId": ""

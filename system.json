@@ -44,6 +44,7 @@
   "primaryTokenAttribute": "endurance.endurance",
   "secondaryTokenAttribute": "fate.value",
   "socket": true,
+  "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
   "version": "0.1",

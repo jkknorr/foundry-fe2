@@ -84,114 +84,115 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   prepareDerivedData() {
+    console.log("We are in prepareDerivedData")
     if (this.type == 'character') {
-      let restotal = this.data.level.value + 2 + this.system.resources.bonus;
+      let restotal = this.system.level.value + 2 + this.system.resources.bonus;
       if ( restotal != this.system.resources.total) {
         this.system.resources.total = restotal;
-        this.update( { 'data.resources.total': restotal } );
+        this.update( { 'system.resources.total': restotal } );
       }
       let inftotal = this.system.level.value + 2 + this.system.influence.bonus;
       if ( inftotal != this.system.influence.total) {
         this.system.influence.total = inftotal;
-        this.update( { 'data.influence.total': inftotal } );
+        this.update( { 'system.influence.total': inftotal } );
       }
       let endmax = 10 + (this.system.attributes.strength.value * 5) + this.system.endurance.endurancebonus;
       if (endmax != this.system.endurance.max) {
         this.system.endurance.max = endmax;
-        this.update( { 'data.endurance.max': endmax } );
+        this.update( { 'system.endurance.max': endmax } );
       }
       let coverBonus = coverBonusTable[this.system.defensebonus.cover];
       let defTotal = this.getDefenseBase() + coverBonus + this.system.defensebonus.defense;
       if ( defTotal != this.system.defensebonus.total) {
         this.system.defensebonus.total = defTotal;
-        this.update( { 'data.defensebonus.total': defTotal } );
+        this.update( { 'system.defensebonus.total': defTotal } );
       }
       let vsimpair = this.getDefenseBase() + this.system.attributes.strength.value + this.system.defensebonus.vsimpairbonus;
       if (vsimpair != this.system.defensebonus.vsimpair) {
         this.system.defensebonus.vsimpair = vsimpair;
-        this.update( { 'data.defensebonus.vsimpair': vsimpair } );
+        this.update( { 'system.defensebonus.vsimpair': vsimpair } );
       }
       let vspsionic = this.getDefenseBase() + this.system.attributes.focus.value + this.system.defensebonus.vspsionicbonus;
       if (vspsionic != this.system.defensebonus.vspsionic) {
         this.system.defensebonus.vspsionic = vspsionic;
-        this.update( { 'data.defensebonus.vspsionic': vspsionic } );
+        this.update( { 'system.defensebonus.vspsionic': vspsionic } );
       }
-      let vsstealth = 10 + this.system.attributes.perception.value + this.system.defensebonus.ally;
+      let vsstealth = 10 + this.system.attributes.intelligence.value + this.system.defensebonus.ally;
       if (vsstealth != this.system.defensebonus.vsstealth) {
         this.system.defensebonus.vsstealth = vsstealth;
-        this.update( { 'data.defensebonus.vsstealth': vsstealth } );
+        this.update( { 'system.defensebonus.vsstealth': vsstealth } );
       }
       let recovery = this.system.attributes.focus.value + this.system.endurance.recoverybonus;
       if (recovery != this.system.endurance.recovery) {
         this.system.endurance.recovery = recovery;
-        this.update( { 'data.endurance.recovery': recovery } );
+        this.update( { 'system.endurance.recovery': recovery } );
       }      
     }
     if (this.type == 'spacecraft') {
       let cargomax = (this.system.size.value*4) + this.system.attributes.hull.value - 10 + this.system.stats.cargo.bonus;
       if  ( cargomax != this.system.stats.cargo.max) {
         this.system.stats.cargo.max = cargomax;
-        this.update( { 'data.stats.cargo.max': cargomax } );
+        this.update( { 'system.stats.cargo.max': cargomax } );
       }
       let slotmax = this.system.size.value + this.system.stats.weaponsslot.bonus;
       if ( slotmax != this.system.stats.weaponsslot.max) {
         this.system.stats.weaponsslot.max = slotmax;
-        this.update( { 'data.stats.weaponsslot.max': slotmax } );
+        this.update( { 'system.stats.weaponsslot.max': slotmax } );
       }
       let resupmax = (this.system.size.value*2) + this.system.stats.resupply.bonus;
       if ( resupmax != this.system.stats.resupply.max) {
         this.system.stats.resupply.max = resupmax;
-        this.update( { 'data.stats.resupply.max': resupmax } );
+        this.update( { 'system.stats.resupply.max': resupmax } );
       }
       let velomax = 6 
       if ( velomax != this.system.attributes.velocity.value) {
         this.system.attributes.velocity.value = velomax;
-        this.update( { 'data.attributes.velocity.value': velomax } );
+        this.update( { 'system.attributes.velocity.value': velomax } );
       }
       let defenceb = this.getDefenseBase();
       if ( defenceb != this.system.fight.defence.base) {
         this.system.fight.defence.base = defenceb;
-        this.update( { 'data.fight.defence.base': defenceb } );
+        this.update( { 'system.fight.defence.base': defenceb } );
       }
       let defencet = defenceb + this.system.fight.defence.bonus;
       if ( defencet != this.system.fight.defence.total) {
         this.system.fight.defence.total = defencet;
-        this.update( { 'data.fight.defence.total': defencet } );
+        this.update( { 'system.fight.defence.total': defencet } );
       }
       let armourb = this.getBaseArmour();
       if ( armourb != this.system.fight.armour.base) {
         this.system.fight.armour.base = armourb;
-        this.update( { 'data.fight.armour.base': armourb } );
+        this.update( { 'system.fight.armour.base': armourb } );
       }
       let armourt = armourb + this.system.fight.armour.bonus;
       if ( armourt != this.system.fight.armour.total) {
         this.system.fight.armour.total = armourt;
-        this.update( { 'data.fight.armour.total': armourt } );
+        this.update( { 'system.fight.armour.total': armourt } );
       }
       let shieldb = 10 + (this.system.attributes.power.value*this.system.size.value) ;
       if ( shieldb != this.system.fight.shield.base) {
         this.system.fight.shield.base = shieldb;
-        this.update( { 'data.fight.shield.base': shieldb } );        
+        this.update( { 'system.fight.shield.base': shieldb } );        
       }
       let shieldt = shieldb  + this.system.fight.shield.bonus;
       if ( shieldt != this.system.fight.shield.total) {
         this.system.fight.shield.total = shieldt;
-        this.update( { 'data.fight.shield.total': shieldt } );        
+        this.update( { 'system.fight.shield.total': shieldt } );        
       }
       let vsordinance = this.system.fight.defence.total + this.system.fight.defence.derivated.vsordinance.bonus;
       if ( vsordinance != this.system.fight.defence.derivated.vsordinance.total) {
         this.system.fight.defence.derivated.vsordinance.total = vsordinance;
-        this.update( { 'data.fight.defence.derivated.vsordinance.total': vsordinance } );        
+        this.update( { 'system.fight.defence.derivated.vsordinance.total': vsordinance } );        
       }
       let vsboarding = 10 + this.system.size.value + this.system.attributes.crew.value + this.system.fight.defence.derivated.vsboarding.bonus;
       if ( vsboarding != this.system.fight.defence.derivated.vsboarding.total) {
         this.system.fight.defence.derivated.vsboarding.total = vsboarding;
-        this.update( { 'data.fight.defence.derivated.vsboarding.total': vsboarding } );        
+        this.update( { 'system.fight.defence.derivated.vsboarding.total': vsboarding } );        
       }
       let at0shield = -1 + this.system.fight.armour.derivated.at0shield.bonus;
       if ( at0shield != this.system.fight.armour.derivated.at0shield.total) {
         this.system.fight.armour.derivated.at0shield.total = at0shield;
-        this.update( { 'data.fight.armour.derivated.at0shield.total': at0shield } );        
+        this.update( { 'system.fight.armour.derivated.at0shield.total': at0shield } );        
       }
     }
 
@@ -200,17 +201,18 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   _preUpdate(changed, options, user) {
-    if ( changed.data?.resources?.value ) {
-      if ( changed.data.resources.value < 0 ) 
-        changed.data.resources.value = 0;
-      if ( changed.data.resources.value > this.system.resources.total ) 
-        changed.data.resources.value = this.system.resources.total; 
+
+    if ( changed.system?.resources?.value ) {
+      if ( changed.system.resources.value < 0 ) 
+        changed.system.resources.value = 0;
+      if ( changed.system.resources.value > this.system.resources.total ) 
+        changed.system.resources.value = this.system.resources.total; 
     }
-    if ( changed.data?.influence?.value ) {
-      if ( changed.data.influence.value < 0 ) 
-        changed.data.influence.value = 0;
-      if ( changed.data.influence.value > this.system.influence.total ) 
-        changed.data.influence.value = this.system.influence.total; 
+    if ( changed.system?.influence?.value ) {
+      if ( changed.system.influence.value < 0 ) 
+        changed.system.influence.value = 0;
+      if ( changed.system.influence.value > this.system.influence.total ) 
+        changed.system.influence.value = this.system.influence.total; 
     }
 
     super._preUpdate(changed, options, user);

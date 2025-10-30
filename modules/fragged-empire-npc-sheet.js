@@ -12,7 +12,7 @@ export class FraggedEmpireNPCSheet extends foundry.appv1.sheets.ActorSheet {
   /** @override */
   static get defaultOptions() {
 
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["fragged-empire", "sheet", "actor"],
       template: "systems/foundry-fe2/templates/npc-sheet.html",
       width: 640,

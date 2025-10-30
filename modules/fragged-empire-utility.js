@@ -17,7 +17,7 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static getSkillsType( skillType ) {
-    let filtered = this.compendiumSkills.filter( skill => skill.data.type == skillType );
+    let filtered = this.compendiumSkills.filter( skill => skill.system.type == skillType );
     return filtered;
   }
 
@@ -55,13 +55,13 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static templateData(it) {
-    return FraggedEmpireUtility.data(it)?.data ?? {}
+    return FraggedEmpireUtility.data(it)?.system ?? {}
   }
 
   /* -------------------------------------------- */
   static data(it) {
     if (it instanceof Actor || it instanceof Item || it instanceof Combatant) {
-      return it.data;
+      return it.system;
     }
     return it;
   }
@@ -181,7 +181,7 @@ export class FraggedEmpireUtility  {
     console.log("Going to roll", rollData);
 
     // Init stuff
-    let skillLevel = rollData.skill?.data.data.total ||  0;
+    let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
 
     // Bonus/Malus total
@@ -205,9 +205,10 @@ export class FraggedEmpireUtility  {
     let myRoll = rollData.roll;
     if ( !myRoll ) { // New rolls only of no rerolls
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
-      myRoll = new Roll(formula).roll( { async: false} );
+      myRoll = new Roll(formula);
+      await myRoll.evaluate();
       console.log("ROLL : ", formula);
-      await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
+      // await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
       rollData.roll = myRoll
       rollData.nbStrongHitUsed = 0;
     }
@@ -222,6 +223,7 @@ export class FraggedEmpireUtility  {
     let nbStrongHit = 0;
     rollData.rollTotal  = 0;
     for (let i=0; i< nbDice; i++) {
+      console.log("Dice results", i, myRoll.dice[0].results[i].result)
       rollData.diceResults[i] = myRoll.dice[0].results[i].result
       if ( myRoll.dice[0].results[i].result >= minStrongHit && myRoll.dice[0].results[i].result <= maxStrongHit) {
         nbStrongHit++;

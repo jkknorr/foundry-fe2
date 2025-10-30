@@ -29,7 +29,8 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     const objectData = this.object
     
     this.actor.prepareTraitsAttributes();
-    let actorData = foundry.utils.duplicate(FraggedEmpireUtility.templateData(this.object));
+    // let actorData = foundry.utils.duplicate(FraggedEmpireUtility.templateData(this.object));
+    let actorData = foundry.utils.duplicate(this.object);
     let sortedSkills = this.actor.getSortedSkills();
 
     let formData = {
@@ -40,7 +41,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
       name: objectData.name,
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
-      data: actorData,
+      system: actorData.system,
       effects: this.object.effects.map(e => foundry.utils.deepClone(e.data)),
       limited: this.object.limited,
       sortedSkills: sortedSkills,
@@ -73,7 +74,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     }
     this.formData = formData;
     
-    console.log("FE : ", formData, this.object);
+    console.log("formData : ", formData);
     return formData;
   }
 

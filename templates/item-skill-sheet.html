@@ -1,6 +1,6 @@
 <form class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="icons/svg/item-bag.svg" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
         </div>
@@ -12,39 +12,37 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="generic-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-                {{#select data.type}}
+              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
                 <option value="everyday">Everyday</option>
                 <option value="professional">Professional</option>
                 <option value="combat">Combat</option>
                 <option value="vehicle">Vehicle</option>
-                {{/select}}
               </select> 
             </li>
             <li class="flexrow"><label class="generic-label">Trained ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.trained" {{checked data.trained}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.trained" {{checked system.trained}}/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Bonus</label>
-              <label class="attribute-value checkbox"><input type="text" name="data.bonus" value="{{data.bonus}}" data-dtype="Number"/></label>
+              <label class="attribute-value checkbox"><input type="text" name="system.bonus" value="{{system.bonus}}" data-dtype="Number"/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Toolkit ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.toolkit" {{checked data.toolkit}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.toolkit" {{checked system.toolkit}}/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Toolbox ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.toolbox" {{checked data.toolbox}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.toolbox" {{checked system.toolbox}}/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Workshop ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.workshop" {{checked data.workshop}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.workshop" {{checked system.workshop}}/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Dedicated Workshop ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.dedicatedworkshop" {{checked data.dedicatedworkshop}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.dedicatedworkshop" {{checked system.dedicatedworkshop}}/></label>
             </li>
           </ul>
 
             {{> "systems/foundry-fe2/templates/skill-traits-section.html"}}
             
           <label class="generic-label">Description</label>
-          {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+          {{editor system.description target="system.description" button=true owner=owner editable=editable}}
         </div>
 
     </section>

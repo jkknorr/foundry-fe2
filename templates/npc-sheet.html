@@ -169,12 +169,12 @@
         <article class="flexcol">
           <h3>Description : </h3>
           <div class="form-group editor">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            {{editor system.description target="data.description" button=true owner=owner editable=editable}}
           </div>
           <hr>
           <h3>Notes : </h3>
           <div class="form-group editor">
-            {{editor content=data.notes target="data.notes" button=true owner=owner editable=editable}}
+            {{editor system.notes target="data.notes" button=true owner=owner editable=editable}}
           </div>
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
