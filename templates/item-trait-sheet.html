@@ -13,20 +13,20 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="item-sheet-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-                {{#select data.type}}
-                <option value="level">Level</option>
-                <option value="fate">Fate</option>
-                <option value="resources">Resources</option>
-                <option value="influence">Influence</option>
-                <option value="attribute">Attributes</option>
-                <option value="skill">Skill</option>
+              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{#select system.type}}
+                <option value="advancement">Advancement</option>
+                <option value="attribute">Attribute</option>
+                <option value="primaryskill">Primary Skill</option>
+                <option value="personalcombat">Personal Combat</option>
+                <option value="spaceshipcombat">Spaceship Combat</option>
+                <option value="npc">NPC</option>
                 {{/select}}
               </select> 
             </li>
-            <li class="flexrow"><label class="item-sheet-label">Sub-Type</label>
-              <select class="competence-base flexrow" type="text" name="data.subtype" value="{{data.subtype}}" data-dtype="String">
-                {{#select data.subtype}}
+{{!--             <li class="flexrow"><label class="item-sheet-label">Sub-Type</label>
+              <select class="competence-base flexrow" type="text" name="system.subtype" value="{{system.subtype}}" data-dtype="String">
+                {{#select system.subtype}}
                 <option value="level">Level</option>
                 <option value="fate">Fate</option>
                 <option value="resources">Resources</option>
@@ -42,22 +42,22 @@
                 <option value="vehicle">Skill - Vehicle</option>
                 {{/select}}
               </select> 
-            </li>
+            </li> --}}
           </ul>
           <ul>
             <li class="flexrow"><label class="item-sheet-label">Requirements</label>
               <span class="small-editor item-text-long-line">
-              {{editor system.requirements target="data.requirements" button=true owner=owner editable=editable}}
+              {{editor system.requirements target="system.requirements" button=false engine=prosemirror editable=false}}
               </span>
             </li>
             <li class="flexrow"><label class="item-sheet-label">Benefits</label>
               <span class="small-editor item-text-long-line">
-                {{editor system.benefits target="data.benefits" button=true owner=owner editable=editable}}
+                {{editor system.benefits target="system.benefits" button=true owner=owner editable=editable}}
               </span>
             </li>
             <li class="flexrow"><label class="item-sheet-label">Disadvantages</label>
               <span class="small-editor item-text-long-line">
-                {{editor system.disadvantages target="data.disadvantages" button=true owner=owner editable=editable}}
+                {{editor system.disadvantages target="system.disadvantages" button=true owner=owner editable=editable}}
               </span>
             </li>
           </ul>

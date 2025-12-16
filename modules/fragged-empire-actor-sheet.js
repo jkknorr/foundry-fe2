@@ -33,6 +33,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     let actorData = foundry.utils.duplicate(this.object);
     let sortedSkills = this.actor.getSortedSkills();
 
+
     let formData = {
       title: this.title,
       id: objectData.id,
@@ -64,6 +65,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
       complications: this.actor.getComplications(),
       equipmentsSlotsBase: this.actor.getEquipmentSlotsBase(),
       equipmentsSlotsTotal: this.actor.getEquipmentSlotsTotal(),
+      equipmentsSlotsUsed: this.actor.getEquipmentSlotsUsed(),
       subActors: this.actor.getSubActors(),
       optionsDMDP: FraggedEmpireUtility.createDirectOptionList(-3, +3),      
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),      
@@ -143,6 +145,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.find('.weapon-label a').click((event) => {
       const li = $(event.currentTarget).parents(".item");
       const armeId = li.data("item-id");
+      console.log(this)
       this.actor.rollWeapon(armeId);
     });
     html.find('.npc-fight a').click((event) => {
@@ -176,6 +179,12 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
       this.actor.equipItem( li.data("item-id") );
       this.render(true);
     });
+    html.find('.weapons-munitions-label').click(ev => {
+      const li = $(ev.currentTarget).parents(".item");
+      console.log("We are in a custom trap for munitions", ev)
+      // this.actor.equipItem( li.data("item-id") );
+      // this.render(true);
+    });
 
   }
 
@@ -206,6 +215,10 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
   /* -------------------------------------------- */
   /** @override */
   _updateObject(event, formData) {
+    console.log("We are in _updateObject",event)
+    if (event.type == "change" && event.target.parentElement.className == "stat-label weapon-munitions-label") {
+      this.actor.updateWeaponMunitions(event.target.name, event.target.value)
+    }
     // Update the Actor
     return this.object.update(formData);
   }

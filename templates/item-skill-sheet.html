@@ -12,15 +12,17 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="generic-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
-                <option value="everyday">Everyday</option>
-                <option value="professional">Professional</option>
-                <option value="combat">Combat</option>
-                <option value="vehicle">Vehicle</option>
+              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String" disabled>
+                <option value="primary">Primary</option>
+                <option value="personalcombat">Personal Combat</option>
+                <option value="spaceshipcombat">Spaceship Combat</option>
               </select> 
             </li>
             <li class="flexrow"><label class="generic-label">Trained ?</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.trained" {{checked system.trained}}/></label>
+            </li>
+            <li class="flexrow"><label class="generic-label">Attribute Boost</label>
+              <label class="attribute-value checkbox"><input type="text" name="foo" value="{{system.attribute}}" data-dtype="Number" disabled/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Bonus</label>
               <label class="attribute-value checkbox"><input type="text" name="system.bonus" value="{{system.bonus}}" data-dtype="Number"/></label>

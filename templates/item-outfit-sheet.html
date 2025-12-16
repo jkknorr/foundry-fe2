@@ -21,13 +21,13 @@
               <ul>
                 {{#each keywordArray as |keyword key|}}
                 <li class="item-list item flexrow stack-left">
-                  <input type="checkbox" name="data.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
+                  <input type="checkbox" name="system.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
                   <label class="generic-label keyword-label packed-left">{{keyword.label}}</label>
                   {{#if keyword.X}}
-                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
+                    <input type="text" class="input-numeric-short padd-right" name="system.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
                   {{/if}}
                   {{#if keyword.Y}}
-                    <input type="text" class="input-numeric-short padd-right" name="data.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
+                    <input type="text" class="input-numeric-short padd-right" name="system.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
                   {{/if}}
                 </li>
                 {{/each}}
@@ -37,17 +37,17 @@
           </div>
 
           <h3>Stats</h3>
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.statstotal isfinal=true title="Final stats" header=true}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.stats  isbase=true title="Outfit stats"}}
-          {{#each data.variations as |variation key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.data.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.statstotal isfinal=true title="Final stats" header=true}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats  isbase=true title="Outfit stats"}}
+          {{#each system.variations as |variation key|}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.system.stats  isfinal=false title="Variation" subtitle=variation.name}}
           {{/each}}
-          {{#each data.modifications as |modification key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.data.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{#each system.modifications as |modification key|}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.system.stats  isfinal=false title="Modification" subtitle=modification.name}}
           {{/each}}
 
           <label class="generic-label">Description</label>
-          {{editor system.description target="data.description" button=true owner=owner editable=editable}}
+          {{editor system.description target="system.description" button=true owner=owner editable=editable}}
         </div>
 
     </section>

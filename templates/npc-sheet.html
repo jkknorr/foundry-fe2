@@ -32,23 +32,23 @@
             <div class="">
               
               <span class="generic-label"><h3>Type</h3>
-              <select class="competence-base flexrow" type="text" name="data.npctype" value="{{data.npctype}}" data-dtype="String" {{#unless @root.editScore}}disabled{{/unless}}>
-                {{#select data.npctype}}
+              <select class="competence-base flexrow" type="text" name="system.npctype" value="{{system.npctype}}" data-dtype="String" {{#unless @root.editScore}}disabled{{/unless}}>
+                {{#select system.npctype}}
                 <option value="henchman">Henchman</option>
                 <option value="drone">Drone</option>
                 <option value="companion">Companion</option>
                 {{/select}}
               </select> </span>
 
-              <button class="npc-fight-roll">Fight roll</button>
+              {{!-- <button class="npc-fight-roll">Fight roll</button> --}}
               <button class="npc-skill-roll">Generic Skill roll</button>
 
               <span class="generic-label"><h3>Key stats</h3></span>
               <ul>
-                {{#each data.stats as |stat key|}}
+                {{#each system.stats as |stat key|}}
                 <li class="item flexrow list-item stack-left" data-attr-key="{{key}}">
                   <span class="stat-label padd-right npc-stat-label" name="{{key}}"><a class="carac-roll">{{stat.label}}</a></span>
-                  <input type="text" class="input-numeric-short padd-right" name="data.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
+                  <input type="text" class="input-numeric-short padd-right" name="system.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
                 </li>
                 {{/each}}
               </ul>  
@@ -57,10 +57,10 @@
             <div class="">
               <span class="generic-label"><h3>Other datas</h3></span>
               <ul>
-                {{#each data.spec as |spec key|}}
+                {{#each system.spec as |spec key|}}
                 <li class="item flexrow list-item stack-left" data-attr-key="{{key}}">
                   <span class="stat-label padd-right npc-stat-label" name="{{key}}">{{spec.label}}</span>
-                  <input type="text" class="input-numeric-short padd-right" name="data.spec.{{key}}.value" value="{{spec.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
+                  <input type="text" class="input-numeric-short padd-right" name="system.spec.{{key}}.value" value="{{spec.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
                 </li>
                 {{/each}}
               </ul>    
@@ -75,16 +75,16 @@
         <div class="flexcol">
 
           <div class="">     
-            {{#each data.fight as |fight key|}}   
+            {{#each system.fight as |fight key|}}   
             <ul>
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-right"><strong>{{fight.label}}</strong></span>                
-                <input type="text" class="input-numeric-short padd-right" name="data.fight.{{key}}.value" value="{{fight.value}}" data-dtype="Number"/>
+                <input type="text" class="input-numeric-short padd-right" name="system.fight.{{key}}.value" value="{{fight.value}}" data-dtype="Number"/>
               </li>
               {{#each fight.derivated as |derivated keydev|}}   
               <li class="item flexrow list-item">
                 <span class="stat-label flexrow ">{{derivated.label}}</span>
-                <input type="text" class="input-numeric-short padd-right"  name="data.fight.{{key}}.derivated.{{keydev}}.value" value="{{derivated.value}}" data-dtype="Number"/>
+                <input type="text" class="input-numeric-short padd-right"  name="system.fight.{{key}}.derivated.{{keydev}}.value" value="{{derivated.value}}" data-dtype="Number"/>
               </li>
               {{/each}}
             </ul>    
@@ -98,13 +98,13 @@
               <img class="sheet-competence-img" src="{{weapon.img}}"/>
               <span class="stat-label weapon-label"><a name="{{weapon.name}}">{{weapon.name}}</a></span>
               <div class="item-controls">
-                <a class="item-control item-equip" title="Worn">{{#if weapon.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-equip" title="Worn">{{#if weapon.system.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                 <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
                 <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
               </div>
             </li>
             <li class="item stat flexrow list-item stats-table" data-armure-id="{{outfit.id}}" data-item-id="{{outfit.id}}">
-              {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false header=true}}
+              {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.system.statstotal isfinal=false header=true}}
             </li>
             {{/each}}                
           </ul>          
@@ -121,7 +121,7 @@
           <li class="item flexrow list-item" data-item-id="{{trait.id}}">
             <img class="sheet-competence-img" src="{{trait.img}}"/>
             <span class="competence-label">{{trait.name}}</span>
-            <span class="competence-label">{{trait.data.data.type}}</span>
+            <span class="competence-label">{{trait.system.system.type}}</span>
             <div class="item-controls">
               <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
               <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
@@ -153,7 +153,7 @@
               <span class="equipement-label">{{equip.name}}</span>
               <span class="equipement-label">{{equip.type}}</span>
               <div class="item-controls">
-                <a class="item-control item-equip" title="Worn">{{#if equip.data.data.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                <a class="item-control item-equip" title="Worn">{{#if equip.system.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                 <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
                 <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
               </div>
@@ -169,12 +169,12 @@
         <article class="flexcol">
           <h3>Description : </h3>
           <div class="form-group editor">
-            {{editor system.description target="data.description" button=true owner=owner editable=editable}}
+            {{editor system.description target="system.description" button=true owner=owner editable=editable}}
           </div>
           <hr>
           <h3>Notes : </h3>
           <div class="form-group editor">
-            {{editor system.notes target="data.notes" button=true owner=owner editable=editable}}
+            {{editor system.notes target="system.notes" button=true owner=owner editable=editable}}
           </div>
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}

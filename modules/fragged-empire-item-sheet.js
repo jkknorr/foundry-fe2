@@ -56,13 +56,13 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
       title: this.title,
       id: this.id,
       type: this.type,
-      img: this.img,
+      img: itemData.img,
       name: this.title,
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
       system: itemData.system, 
-      combatSkills: FraggedEmpireUtility.getSkillsType('combat'),
-      keywords: FraggedEmpireUtility.split3Columns(itemData.keywords),
+      combatSkills: FraggedEmpireUtility.getSkillsType('personalcombat'),
+      keywords: FraggedEmpireUtility.split3Columns(itemData.system.keywords),
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),
       limited: this.object.limited,
       options: this.options,
@@ -77,7 +77,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
 
   /* -------------------------------------------- */
   async manageVariation( itemId) {
-    let itemData = this.object.data.data.variations.find( item => item._id == itemId);
+    let itemData = this.object.system.variations.find( item => item._id == itemId);
     let variation = await Item.create(itemData, {temporary: true});   
     variation.data.origin = "embeddedItem";
     new FraggedEmpireItemSheet(variation).render(true);
@@ -86,7 +86,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
 
   /* -------------------------------------------- */
   async manageModification( itemId) {
-    let itemData = this.object.data.data.modifications.find( item => item._id == itemId);
+    let itemData = this.object.system.modifications.find( item => item._id == itemId);
     let modification = await Item.create(itemData, {temporary: true});   
     modification.data.origin = "embeddedItem";
     new FraggedEmpireItemSheet(modification).render(true);
@@ -95,7 +95,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
 
   /* -------------------------------------------- */
   async manageTrait( itemId)  {
-    let itemData = this.object.data.data.traits.find( item => item._id == itemId);
+    let itemData = this.object.system.traits.find( item => item._id == itemId);
     let trait = await Item.create(itemData, {temporary: true});   
     trait.data.origin = "embeddedItem";
     new FraggedEmpireItemSheet(trait).render(true);
@@ -116,7 +116,8 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
   /* -------------------------------------------- */
   postItem() {
     console.log(this.item);
-    let chatData = duplicate(FraggedEmpireUtility.data(this.item));
+    let chatData = foundry.utils.duplicate(FraggedEmpireUtility.data(this.item));
+    console.log(chatData);
     if (this.actor) {
       chatData.actor = { id: this.actor.id };
     }
@@ -159,15 +160,15 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
       const li = $(ev.currentTarget).parents(".item");
       let itemId = li.data("item-id");
       let itemType = li.data("item-type");
-      let array = duplicate(this.object.data.data[itemType]);
+      let array = duplicate(this.object.system[itemType]);
       let newArray = array.filter( item => item._id != itemId);
       console.log("Delete", array, newArray, itemId, itemType);
       if ( itemType == 'variations') {
-        this.object.update( {"data.variations": newArray} );
+        this.object.update( {"system.variations": newArray} );
       } else if (itemType == "modifications") {
-        this.object.update( { "data.modifications": newArray} );
+        this.object.update( { "system.modifications": newArray} );
       } else {
-        this.object.update( { "data.traits": newArray} );
+        this.object.update( { "system.traits": newArray} );
       }
     });
 
@@ -219,24 +220,24 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
         let dataItem = JSON.parse( data);
         let item;
         if (dataItem.pack) {
-          item = await fromUuid(dataItem.id);
+          item = await fromUuid(dataItem.uuid.split('.')[1]);
         } else {
-          item = game.items.get(dataItem.id )
+          item = game.items.get(dataItem.uuid.split('.')[1]);
         }
-        //console.log("Item dropped : ", event, dataItem, dataItem.id);
-        console.log("FOUND ITEM", item, dataItem.id.length);
-        if ( item.data.type.includes("variation") ) {
-          let variationsArray = duplicate(this.object.data.data.variations);
-          let newItem = duplicate(item.data);
-          newItem._id = randomID( dataItem.id.length );
+        // console.log("Item dropped : ", event, dataItem, dataItem.uuid, data);
+        console.log("FOUND ITEM", item, dataItem.uuid.length);
+        if ( item.type.includes("variation") ) {
+          let variationsArray = foundry.utils.duplicate(this.object.system.variations);
+          let newItem = foundry.utils.duplicate(item);
+          newItem._id = randomID( dataItem.uuid.length );
           variationsArray.push( newItem );
-          await this.object.update( { 'data.variations': variationsArray} );            
-        } else if ( item.data.type.includes("modification") ) {
-          let modsArray = duplicate(this.object.data.data.modifications);
-          let newItem = duplicate(item.data);
-          newItem._id = randomID( dataItem.id.length );
+          await this.object.update( { 'system.variations': variationsArray} );            
+        } else if ( item.type.includes("modification") ) {
+          let modsArray = foundry.utils.duplicate(this.object.system.modifications);
+          let newItem = foundry.utils.duplicate(item);
+          newItem._id = randomID( dataItem.uuid.length );
           modsArray.push( newItem );
-          await this.object.update( { 'data.modifications': modsArray} );
+          await this.object.update( { 'system.modifications': modsArray} );
         }
       }
     }
@@ -251,6 +252,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
   /* -------------------------------------------- */
   /** @override */
   _updateObject(event, formData) {
+    console.log("We are in _updateObject for item-sheet",event,formData)
     return this.object.update(formData);
   }
 }

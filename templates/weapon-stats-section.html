@@ -16,9 +16,9 @@
         <td>
           <input type="text" value="{{stat.value}}" data-dtype="String" 
             {{#if ../isfinal}}
-            name="data.statstotal.{{key}}.value"{{else}}
+            name="system.statstotal.{{key}}.value"{{else}}
             {{#if ../isbase}}
-              name="data.stats.{{key}}.value"
+              name="system.stats.{{key}}.value"
               {{else}}
               disabled
               {{/if}}

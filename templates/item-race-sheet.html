@@ -1,34 +1,27 @@
 
 <form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
-        <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
-        </div>
-    </header>
+  <header class="sheet-header">
+      <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+      <div class="header-fields">
+          <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+      </div>
+  </header>
 
-    {{!-- Sheet Body --}}
-    <section class="sheet-body">
-
-        <div class="tab" data-group="primary">
-          <ul>
-            <li class="flexrow"><label class="item-sheet-label">Requirements</label>
-              <span class="small-editor item-text-long-line">
-              {{editor system.requirements target="data.requirements" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-            <li class="flexrow"><label class="item-sheet-label">Benefits</label>
-              <span class="small-editor item-text-long-line">
-                {{editor system.benefits target="data.benefits" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-            <li class="flexrow"><label class="item-sheet-label">Disadvantages</label>
-              <span class="small-editor item-text-long-line">
-                {{editor system.disadvantages target="data.disadvantages" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-          </ul>
-        </div>
-
-    </section>
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <div class="tab" data-group="primary">
+      <span class="generic-label"><h3>Requirements</h3></span>
+      <span class="small-editor item-text-long-line">
+        {{editor system.requirements target="system.requirements"}}
+      </span>
+      <span class="generic-label"><h3>Benefits</h3></span>
+      <span class="small-editor item-text-long-line">
+        {{editor system.benefits target="system.benefits"}}
+      </span>
+      <span class="generic-label"><h3>Disadvantages</h3></span>
+      <span class="small-editor item-text-long-line">
+        {{editor system.disadvantages target="system.disadvantages"}}
+      </span>
+    </div>
+  </section>
 </form>

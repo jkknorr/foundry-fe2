@@ -73,8 +73,9 @@
           "traitId": ""
         }
       },
-      "fate": {
+      "gritreroll": {
         "value": 0,
+        "bonus": 0,
         "max": 0,
         "traitId": ""
       },
@@ -115,20 +116,10 @@
       "npctype": "",
       "description": "",
       "spec": {
-        "resources": {
-          "value": 0,
-          "max": 0,
-          "label": "Resources"
-        },
         "bodies": {
           "value": 0,
           "max": 0,
           "label": "Bodies"
-        },
-        "slots": {
-          "value": 0,
-          "max": 0,
-          "label": "Slots"
         },
         "avgplayerres": {
           "value": 0,
@@ -136,14 +127,14 @@
           "label": "Average Player Resource"
         }
       },
-      "fight": {        
-        "combatorder": {
+      "fight": {
+        "endurance": {
           "value": 0,
-          "label": "Combat order"
-        },        
-        "lockon" : {
+          "label": "Endurance"
+        },
+        "durability": {
           "value": 0,
-          "label": "Lock On"
+          "label": "Durability"
         },
         "movement": {
           "value": 0,
@@ -169,41 +160,9 @@
         }
       },
       "stats": {
-        "hit": {
+        "Attribute": {
           "value": "",
-          "label": "Hit Bonus"
-        },
-        "enddmg": {
-          "value": "",
-          "label": "Endurance Damage"
-        },
-        "crit": {
-          "value": "",
-          "label": "Critical Damage"
-        },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },
-        "clips": {
-          "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
-        "weight": {
-          "value": "",
-          "label": "Weight"
+          "label": "Attribute"
         }
       }
     },
@@ -217,6 +176,7 @@
       "notes": "",
       "influence": 0,
       "build": "",
+      "munitions": 0,
       "attributes": {
         "hull":{ 
           "label": "Hull",
@@ -320,6 +280,11 @@
             }
           }
         },
+        "munitions": {
+          "label": "Munitions",
+          "valueonly": true,
+          "value": 0
+        },
         "boarded": { 
           "label": "Boarded", 
           "valueonly": true,
@@ -375,7 +340,8 @@
     "language": {
     },
     "tradegood": {
-      "tradebox": 0,
+      "type": "",
+      "cargoSpace": "",
       "description": ""
     },
     "research": {
@@ -387,6 +353,7 @@
     "skill": {
       "type": "",
       "trained": false,
+      "attribute": "",
       "bonus": 0,
       "toolkit": false,
       "toolbox": false,
@@ -425,6 +392,10 @@
       "type": "",
       "weapontype": "",
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
@@ -440,30 +411,14 @@
         "range": {
           "value": "",
           "label": "Range Increment"
+        },    
+        "acquire": {
+          "value": "",
+          "label": "Acquire"
         },
-        "clips": {
+        "resources": {
           "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "Cost"
+          "label": "Resources"
         }
       },
       "description": ""
@@ -472,6 +427,10 @@
       "type": "",
       "weapontype": "",
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
@@ -487,30 +446,14 @@
         "range": {
           "value": "",
           "label": "Range Increment"
+        },    
+        "acquire": {
+          "value": "",
+          "label": "Acquire"
         },
-        "clips": {
+        "resources": {
           "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "Cost"
+          "label": "Resources"
         }
       },
       "description": ""
@@ -519,6 +462,7 @@
       "type": "",
       "variations": [],
       "modifications": [],
+      "munitions": "0",
       "equipped": false,
       "defaultskill": "",
       "keywords": {
@@ -563,6 +507,10 @@
         },
         "gauntlet" :{ 
           "label": "Gauntlet",
+          "flag": false
+        },
+        "innate" :{ 
+          "label": "Innate",
           "flag": false
         },
         "jam" :{ 
@@ -669,6 +617,10 @@
         }
       },
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
@@ -684,33 +636,21 @@
         "range": {
           "value": "",
           "label": "Range Increment"
+        },    
+        "acquire": {
+          "value": "",
+          "label": "Acquire"
         },
-        "clips": {
+        "resources": {
           "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "Cost"
+          "label": "Resources"
         }
       },
       "statstotal": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
@@ -727,29 +667,13 @@
           "value": "",
           "label": "Range Increment"
         },
-        "clips": {
+        "acquire": {
           "value": "",
-          "label": "Clips"
+          "label": "Acquire"
         },
-        "ammo": {
+        "resources": {
           "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "Cost"
+          "label": "Resources"
         }
       },      
       "description": ""
@@ -832,10 +756,6 @@
       "variations": [],
       "modifications": [],
       "stats": {
-        "armour": {
-          "value": "",
-          "label": "Armour"
-        },
         "defence": {
           "value": "",
           "label": "Defence"
@@ -844,32 +764,24 @@
           "value": "",
           "label": "Endurance"
         },
-        "cover": {
+        "armour": {
           "value": "",
-          "label": "Cover"
+          "label": "Armour"
         },
-        "frontcover": {
+        "zeroend": {
           "value": "",
-          "label": "Front Cover"
+          "label": "At 0 Endurance"
         },
-        "equipmentslots": {
+        "outfittype": {
           "value": "",
-          "label": "Equipped Equipment Slots"
+          "label": "Outfit Type"
         },
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
+        "resources": {
           "value": "",
           "label": "Cost"
         }
       },
       "statstotal": {
-        "armour": {
-          "value": "",
-          "label": "Armour"
-        },
         "defence": {
           "value": "",
           "label": "Defence"
@@ -878,23 +790,19 @@
           "value": "",
           "label": "Endurance"
         },
-        "cover": {
+        "armour": {
           "value": "",
-          "label": "Cover"
+          "label": "Armour"
         },
-        "frontcover": {
+        "zeroend": {
           "value": "",
-          "label": "Front Cover"
+          "label": "At 0 Endurance"
         },
-        "equipmentslots": {
+        "outfittype": {
           "value": "",
-          "label": "Equipped Equipment Slots"
+          "label": "Outfit Type"
         },
-        "weight": {
-          "value": "",
-          "label": "Weight"
-        },
-        "cost": {
+        "resources": {
           "value": "",
           "label": "Cost"
         }
@@ -922,6 +830,10 @@
         },
         "gauntlet": {
           "label": "Gauntlet"
+        },
+        "innate" :{ 
+          "label": "Innate",
+          "flag": false
         },
         "modroll": {
           "label": "Modification Rolls",
@@ -1207,9 +1119,17 @@
         }
       },
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
         },
         "shielddmg": {
           "value": "",
@@ -1219,26 +1139,6 @@
           "value": "",
           "label": "Critical Damage"
         },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },
-        "clips": {
-          "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
         "mount": {
           "value": "",
           "label": "Mount"
@@ -1247,15 +1147,27 @@
           "value": "",
           "label": "Weapon Type"
         },
-        "cost": {
+        "acquire": {
           "value": "",
-          "label": "Cost"
+          "label": "Acquire"
+        },
+        "influence": {
+          "value": "",
+          "label": "Influence"
         }
       },
       "statstotal": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
         },
         "shielddmg": {
           "value": "",
@@ -1265,26 +1177,6 @@
           "value": "",
           "label": "Critical Damage"
         },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },
-        "clips": {
-          "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
         "mount": {
           "value": "",
           "label": "Mount"
@@ -1293,18 +1185,30 @@
           "value": "",
           "label": "Weapon Type"
         },
-        "cost": {
+        "acquire": {
           "value": "",
-          "label": "Cost"
-        }        
+          "label": "Acquire"
+        },
+        "influence": {
+          "value": "",
+          "label": "Influence"
+        }
       },
       "description": ""
     },
     "spacecraftweaponmodification": {
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
         },
         "shielddmg": {
           "value": "",
@@ -1314,26 +1218,6 @@
           "value": "",
           "label": "Critical Damage"
         },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },
-        "clips": {
-          "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
         "mount": {
           "value": "",
           "label": "Mount"
@@ -1342,18 +1226,30 @@
           "value": "",
           "label": "Weapon Type"
         },
-        "cost": {
+        "acquire": {
           "value": "",
-          "label": "Cost"
-        }        
+          "label": "Acquire"
+        },
+        "influence": {
+          "value": "",
+          "label": "Influence"
+        }
       },
       "description": ""
     },
     "spacecraftweaponvariation": {
       "stats": {
+        "hitdice": {
+          "value": "",
+          "label": "Hit Dice"
+        },
         "hit": {
           "value": "",
           "label": "Hit Bonus"
+        },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
         },
         "shielddmg": {
           "value": "",
@@ -1363,26 +1259,6 @@
           "value": "",
           "label": "Critical Damage"
         },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },
-        "clips": {
-          "value": "",
-          "label": "Clips"
-        },
-        "ammo": {
-          "value": "",
-          "label": "Ammunition"
-        },
-        "load": {
-          "value": "",
-          "label": "Load Time"
-        },
-        "rof": {
-          "value": "",
-          "label": "Rate of Fire"
-        },        
         "mount": {
           "value": "",
           "label": "Mount"
@@ -1391,10 +1267,14 @@
           "value": "",
           "label": "Weapon Type"
         },
-        "cost": {
+        "acquire": {
           "value": "",
-          "label": "Cost"
-        }        
+          "label": "Acquire"
+        },
+        "influence": {
+          "value": "",
+          "label": "Influence"
+        }
       },
       "description": ""
     }

@@ -4,19 +4,15 @@
   <h4 class=chat-actor-name>{{alias}}</h4>
 </div>
 
-<hr>
-
-<div>
-<img class="chat-icon" src="{{img}}" alt="{{name}}" />
 <h4>
   {{#if (eq mode "skill")}}  
-  Skill : {{skill.name}} ({{skill.data.data.total}}) {{#if nbStrongHitUsed}}(Strong Hit Reroll){{/if}}
+  Skill : {{skill.name}} ({{skill.system.total}}) {{#if nbStrongHitUsed}}(Strong Hit Reroll){{/if}}
   {{else}}
     {{#if (eq mode "weapon")}}
-    Weapon attack : {{weapon.name}}  ({{weapon.data.data.statstotal.hit.value}}) / {{skill.name}} ({{skill.data.data.total}}) 
+    Weapon attack : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}}) 
     {{else}}
       {{#if (eq mode "spacecraftweapon")}}
-        Spacecraft Weapon attack : {{weapon.name}}  ({{weapon.data.data.statstotal.hit.value}}) / {{skill.name}} ({{skill.data.data.total}})
+        Spacecraft Weapon attack : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}})
       {{else}}
         {{#if (eq mode "npcfight")}}
         NPC attack : {{npc.name}}  ({{npcstats.hit.value}})  
@@ -26,12 +22,12 @@
         {{/if}}
       {{/if}}
   {{/if}}
-  {{#if hasFate}}
-  <a class="fate-reroll" data-actor-id={{actorId}}><i class="fas fa-undo"></i></a>
-  {{/if}}
-
 </h4>
 
+{{#if (ne mode "skill")}}
+  <img class="chat-icon" src="{{target.img}}" alt="{{target.name}}" />
+  <h4 class=chat-actor-name>{{target.name}}</h4>
+{{/if}}
 <div class="limit-line padding-dice">
   {{#each diceResults as |value key|}}
   <span class="dice-image">
@@ -56,17 +52,22 @@
     {{/if}}
     
     {{#if (eq mode "weapon")}}
-    <li>End Damage : {{weapon.data.data.statstotal.enddmg.value}}</li>
-    <li>Crit Damage : {{weapon.data.data.statstotal.crit.value}}</li>
+    <li>End Damage : {{weapon.system.statstotal.enddmg.value}}</li>
+    <li>Crit Damage : {{critDmg}} ({{weapon.system.statstotal.crit.value}} versus {{targetArmor}})</li>
     {{/if}}
     {{#if (eq mode "spacecraftweapon")}}
-    <li>Shield Damage : {{weapon.data.data.statstotal.shielddmg.value}}</li>
-    <li>Crit Damage : {{weapon.data.data.statstotal.crit.value}}</li>
+    <li>Shield Damage : {{weapon.system.statstotal.shielddmg.value}}</li>
+    <li>Crit Damage : {{weapon.system.statstotal.crit.value}}</li>
     {{/if}}
 
     <li><strong>Total Roll : {{rollTotal}}</strong>
+    <li><strong>Target defense: {{targetDefence}}</strong></li>
+    {{#if (gt rollTotal targetDefence)}}<li><strong>Attack lands!</strong></li>
+      {{#if (gt weapon.system.statstotal.enddmg.value targetEnd)}}<li><strong>Endurance 0, Critical Hit or Critical Boost!</strong></li>{{/if}}
+    {{/if}}
+    <li><strong>Grit re-rolls: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
     {{#if nbStrongHit}}
-    <strong> - Strong Hits : {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
+    <strong> - Strong Hits Used: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
     {{/if}}
   </ul>  
 </div>

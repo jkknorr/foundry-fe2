@@ -11,8 +11,8 @@
 
         <div class="tab" data-group="primary">
           <h3>Type</h3>
-            <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-              {{#select data.type}}
+            <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
+              {{#select system.type}}
               <option value="weapon">Weapon Modification</option>
               <option value="melee">Melee Modification</option>
               <option value="drone">Drone & Companion Modification</option>
@@ -20,23 +20,18 @@
             </select> 
 
             <h3>Weapon Type</h3>
-            <select class="competence-base flexrow" type="text" name="data.weapontype" value="{{data.weapontype}}" data-dtype="String">
-              {{#select data.weapontype}}
+            <select class="competence-base flexrow" type="text" name="system.weapontype" value="{{system.weapontype}}" data-dtype="String">
+              {{#select system.weapontype}}
               <option value="all">All</option>
-              <option value="analytical">Analytical</option>
-              <option value="chemical">Chemical</option>
-              <option value="combatcomputer">Combat Computer</option>
-              <option value="disruptor">Disruptor</option>
               <option value="gun">Gun</option>
               <option value="shell">Shell</option>
-              <option value="impairment">Impairment</option>
               <option value="melee">Melee</option>
-              <option value="psionic">Psionic</option>
-              <option value="thrown">Thrown</option>
+              <option value="special">Special</option>
+              <option value="companion">Companion</option>
               {{/select}}
             </select> 
           
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.stats isbase=true title="Modification Stats" header=true}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats isbase=true title="Modification Stats" header=true}}
 
           <label class="generic-label">Description</label>
           {{editor system.description target="data.description" button=true owner=owner editable=editable}}

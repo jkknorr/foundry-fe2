@@ -28,6 +28,15 @@
       </select> 
     </div>
 
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
+        {{#select bMHitDice}}
+        {{{optionsBonusMalus}}}
+        {{/select}}
+      </select>
+    </div>
+
     <h3>Stats</h3>
     {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=npcstats isfinal=false title="Final stats reminder" header=true}}
 

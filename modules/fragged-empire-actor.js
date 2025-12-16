@@ -3,7 +3,7 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireRoll } from "./fragged-empire-roll-dialog.js";
 
 /* -------------------------------------------- */
-const coverBonusTable = { "nocover": 0, "lightcover": 2, "heavycover": 4, "entrenchedcover": 6};
+const coverBonusTable = { "nocover": 0, "lightcover": 1, "heavycover": 2, "entrenchedcover": 3};
 
 /* -------------------------------------------- */
 /* -------------------------------------------- */
@@ -84,7 +84,6 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   prepareDerivedData() {
-    console.log("We are in prepareDerivedData")
     if (this.type == 'character') {
       let restotal = this.system.level.value + 2 + this.system.resources.bonus;
       if ( restotal != this.system.resources.total) {
@@ -101,32 +100,22 @@ export class FraggedEmpireActor extends Actor {
         this.system.endurance.max = endmax;
         this.update( { 'system.endurance.max': endmax } );
       }
-      let coverBonus = coverBonusTable[this.system.defensebonus.cover];
+      let coverBonus = coverBonusTable[this.system.defensebonus.cover] * this.system.attributes.intelligence.current;
       let defTotal = this.getDefenseBase() + coverBonus + this.system.defensebonus.defense;
       if ( defTotal != this.system.defensebonus.total) {
         this.system.defensebonus.total = defTotal;
         this.update( { 'system.defensebonus.total': defTotal } );
       }
-      let vsimpair = this.getDefenseBase() + this.system.attributes.strength.value + this.system.defensebonus.vsimpairbonus;
-      if (vsimpair != this.system.defensebonus.vsimpair) {
-        this.system.defensebonus.vsimpair = vsimpair;
-        this.update( { 'system.defensebonus.vsimpair': vsimpair } );
-      }
-      let vspsionic = this.getDefenseBase() + this.system.attributes.focus.value + this.system.defensebonus.vspsionicbonus;
-      if (vspsionic != this.system.defensebonus.vspsionic) {
-        this.system.defensebonus.vspsionic = vspsionic;
-        this.update( { 'system.defensebonus.vspsionic': vspsionic } );
-      }
-      let vsstealth = 10 + this.system.attributes.intelligence.value + this.system.defensebonus.ally;
-      if (vsstealth != this.system.defensebonus.vsstealth) {
-        this.system.defensebonus.vsstealth = vsstealth;
-        this.update( { 'system.defensebonus.vsstealth': vsstealth } );
-      }
       let recovery = this.system.attributes.focus.value + this.system.endurance.recoverybonus;
       if (recovery != this.system.endurance.recovery) {
         this.system.endurance.recovery = recovery;
         this.update( { 'system.endurance.recovery': recovery } );
-      }      
+      }
+      let gritreroll = this.system.attributes.grit.value + this.system.gritreroll.bonus;
+      if (gritreroll != this.system.gritreroll.max) {
+        this.system.gritreroll.max = gritreroll;
+        this.update( { 'system.gritreroll.max': gritreroll } );
+      }
     }
     if (this.type == 'spacecraft') {
       let cargomax = (this.system.size.value*4) + this.system.attributes.hull.value - 10 + this.system.stats.cargo.bonus;
@@ -250,6 +239,18 @@ export class FraggedEmpireActor extends Actor {
   prepareSkill( item, type) {
     if (item.type == 'skill' && item.system.type == type) {
       item.system.trainedValue = (item.system.trained) ? 1 : -2
+      if (item.system.attribute != "") {
+        for( let key in this.system.attributes) {
+          if (key == item.system.attribute) { 
+            if (this.system.attributes[key].value >= 4) {
+              item.system.bonus = 1
+            }
+            if (this.system.attributes[key].value <= 1) {
+              item.system.bonus = -1
+            }
+          }
+        }
+      }
       item.system.total = item.system.trainedValue + item.system.bonus;
       item.system.isTrait = item.system.traits.length > 0;
       return item;
@@ -262,23 +263,34 @@ export class FraggedEmpireActor extends Actor {
     if ( item &&  item.type == 'outfit' || item.type == 'utility') {
       let itemUnequipped = this.items.find( item2 => item2.type == item.type && item2.system.equipped );
       if ( itemUnequipped) {
-        let update = { _id: itemUnequipped.id, "data.equipped": false };
+        let update = { _id: itemUnequipped.id, "system.equipped": false };
         await this.updateEmbeddedDocuments('Item', [update]); 
       }
     }
     if (item && item.system) {
-      let update = { _id: item.id, "data.equipped": !item.system.equipped };
+      let update = { _id: item.id, "system.equipped": !item.system.equipped };
       await this.updateEmbeddedDocuments('Item', [update]); // Updates one EmbeddedEntity
     }
   }
 
   /* -------------------------------------------- */
+  async updateWeaponMunitions(weaponId, newValue) {
+    let item = this.items.find( item => item.id == weaponId );
+    let update = { _id: item.id, "system.munitions": newValue  };
+    await this.updateEmbeddedDocuments('Item',[update]);
+  }
+
+    /* -------------------------------------------- */
+  async updateShipMunitions(actorId, newValue) {
+    this.update( { 'system.fight.munitions.value': this.system.fight.munitions.value-newValue } );
+  }
+
+  /* -------------------------------------------- */
   getSortedSkills() {
     let comp = {};
-    comp['everyday'] = this.items.filter( item => this.prepareSkill(item, 'everyday') );
-    comp['professional'] = this.items.filter( item => this.prepareSkill(item, 'professional') );
-    comp['combat'] = this.items.filter( item => this.prepareSkill(item, 'combat') );
-    comp['vehicle'] = this.items.filter( item => this.prepareSkill(item, 'vehicle')) ;
+    comp['primary'] = this.items.filter( item => this.prepareSkill(item, 'primary') );
+    comp['personalcombat'] = this.items.filter( item => this.prepareSkill(item, 'personalcombat') );
+    comp['spaceshipcombat'] = this.items.filter( item => this.prepareSkill(item, 'spaceshipcombat') );
     return comp;
   }
  
@@ -303,7 +315,6 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   prepareTraitsAttributes() {
     let search = (this.type == 'character') ? 'trait' : 'spacecrafttrait';
-    console.log("Test",this.system.level);
     let traitsAttr = this.items.filter( item => item.type == search);
     let actorData = this.system;
     
@@ -324,7 +335,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getEquipmentSlotsBase() {
     let equipSlots = this.items.filter( item => item.type == 'outfit' || item.type == 'utility');
-    let equipmentSlots = 0;
+    let equipmentSlots = 6 + this.system.attributes.strength.value;
     for (let equip of equipSlots) {
       if ( equip.system.statstotal?.equipmentslots?.value && !isNaN( equip.system.statstotal.equipmentslots.value)) {
         equipmentSlots+= Number(equip.system.statstotal.equipmentslots.value);
@@ -333,6 +344,18 @@ export class FraggedEmpireActor extends Actor {
     return equipmentSlots;
   }
   /* -------------------------------------------- */
+  getEquipmentSlotsUsed() {
+    let equipSlotsNeeded = this.items.filter( item => item.type == 'outfit' || item.type == 'utility' || item.type == 'weapon');
+    let equipmentSlotsUsed = 0;
+    for (let equip of equipSlotsNeeded) {
+      if (!equip.system.equipped) {
+        equipmentSlotsUsed += 1;
+      }
+    }
+    return equipmentSlotsUsed;
+  }
+
+    /* -------------------------------------------- */
   getEquipmentSlotsTotal() {
     return this.getEquipmentSlotsBase() + this.system.equipmentslots.bonus;
   }
@@ -388,12 +411,12 @@ export class FraggedEmpireActor extends Actor {
   updateWeaponStat( weapon) {
     weapon.system.totalHit = weapon.system.stats.hit.value;
     for (let variation of weapon.system.variations) {
-      if (!isNaN(variation.data.stats.hit) ) {
+      if (!isNaN(variation.system.stats.hit) ) {
         weapon.system.totalHit += Number(variation.system.stats.hit.value)
       }
     }
     for (let mod of weapon.system.modifications) {
-      if (!isNaN(mod.data.stats.hit) ) {
+      if (!isNaN(mod.system.stats.hit) ) {
         weapon.system.totalHit += Number(mod.system.stats.hit.value)
       }
     }
@@ -439,7 +462,7 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   getAttribute( attrName ) {
-    for( let key in this.data.attributes) {
+    for( let key in this.system.attributes) {
       let attr = this.system.carac[key];
       if (attr.label.toLowerCase() == attrName.toLowerCase() ) {
         return deepClone(categ.carac[carac]);
@@ -471,11 +494,16 @@ export class FraggedEmpireActor extends Actor {
   }
   
   /* -------------------------------------------- */
-  getInitiativeScore( )  {
+  getInitiativeScore( phase)  {
     if ( this.type == 'character') {
       return this.system.attributes.intelligence.current + (this.system.attributes.reflexes.current/10)
     } else if (this.type == 'spacecraft') {
-      return this.system.attributes.velocity.value + (this.system.size.value/10)
+      if (phase == 1) {
+        return this.system.attributes.velocity.current + (this.system.attributes.crew.current/10)
+      } else {
+        return this.system.attributes.cpu.current + (this.system.attributes.crew.current/10)
+      }
+      
     }
     return 0.0;
   }
@@ -544,10 +572,28 @@ export class FraggedEmpireActor extends Actor {
   getTradeGoods( ) {
     let tradeGoods = this.items.filter( item => item.type == 'tradegood' );
     for (let good of tradeGoods) {
-      good.cargoSpace = Math.ceil(good.system.tradebox / 4); 
+      if (good.system.type == "money") {
+        good.system.cargoSpace = 0;
+      }
+      if (good.system.type == "loot") {
+        good.system.cargoSpace = .25;
+      }
+      if (good.system.type == "freight") {
+        good.system.cargoSpace = 1;
+      }
     }
     return tradeGoods;
-
+  }
+  /* -------------------------------------------- */
+  getCargoSpaceUsed( ) {
+    let tradeGoods = this.items.filter( item => item.type == 'tradegood' );
+    let cargoSpaceUsed = 0;
+    console.log("Calculating CargoSpaceUsed")
+    for (let good of tradeGoods) {
+      cargoSpaceUsed = cargoSpaceUsed + good.system.cargoSpace
+      console.log(cargoSpaceUsed)
+    }
+    return cargoSpaceUsed;
   }
   /* -------------------------------------------- */
   getResearch( ) {
@@ -581,19 +627,19 @@ export class FraggedEmpireActor extends Actor {
     await this.update( { 'data.subactors': newArray } );
   }
   /* -------------------------------------------- */
-  decrementFate() {
-    if ( this.type == 'character' && this.system.fate.value > 0 ) {
-      let newFate = this.system.fate.value - 1;
-      this.system.fate.value = newFate;
-      this.update( { 'data.fate.value': newFate } );
-      return newFate;
+  decrementGritRerolls() {
+    if ( this.type == 'character' && this.system.gritreroll.value > 0 ) {
+      let newGritReroll = this.system.gritreroll.value - 1;
+      this.system.gritreroll.value = newGritReroll;
+      this.update( { 'system.gritreroll.value': newGritReroll } );
+      return newGritReroll;
     }
     return false;
   }
   /* -------------------------------------------- */
-  getFate() {
-    if ( this.type == 'character' && this.system.fate.value > 0 ) {
-      return this.system.fate.value;
+  getGrit() {
+    if ( this.type == 'character' && this.system.gritreroll.value > 0 ) {
+      return this.system.gritreroll.value;
     }
     return false;
   }
@@ -608,7 +654,7 @@ export class FraggedEmpireActor extends Actor {
         actorImg: this.img,
         actorId: this.id,
         img: skill.img,
-        hasFate: this.getFate(),
+        hasFate: this.getGrit(),
         rollMode: game.settings.get("core", "rollMode"),
         title: `Skill ${skill.name} : ${skill.system.total}`,
         skill: skill,
@@ -651,9 +697,22 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   async rollWeapon( weaponId ) {
+    let intstat = 0;
     let weapon = this.items.find( item => item.id == weaponId);
+      const target = game.user.targets.first();
+    if (Object.is( target, undefined )) { 
+      ui.notifications.error("Target not found!  You must have a target before firing a weapon.");
+      return
+    }
     console.log("WEAPON :", weaponId, weapon );
-        
+    console.log("TARGET", target.actor)
+    
+    if (target.actor.type == 'npc' && target.actor.system.npctype == 'henchman') {
+      intstat = target.actor.system.stats.Attribute.value;
+    } else { 
+      intstat = target.actor.system.attributes.intelligence.current ;
+    }
+
     this.updateWeaponStat( weapon);
     if ( weapon ) {
       
@@ -661,27 +720,34 @@ export class FraggedEmpireActor extends Actor {
         mode: 'weapon',
         alias: this.name, 
         actorId: this.id,
+        actorImg: this.img,
         img: weapon.img,
-        hasFate: this.getFate(),
+        target: target.actor,
+        hasGrit: this.getGrit(),
+        bMHitDice: 0,
         rollMode: game.settings.get("core", "rollMode"),
         title: "Attack : " + weapon.name,
         weapon: weapon,
-        weaponRoFOptions: FraggedEmpireUtility.buildRoFArray(weapon), 
         rofValue: 1,
+        cover: 0,
+        intmod: 0,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
         bonusMalus: 0,
         optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( )
       }
       // Add skill for character only
       if (this.type == 'character') {
-        let weaponSkills = this.items.filter( item => item.type == 'skill' && item.system.type == 'combat');
+        let weaponSkills = this.items.filter( item => item.type == 'skill' && item.system.type == 'personalcombat');
         rollData.weaponSkills =  weaponSkills;
         let combatSkill = weaponSkills[0];
         if ( weapon.system.defaultskill != "") {
-          combatSkill = this.items.find( item => item.type == 'skill' && item.system.type == 'combat' && item.name == weapon.system.defaultskill);
+          combatSkill = this.items.find( item => item.type == 'skill' && item.system.type == 'personalcombat' && item.name == weapon.system.defaultskill);
         }
         rollData.skillId = combatSkill.id;
         rollData.skill = combatSkill;
+        rollData.useMunitions = false;
+      } else if (this.type == 'npc' && this.system.npctype == 'henchman') {
+        rollData.weapon.system.statstotal.enddmg.value = Number(this.system.stats.Attribute.value) + Number(rollData.weapon.system.statstotal.enddmg.value)
       }
       let rollDialog = await FraggedEmpireRoll.create( this, rollData);
       console.log("WEAPON ROLL", rollData);
@@ -693,7 +759,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   buildNPCRoFArray( ) {
     let bodiesBase = Number(this.system.spec.bodies.value);
-    let rofMax = bodiesBase + Number(this.system.stats.rof.value) || 1;
+    let rofMax = bodiesBase || 1;
     return FraggedEmpireUtility.createDirectOptionList(1, rofMax);
   }
 
@@ -713,6 +779,7 @@ export class FraggedEmpireActor extends Actor {
       rofValue: 1,
       optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
       bonusMalus: 0,
+      bMHitDice: 0,
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( )
     }
     let rollDialog = await FraggedEmpireRoll.create( this, rollData);
@@ -723,26 +790,38 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   async rollSpacecraftWeapon( weaponId ) {
       let weapon = this.items.find( item => item.id == weaponId);
+      const target = game.user.targets.first();
       console.log("SPACECRAFT WEAPON :", weaponId, weapon );
       
       // Build available actor/skills
       let actorList = []
       if (game.user.isGM )  {
-        for (let actor of game.actors) {
-          actorList.push( { id:actor.id, name:actor.name, skills:actor.data.items.filter( item => item.type == 'skill' && item.system.type == 'vehicle') } );
+        let actorNPCship = this.items.filter( item => item.name == 'Rival' || item.name == 'Outclassed' || item.name == 'Outgunned')
+        if (actorNPCship.length != 0) {
+        } else {
+          for (let actor of game.actors) {
+            console.log(actor)
+            actorList.push( { id:actor.id, name:actor.name, skills:actor.items.filter( item => item.type == 'skill' && item.system.type == 'spaceshipcombat') } );
+          }
         }
-      } else {      
+      } else {
         let actorWeapon = game.user.character;
-        actorList.push( { id:actorWeapon.id, name:actorWeapon.name, skills:actorWeapon.data.items.filter( item => item.type == 'skill' && item.system.type == 'vehicle') } );
+        actorList.push( { id:actorWeapon.id, name:actorWeapon.name, skills:actorWeapon.system.items.filter( item => item.type == 'skill' && item.system.type == 'spaceshipcombat') } );
       }
 
       // Skill prepare
-      let skill = actorList[0].skills[0];
-      skill.system.trainedValue = (skill.system.trained) ? 1 : -2
-      skill.system.total = skill.system.trainedValue + skill.system.bonus;
-      skill.system.isTrait = skill.system.traits.length > 0; 
+      console.log(actorList.length)
+      if (actorList.length != 0) {
+        let skill = actorList[0].skills[0];
+        skill.system.trainedValue = (skill.system.trained) ? 1 : -2
+        skill.system.total = skill.system.trainedValue + skill.system.bonus;
+        skill.system.isTrait = skill.system.traits.length > 0; 
+      } else {
+        actorList.push( { id:0, name:'NPC Commander', skills:[{ id:99, name:"NPC Combat", system:{total:0} }] } );
+      }
 
-      if ( weapon ) {      
+      console.log(target)
+      if ( weapon ) {
         let rollData = {
           mode: 'spacecraftweapon',
           alias: this.name, 
@@ -753,14 +832,17 @@ export class FraggedEmpireActor extends Actor {
           rollMode: game.settings.get("core", "rollMode"),
           title: "Spacecraft attack : " + weapon.name,
           weapon: weapon,
+          munitions: this.system.fight.munitions.value,
           skillId: actorList[0].skills[0].id,
           skill: actorList[0].skills[0],
           optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
           optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( ),
           bonusMalus: 0,
-          isGM: game.user.isGM
+          bMHitDice: 0,
+          isGM: game.user.isGM,
+          target: target.actor
         }
-        let rofMax = Number(weapon.system.statstotal.rof.value) || 1;
+        let rofMax = 1;
         rollData.rofValue = rofMax;
 
         let rollDialog = await FraggedEmpireRoll.create( this, rollData);

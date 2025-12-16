@@ -12,7 +12,7 @@
     "maximum": 13
   },
   "description": "Fragged Empire 2E system for FoundryVTT",
-  "download": "https://gitlab.com/iamelodin/foundry-fe2/-/archive/master/fvtt-fragged-empire.zip",
+  "download": "https://github.com/jkknorr/foundry-fe2/releases/download/0.9/foundry-fe2.zip",
   "esmodules": [
     "modules/fragged-empire-main.js"
   ],
@@ -39,6 +39,17 @@
         "skill"
       ],
       "type": "Item"
+    },
+        {
+      "entity": "Item",
+      "label": "Fragged Empire 2 Items",
+      "name": "Fragged Empire 2 Items",
+      "path": "./packs/item.db",
+      "system": "foundry-fe2",
+      "tags": [
+        "items"
+      ],
+      "type": "Item"
     }
   ],
   "primaryTokenAttribute": "endurance.endurance",
@@ -47,6 +58,6 @@
   "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
-  "version": "0.1",
-  "background" : "./images/ui/FE_Welcome_Page.webp"
+  "version": "0.9",
+  "background" : "./systems/foundry-fe2/images/ui/FE_Welcome_Page.webp"
 }

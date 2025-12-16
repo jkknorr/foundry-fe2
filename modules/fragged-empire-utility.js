@@ -24,17 +24,13 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static async chatListeners(html) {
 
-    html.on("click", '.link-reroll', event => {
-      const diceIndex = $(event.currentTarget).data("dice-index");
-      const actorId = $(event.currentTarget).data("actor-id");
-      FraggedEmpireUtility.rerollDice(actorId, diceIndex)
+    html.addEventListener("click", event => {
+      if (event.target.className == 'dice-image-reroll chat-dice') {
+        const diceIndex = event.target.parentElement.dataset.diceIndex;
+        const actorId = event.target.parentElement.dataset.actorId;
+        FraggedEmpireUtility.rerollDice(actorId, diceIndex)
+      }
     });
-    html.on("click", '.fate-reroll', event => {
-      const actorId = $(event.currentTarget).data("actor-id");      
-      FraggedEmpireUtility.rerollDice(actorId);      
-    });
-        
-  
   }
   
   /* -------------------------------------------- */  
@@ -102,8 +98,8 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static async getTraitAttributeList( attr ) {
     console.log("Searching traits: attr");
-    let traits1 = game.items.filter( item => item.data.type == 'trait' && item.data.data.subtype == attr );
-    let traits2 = await this.loadCompendium('world.traits', item => item.data.type == 'trait' && item.data.data.subtype == attr );
+    let traits1 = game.items.filter( item => item.data.type == 'trait' && item.system.subtype == attr );
+    let traits2 = await this.loadCompendium('world.traits', item => item.data.type == 'trait' && item.system.subtype == attr );
     return traits1.concat( traits2);
   }
 
@@ -139,13 +135,13 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static async loadCompendiumData(compendium) {
     const pack = game.packs.get(compendium);
+    console.log("Compendium", compendium);
     return await pack?.getDocuments() ?? [];
   }
 
   /* -------------------------------------------- */
   static async loadCompendium(compendium, filter = item => true) {
     let compendiumData = await this.loadCompendiumData(compendium);
-    //console.log("Compendium", compendiumData);
     return compendiumData.filter(filter);
   }
   
@@ -177,25 +173,29 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
    static async rollFraggedEmpire( rollData ) {
-    
-    console.log("Going to roll", rollData);
 
     // Init stuff
+    console.log(rollData)
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
 
     // Bonus/Malus total
     rollData.weaponHit = 0;
-    rollData.rofBonus = 0;
     rollData.finalBM = rollData.bonusMalus;
     if ( rollData.useToolbox) rollData.finalBM += 1;
     if ( rollData.useDedicatedworkshop) rollData.finalBM += 2;
     if ( rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
-      rollData.weaponHit = Number(rollData.weapon.data.data.statstotal.hit.value);
-      rollData.rofBonus = rollData.rofValue - 1;
-      nbDice += rollData.rofBonus;
+      rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value);
+      nbDice = Number(rollData.weapon.system.statstotal.hitdice.value);
     }
+    if ( rollData.bMHitDice ) {
+      console.log("Extra hit dice added",rollData.bMHitDice)
+      nbDice = nbDice + rollData.bMHitDice 
+    } else {
+      console.log("No extra hit dice found")
+    }
+
     if ( rollData.mode == 'npcfight' ) {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.npcstats.hit.value);
@@ -208,22 +208,21 @@ export class FraggedEmpireUtility  {
       myRoll = new Roll(formula);
       await myRoll.evaluate();
       console.log("ROLL : ", formula);
-      // await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
+      await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
       rollData.roll = myRoll
       rollData.nbStrongHitUsed = 0;
     }
     
     let minStrongHit = 6;
     let maxStrongHit = 6;
-    if ( rollData.weapon && rollData.weapon.data.data.keywords.stronghit.flag) {
-      minStrongHit = Number(rollData.weapon.data.data.keywords.stronghit.X);
-      maxStrongHit = Number(rollData.weapon.data.data.keywords.stronghit.Y);
+    if ( rollData.weapon && rollData.weapon.system.keywords.stronghit.flag) {
+      minStrongHit = Number(rollData.weapon.system.keywords.stronghit.X);
+      maxStrongHit = Number(rollData.weapon.system.keywords.stronghit.Y);
     }
     rollData.diceResults = [];
     let nbStrongHit = 0;
     rollData.rollTotal  = 0;
     for (let i=0; i< nbDice; i++) {
-      console.log("Dice results", i, myRoll.dice[0].results[i].result)
       rollData.diceResults[i] = myRoll.dice[0].results[i].result
       if ( myRoll.dice[0].results[i].result >= minStrongHit && myRoll.dice[0].results[i].result <= maxStrongHit) {
         nbStrongHit++;
@@ -238,34 +237,87 @@ export class FraggedEmpireUtility  {
     if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
       rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
     } else {
-      rollData.strongHitAvailable = false;
+      rollData.strongHitAvailable = true;
     }
     console.log("ROLLLL!!!!", rollData);
-  
+    
     let actor = game.actors.get(rollData.actorId);
+    if (rollData.mode != "skill") {
+      if (rollData.target.type == "npc"){
+        rollData.targetDefence = rollData.target.system.fight.defence.value + (rollData.intmod * rollData.cover)
+        rollData.targetArmor = rollData.target.system.fight.armour.value
+        rollData.targetEnd = rollData.target.system.fight.endurance.value
+        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.value
+      } else if (rollData.target.type == "spacecraft") {
+        rollData.targetDefence = rollData.target.system.fight.defence.total
+        rollData.targetArmor = rollData.target.system.fight.armor.total
+        rollData.targetEnd = rollData.target.system.fight.shield.total
+        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armor.value
+      } else {
+        rollData.targetDefence = rollData.target.system.defensebonus.total + (rollData.intmod * rollData.cover)
+        rollData.targetArmor = rollData.target.system.armourbonus.total
+        rollData.targetEnd = rollData.target.system.endurance.value
+        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.armourbonus.total
+        if (rollData.hasGrit != false) {
+          rollData.gritRerollsLeft = actor.system.gritreroll.value
+          rollData.gritRerollsMax = actor.system.gritreroll.max
+        }
+      }
+    }
+    
     actor.saveRollData( rollData );
-  
-    this.createChatWithRollMode( rollData.alias, {
-      content: await renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData)
-    });
-  }
 
+    if (rollData.mode != "skill") {
+      if (rollData.munitionsUsed != 0) {
+        if (rollData.mode == "spacecraftweapon") {
+          actor.updateShipMunitions(rollData.actorId,rollData.munitionsUsed)
+          actor.update
+        } else {
+          actor.updateWeaponMunitions(rollData.weapon.id,rollData.munitionsUsed)
+          actor.update
+        }
+      }
+    }
+
+    this.createChatWithRollMode( rollData.alias, {
+      content: await foundry.applications.handlebars.renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData)
+    });
+
+    if (rollData.mode != "skill") {
+      if (rollData.target.type == "npc"){
+        if (rollData.weapon.system.statstotal.crit.value >= rollData.target.system.fight.durability.value) {
+        }
+      } else { if (rollData.target.type == "spacecraft") {
+                if (rollData.weapon.system.statstotal.shielddmg.value >= rollData.target.system.fight.shield.total || rollData.nbStrongHit > 0) {
+                  let table = game.tables.find( t => t.name === 'Spacecraft Hit Location' );
+                  let draw = await table.draw();
+                }
+              } else { if (rollData.weapon.system.statstotal.enddmg.value >= rollData.target.system.endurance.value || rollData.nbStrongHit > 0) {
+                let table = game.tables.find( t => t.name === 'Hit Location' );
+                let draw = await table.draw();
+              }
+            }
+      }
+    }
+  }
   /* -------------------------------------------- */
   static async rerollDice( actorId, diceIndex=-1 ) {
     let actor = game.actors.get(actorId);
     let rollData = actor.getRollData();
     
+
     if ( diceIndex != -1) {
-      let myRoll = new Roll("1d6").roll( { async: false} );
+      let myRoll = new Roll("1d6");
+      await myRoll.evaluate();
       await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
 
       rollData.roll.dice[0].results[diceIndex].result = myRoll.total; // Patch
-      rollData.nbStrongHitUsed++;
+      rollData.gritreroll= actor.decrementGritRerolls();
     } else {
-      rollData.hasFate = actor.decrementFate();
+      rollData.gritRerollsLeft = actor.decrementGritRerolls();
       rollData.roll = undefined;
     }
-
+    rollData.nbStrongHitUsed++
     this.rollFraggedEmpire( rollData );
   }
 
@@ -301,7 +353,7 @@ export class FraggedEmpireUtility  {
   static buildRoFArray( item ) {
     if (item.type != "weapon") return false;
     
-    let rofMax = Number(item.data.data.statstotal.rof.value) || 1;
+    let rofMax = Number(item.system.statstotal.rof.value) || 1;
     return this.createDirectOptionList(1, rofMax);
   }
 
@@ -318,7 +370,7 @@ export class FraggedEmpireUtility  {
       array[col].push( keyword);
       col++;
       if (col == 3) col = 0;
-    } 
+    }
     return array;
   }
 

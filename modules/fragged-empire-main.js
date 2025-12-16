@@ -99,3 +99,28 @@ Hooks.on("chatMessage", (html, content, msg) => {
   }
   return true;
 });
+
+Hooks.on("combatRound", (combat, prior, current) => {
+
+  // Notify you that the hook ran
+  ui.notifications.info(`New Round: Round ${combat.round}`);
+  if (combat.combatant?.actor.type == 'spacecraft') {
+    console.log("This is a spaceship fight, rerolling alternate initiative")
+  }
+  combat.turns.forEach((theGuy) => {
+    combat.rollInitiative(theGuy.id);
+  })
+});
+
+Hooks.on("modifyTokenAttribute", (data, updates, actor) => {
+  // Notify you that the hook ran
+  console.log("modifyTokenAttribute fired!",data,updates,actor)
+  if (data.attribute == "fight.endurance.value" && actor.type == "npc" && actor.system.npctype == "henchman") {
+    canvas.scene.tokens.forEach((st) => {
+      if (st.name == actor.name && st.id != actor.parent.id) {
+        console.log("We need to update endurance on",st.actor)
+        st.actor.system.fight.endurance.value = data.value
+      }
+    })
+  }
+});

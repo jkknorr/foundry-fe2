@@ -3,28 +3,15 @@
 
   <div class="floxrow">
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit bonus : {{weapon.data.data.statstotal.hit.value}}</span>
+      <span class="competence-base flexrow" >Hit bonus : {{weapon.system.statstotal.hit.value}}</span>
     </div>
     
-    {{#if weaponRoFOptions}}
-    <div class="flexrow">
-      <span class="competence-base flexrow" >Rate of Fire : </span>
-      <select class="competence-base flexrow" type="text" id="rof" name="rof" value="rofValue" data-dtype="Number">
-        {{#select rofValue}}
-          {{#each weaponRoFOptions as |rof idx|}}
-          <option value="{{idx}}">{{rof}}</option>
-          {{/each}}
-        {{/select}}
-      </select> 
-    </div>
-    {{/if}}
-
     <div class="flexrow">
       <span class="competence-base flexrow" >Skill to use : </span>
       <select class="competence-base flexrow" type="text" id="skillId" name="skillId" value="skillId" data-dtype="String">
         {{#select skillId}}
           {{#each weaponSkills as |skill key|}}
-          <option value="{{skill.id}}">{{skill.name}} ({{skill.data.data.total}})</option>
+          <option value="{{skill.id}}">{{skill.name}} ({{skill.system.total}})</option>
           {{/each}}
         {{/select}}
       </select> 
@@ -34,13 +21,45 @@
       <span class="competence-base flexrow" >Bonus/Malus : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
         {{#select bonusMalus}}
-        {{{optionsBonusMalus}}}
+          {{{optionsBonusMalus}}}
         {{/select}}
       </select> 
     </div>
 
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
+        {{#select bMHitDice}}
+        {{{optionsBonusMalus}}}
+        {{/select}}
+      </select>
+    </div>
+
+    <div class="flexrow">
+      <span class="competence-base flexrow">
+        {{#ifThen (ne weapon.system.munitions "0") "" "Munitions zero, chamber is empty!"}}{{/ifThen}}
+      </span>
+    </div>
+
+    <div class="flexrow">
+      <span class="competence-base flexrow">
+        <label class="generic-label">Use munitions ({{weapon.system.munitions}}) ?</label>
+        <label class="attribute-value checkbox"><input type="checkbox" id="useMunitions" name="useMunitions" {{checked useMunitions}}/></label>
+      </span>
+    </div>
+
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Cover : </span>
+      <select class="competence-base flexrow" type="text" id="cover" name="cover" value="cover" data-dtype="Number">
+        <option value="0">No Cover</option>
+        <option value="1">Light Cover</option>
+        <option value="2">Heavy Cover</option>
+        <option value="3">Entrenched Cover</option>
+      </select> 
+    </div>
+
     <h3>Stats</h3>
-    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false title="Final stats reminder" header=true}}
+    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.statstotal isfinal=false title="Final stats reminder" header=true}}
 
   </div>
   

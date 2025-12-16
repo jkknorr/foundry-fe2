@@ -25,10 +25,11 @@ export class FraggedEmpireSpacecraftSheet extends foundry.appv1.sheets.ActorShee
 
   /* -------------------------------------------- */
   async getData() {
-    const objectData = FraggedEmpireUtility.data(this.object);
+    // const objectData = FraggedEmpireUtility.data(this.object);
+    const objectData = this.object
 
     this.actor.prepareTraitsAttributes();
-    let shipData = duplicate(FraggedEmpireUtility.templateData(this.object));
+    let shipData = foundry.utils.duplicate(FraggedEmpireUtility.templateData(this.object));
 
     let formData = {
       title: this.title,
@@ -38,13 +39,13 @@ export class FraggedEmpireSpacecraftSheet extends foundry.appv1.sheets.ActorShee
       name: objectData.name,
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
-      data: shipData,
+      system: this.object.system,
       effects: this.object.effects.map(e => foundry.utils.deepClone(e.data)),
       limited: this.object.limited,
       weapons: this.actor.getSpacecraftWeapons(),
       tradeGoods : this.actor.getTradeGoods(),
+      cargoSpaceUsed : this.actor.getCargoSpaceUsed(),
       defenseBase: this.actor.getDefenseBase(),
-      defenseVsOrdinance: this.actor.getVsOrdinance(),      
       armourBase: this.actor.getBaseArmour(),
       armourTotal: this.actor.getTotalArmour(),
       traits: this.actor.getTraits(),

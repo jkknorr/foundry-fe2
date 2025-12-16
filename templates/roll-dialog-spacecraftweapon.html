@@ -3,7 +3,7 @@
 
   <div class="floxrow">
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit bonus : {{weapon.data.data.statstotal.hit.value}}</span>
+      <span class="competence-base flexrow" >Hit bonus : {{weapon.system.statstotal.hit.value}}</span>
       <span class="competence-base flexrow" >Rate of Fire : {{rofValue}}</span>
     </div>
     
@@ -26,7 +26,7 @@
         {{#select skill}}
           {{#each actorList as |actor key|}}
             {{#each actor.skills as |skill key|}}
-            <option value="{{skill.id}}">{{actor.name}} - {{skill.name}} ({{skill.data.data.total}})</option>
+            <option value="{{skill.id}}">{{actor.name}} - {{skill.name}} ({{skill.system.total}})</option>
             {{/each}}
           {{/each}}
         {{/select}}
@@ -39,11 +39,31 @@
         {{#select bonusMalus}}
         {{{optionsBonusMalus}}}
         {{/select}}
-      </select> 
+      </select>
+    </div>
+    <div class="flexrow">
+      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
+        {{#select bMHitDice}}
+        {{{optionsBonusMalus}}}
+        {{/select}}
+      </select>
+    </div>
+    <div class="flexrow">
+      <span class="competence-base flexrow">
+        {{#ifThen (ne munitions "0") "" "Munitions zero, chamber is empty!"}}{{/ifThen}}
+      </span>
+    </div>
+
+    <div class="flexrow">
+      <span class="competence-base flexrow">
+        <label class="generic-label">Use munitions ({{munitions}}) ?</label>
+        <label class="attribute-value checkbox"><input type="text" id="munitionsUsed" class="input-numeric-short padd-right" name="munitionsUsed" value="0" data-dtype="Number"/>
+      </span>
     </div>
 
     <h3>Stats</h3>
-    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.data.data.statstotal isfinal=false title="Final stats reminder" header=true}}
+    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.statstotal isfinal=false title="Final stats reminder" header=true}}
 
   </div>
   

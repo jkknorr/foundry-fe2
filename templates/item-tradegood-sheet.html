@@ -11,9 +11,14 @@
 
         <div class="tab" data-group="primary">
           <ul>
-            <li class="flexrow"><label class="generic-label">Trade Box</label>
-              <input type="text" name="data.tradebox" value="{{data.tradebox}}" data-dtype="Number"/>
-            </li>
+            <span class="generic-label"><h3>Type</h3>
+            <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
+              {{#select system.type}}
+              <option value="money">Money</option>
+              <option value="loot">Loot</option>
+              <option value="freight">Freight</option>
+              {{/select}}
+            </select> </span>
           </ul>
           <label class="generic-label">Description</label>
           {{editor system.description target="data.description" button=true owner=owner editable=editable}}

@@ -28,17 +28,17 @@ export class FraggedEmpireNPCSheet extends foundry.appv1.sheets.ActorSheet {
     const objectData = FraggedEmpireUtility.data(this.object);
     
     this.actor.prepareTraitsAttributes();
-    let actorData = duplicate(FraggedEmpireUtility.templateData(this.object));
+    let actorData = foundry.utils.duplicate(FraggedEmpireUtility.templateData(this.object));
 
     let formData = {
       title: this.title,
-      id: objectData.id,
-      type: objectData.type,
-      img: objectData.img,
-      name: objectData.name,
+      id: this.object._id,
+      type: this.object.type,
+      img: this.object.img,
+      name: this.object.name,
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
-      data: actorData,
+      system: this.object.system,
       effects: this.object.effects.map(e => foundry.utils.deepClone(e.data)),
       limited: this.object.limited,
       equipments: this.actor.getEquipments(),
@@ -115,7 +115,8 @@ export class FraggedEmpireNPCSheet extends foundry.appv1.sheets.ActorSheet {
     });    
     html.find('.item-equip').click(ev => {
       const li = $(ev.currentTarget).parents(".item");
-      this.actor.equipItem( li.data("item-id") );
+      console.log(li,li[0].dataset);
+      this.actor.equipItem( li[0].dataset.itemId );
       this.render(true);
     });
 
