@@ -1,6 +1,6 @@
-{{#if data.isGM}}
-<h3>GM Notes : </h3>
-<div class="form-group editor">
-  {{editor system.gmnotes target="data.gmnotes" button=true owner=owner editable=editable}}
-</div>
+{{#if system.isGM}}
+  <h3>GM Notes : </h3>
+  <span class="small-editor item-text-long-line">
+    {{editor system.gmnotes target="system.gmnotes"}}
+  </span>
 {{/if}}

@@ -579,14 +579,14 @@
 
           <hr>
           <h3>Biography : </h3>
-          <div class="form-group editor">
-            {{editor system.biosystem.description target="system.biosystem.description" button=true owner=owner editable=editable}}
-          </div>
+          <span class="small-editor item-text-long-line">
+            {{editor system.biosystem.description target="system.biosystem.description"}}
+          </span>
           <hr>
           <h3>Notes : </h3>
-          <div class="form-group editor">
-            {{editor system.biosystem.notes target="system.biosystem.notes" button=true owner=owner editable=editable}}
-          </div>
+          <span class="small-editor item-text-long-line">
+            {{editor system.biosystem.notes target="system.biosystem.notes"}}
+          </span>
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
         </article>

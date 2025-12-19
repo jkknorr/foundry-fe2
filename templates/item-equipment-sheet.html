@@ -12,17 +12,17 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="generic-label">Equipped ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="data.equipped" {{checked data.equipped}}/></label>
+              <label class="attribute-value checkbox"><input type="checkbox" name="system.equipped" {{checked system.equipped}}/></label>
             </li>
             <li class="flexrow"><label class="generic-label">Weight</label>
-              <input type="text" name="data.weight" value="{{data.weight}}" data-dtype="Number"/>
+              <input type="text" name="data.weight" value="{{system.weight}}" data-dtype="Number"/>
             </li>
             <li class="flexrow"><label class="generic-label">Cost</label>
-              <input type="text" name="data.cost" value="{{data.cost}}" data-dtype="Number"/>
+              <input type="text" name="data.cost" value="{{system.cost}}" data-dtype="Number"/>
             </li>
           </ul>
           <label class="generic-label">Description</label>
-          {{editor system.description target="data.description" button=true owner=owner editable=editable}}
+          {{editor system.description target="system.description" button=true owner=owner editable=editable}}
         </div>
 
     </section>
