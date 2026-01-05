@@ -625,6 +625,10 @@
           "value": "",
           "label": "Hit Bonus"
         },
+        "range": {
+          "value": "",
+          "label": "Range Increment"
+        },    
         "enddmg": {
           "value": "",
           "label": "Endurance Damage"
@@ -633,10 +637,6 @@
           "value": "",
           "label": "Critical Damage"
         },
-        "range": {
-          "value": "",
-          "label": "Range Increment"
-        },    
         "acquire": {
           "value": "",
           "label": "Acquire"

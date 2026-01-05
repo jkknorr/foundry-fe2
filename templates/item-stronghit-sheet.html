@@ -9,18 +9,11 @@
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-
         <div class="tab" data-group="primary">
-          <label class="generic-label">Description</label>
-          {{editor system.description target="system.description" button=true owner=owner editable=editable}}
-          <ul>
-            <li class="flexrow"><label class="item-sheet-label">Requirements</label>
-              <span class="small-editor item-text-long-line">
-              {{editor system.requirements target="system.requirements" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-          </ul>
+          <h3>Description</h3>
+            {{editor system.description target="system.description"}}
+          <h3>Requirements</h3>
+            {{editor system.requirements target="system.requirements"}}
         </div>
-
     </section>
 </form>

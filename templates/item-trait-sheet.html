@@ -44,24 +44,19 @@
               </select> 
             </li> --}}
           </ul>
-          <ul>
-            <li class="flexrow"><label class="item-sheet-label">Requirements</label>
-              <span class="small-editor item-text-long-line">
-              {{editor system.requirements target="system.requirements" button=false engine=prosemirror editable=false}}
-              </span>
-            </li>
-            <li class="flexrow"><label class="item-sheet-label">Benefits</label>
-              <span class="small-editor item-text-long-line">
-                {{editor system.benefits target="system.benefits" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-            <li class="flexrow"><label class="item-sheet-label">Disadvantages</label>
-              <span class="small-editor item-text-long-line">
-                {{editor system.disadvantages target="system.disadvantages" button=true owner=owner editable=editable}}
-              </span>
-            </li>
-          </ul>
+        <div class="tab" data-group="primary">
+          <span class="generic-label"><h3>Requirements</h3></span>
+          <span class="small-editor item-text-long-line">
+            {{editor system.requirements target="system.requirements"}}
+          </span>
+          <span class="generic-label"><h3>Benefits</h3></span>
+          <span class="small-editor item-text-long-line">
+            {{editor system.benefits target="system.benefits"}}
+          </span>
+          <span class="generic-label"><h3>Disadvantages</h3></span>
+          <span class="small-editor item-text-long-line">
+            {{editor system.disadvantages target="system.disadvantages"}}
+          </span>
         </div>
-
     </section>
 </form>
