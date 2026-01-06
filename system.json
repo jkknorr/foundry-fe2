@@ -58,6 +58,6 @@
   "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
-  "version": "0.9",
+  "version": "1.0",
   "background" : "./systems/foundry-fe2/images/ui/FE_Welcome_Page.webp"
 }
