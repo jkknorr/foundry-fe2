@@ -439,6 +439,7 @@
       "Labels": {
         "BonusMalus": "Bonus/Malus",
         "HitBonus": "Hit bonus",
+        "RangePenalty": "Range penalty",
         "SkillToUse": "Skill to use",
         "HitDiceModifier": "Hit Dice Modifier",
         "RateOfFire": "Rate of Fire",

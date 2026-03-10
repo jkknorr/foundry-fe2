@@ -417,6 +417,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     } catch (e) {
       return;
     }
+
     if (data && data.type === "Actor" && data.uuid) {
       const droppedActor = await fromUuid(data.uuid);
       if (droppedActor) {
@@ -439,6 +440,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     // Single-species enforcement: remove existing race items before adding new one
     if (data?.type === "Item") {
       const item = await fromUuid(data.uuid);
+      console.log(item)
       if (item?.type === "race") {
         const existingRaces = this.document.getRaces();
         // Clean up sub-items from existing races before removing them

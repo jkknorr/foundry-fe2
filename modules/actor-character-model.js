@@ -655,6 +655,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       ui.notifications.error(game.i18n.localize("FE2.Notifications.TargetNotFound"));
       return;
     }
+
     let intstat = 0;
     if (target.actor.type == 'npc' && target.actor.system.npctype == 'henchman') {
       intstat = target.actor.system.stats.Attribute.value;
@@ -676,6 +677,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         rollMode: game.settings.get("core", "rollMode"),
         title: game.i18n.format("FE2.Dialog.AttackTitle", { name: weapon.name }),
         weapon: weapon,
+        distance: 0,
         rofValue: 1,
         cover: 0,
         intmod: 0,
@@ -700,6 +702,10 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       rollData.untrainedSkillMod = actor._computed?.untrainedSkillMod || 0;
       rollData.conditionalEffects = getRelevantConditionalEffects(actor, rollData.mode, { skillType: 'personalcombat', skillId: combatSkill?.id });
       rollData.selectedConditionalEffects = [];
+      let shotpath = canvas.grid.measurePath([target.actor.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
+      console.log(shotpath.distance)
+      rollData.distance = shotpath.distance
+      rollData.rangepenalty = ((Math.ceil(shotpath.distance / weapon.system.statstotal.range.value) -1 ) *2)
       await FraggedEmpireRoll.create(actor, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
