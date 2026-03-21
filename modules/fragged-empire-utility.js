@@ -356,14 +356,28 @@ export class FraggedEmpireUtility  {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
       nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
-    }
+    }game.items.filter( item => item.type == 'trait' && item.system.subtype == attr );
+    let munBoosts = rollData.weapon.system.keywords.filter(keyword => keyword.name.includes('Munition Boost'))
 
     if ( rollData.bMHitDice ) {
       nbDice += rollData.bMHitDice 
     }
     if ( rollData.munHitDice) {
       nbDice += rollData.munHitDice
+      for (const munBoost of munBoosts) {
+        switch (munBoost.name) {
+          case 'Munition Boost Xd6':
+            nbDice += Number(munBoost.system.params.X)
+            console.log('Adding',Number(munBoost.system.params.X),'dice to attack roll')
+            break
+          case 'Munition Boost +X End/Shield Dmg':
+            rollData.endDmgAdd = Number(munBoost.system.params.X)
+            console.log('Adding',Number(munBoost.system.params.X),'to Endurance/Shield Dmg, now',rollData.endDmgAdd)
+            break
+        }
+      }
     }
+    console.log( rollData )
     if ( rollData.mode == 'npcfight' ) {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.npcstats.hit.value);
@@ -414,15 +428,16 @@ export class FraggedEmpireUtility  {
     
     switch (actor.type) {
       case "npc":
-        rollData.endDmgAdd = Number(actor.system.stats.Attribute.value)
+        rollData.endDmgAdd += Number(actor.system.stats.Attribute.value)
         break;
       case "character":
-        rollData.endDmgAdd = Number(actor.system.attributes.focus.current)
+        rollData.endDmgAdd += Number(actor.system.attributes.focus.current)
         break;
       case "spacecraft":
-        rollData.endDmgAdd = Number(actor.system.attributes.sensors.current)
+        rollData.endDmgAdd += Number(actor.system.attributes.sensors.current)
         break;
     }
+    console.log('Endurance/Shield Dmg now' ,rollData.endDmgAdd)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / rollData.weapon.system.statstotal.range.value) -1 ) *2)
       if (rollData.hasGrit != false) {
