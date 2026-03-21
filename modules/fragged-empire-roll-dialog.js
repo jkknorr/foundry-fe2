@@ -82,11 +82,8 @@ export class FraggedEmpireRoll {
         el.querySelector("#useToolbox")?.addEventListener("change", (e) => {
           rollData.useToolbox = e.currentTarget.checked;
         });
-        el.querySelector("#useMunitions")?.addEventListener("change", (e) => {
-          rollData.useMunitions = e.currentTarget.checked;
-        });
-        el.querySelector("#munitionsUsed")?.addEventListener("change", (e) => {
-          rollData.munitionsUsed = Number(e.currentTarget.value);
+        el.querySelector("#munHitDice")?.addEventListener("change", (e) => {
+          rollData.munHitDice = Number(e.currentTarget.value);
         });
         el.querySelector("#cover")?.addEventListener("change", (e) => {
           rollData.cover = Number(e.currentTarget.value);

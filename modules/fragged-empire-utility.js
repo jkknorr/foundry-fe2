@@ -359,7 +359,10 @@ export class FraggedEmpireUtility  {
     }
 
     if ( rollData.bMHitDice ) {
-      nbDice = nbDice + rollData.bMHitDice 
+      nbDice += rollData.bMHitDice 
+    }
+    if ( rollData.munHitDice) {
+      nbDice += rollData.munHitDice
     }
     if ( rollData.mode == 'npcfight' ) {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
@@ -371,6 +374,7 @@ export class FraggedEmpireUtility  {
     if ( !myRoll ) { // New rolls only of no rerolls
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
       myRoll = new Roll(formula);
+      console.log()
       await myRoll.evaluate();
       await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
       rollData.roll = myRoll
@@ -467,16 +471,12 @@ export class FraggedEmpireUtility  {
             .stretchTo(fxTarget, { attachTo: true })
         .play()
     }
-
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
-      if (rollData.mode == "weapon" && rollData.useMunitions) {
-        rollData.munitionsUsed = 1;
-      }
-      if (rollData.munitionsUsed != 0) {
+      if (rollData.munHitDice != 0) {
         if (rollData.mode == "spacecraftweapon") {
-          actor.updateShipMunitions(rollData.actorId, rollData.munitionsUsed);
+          actor.updateShipMunitions(rollData.actorId, rollData.munHitDice);
         } else {
-          actor.updateWeaponMunitions(rollData.weapon._id, rollData.munitionsUsed);
+          actor.updateWeaponMunitions(rollData.weapon._id, rollData.munHitDice);
         }
       }
     }

@@ -29,6 +29,15 @@
       </select>
     </div>
 
+    <div class="flexrow">
+      <span class="competence-base flexrow">
+        <label class="generic-label">{{localize "FE2.Roll.Labels.UseMunitions"}} ({{system.fight.munitions}}) ?</label>
+        <select class="competence-base flexrow" type="text" id="munHitDice" name="munHitDice" value="munHitDice" data-dtype="Number">
+          {{selectOptions optionsBonusMalus selected=munHitDice}}
+        </select>
+      </span>
+    </div>
+
     {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}
 
     <div class="fe2-weapon-summary-dialog">

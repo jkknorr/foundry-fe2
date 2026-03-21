@@ -682,6 +682,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         cover: 0,
         intmod: 0,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
+        optionsMunitions: FraggedEmpireUtility.buildListOptions(0, Number(weapon.system.munitions)),
         bonusMalus: 0,
         optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions()
       };
@@ -703,7 +704,6 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       rollData.conditionalEffects = getRelevantConditionalEffects(actor, rollData.mode, { skillType: 'personalcombat', skillId: combatSkill?.id });
       rollData.selectedConditionalEffects = [];
       let shotpath = canvas.grid.measurePath([target.actor.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
-      console.log(shotpath.distance)
       rollData.distance = shotpath.distance
       rollData.rangepenalty = ((Math.ceil(shotpath.distance / weapon.system.statstotal.range.value) -1 ) *2)
       await FraggedEmpireRoll.create(actor, rollData);

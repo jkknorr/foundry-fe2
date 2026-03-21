@@ -38,7 +38,9 @@
     <div class="flexrow">
       <span class="competence-base flexrow">
         <label class="generic-label">{{localize "FE2.Roll.Labels.UseMunitions"}} ({{weapon.system.munitions}}) ?</label>
-        <label class="attribute-value checkbox"><input type="checkbox" id="useMunitions" name="useMunitions" {{checked useMunitions}}/></label>
+        <select class="competence-base flexrow" type="text" id="munHitDice" name="munHitDice" value="munHitDice" data-dtype="Number">
+          {{selectOptions optionsMunitions selected=munHitDice}}
+        </select>
       </span>
     </div>
 

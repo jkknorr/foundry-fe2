@@ -450,7 +450,7 @@
         "ApplyToolsBonus": "Apply Tools Bonus",
         "ApplyToolboxBonus": "Apply Toolbox bonus (+1) ?",
         "ApplyDedicatedWorkshopBonus": "Apply Dedicated Workshop bonus (+2) ?",
-        "UseMunitions": "Use munitions",
+        "UseMunitions": "Munition ability: Gain +1d6 Hit (Stacks)",
         "MunitionsEmpty": "Munitions zero, chamber is empty!",
         "Trained": "Trained (+1)",
         "NotTrained": "Not Trained (-2)",

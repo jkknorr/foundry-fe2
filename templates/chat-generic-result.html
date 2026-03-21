@@ -26,8 +26,9 @@
 </h4>
 
 {{#if target}}
-  <img class="chat-icon" src="{{target.img}}" alt="{{target.name}}" />
-  <h4 class=chat-actor-name>{{target.name}}</h4>
+  {{!-- <img class="chat-icon" src="{{target.img}}" alt="{{target.name}}" /> --}}
+  {{!-- <h4 class=chat-actor-name>{{target.name}}</h4> --}}
+  <h4>{{target.name}}</h4>
 {{/if}}
 <div class="limit-line padding-dice">
   {{#each diceResults as |value key|}}
