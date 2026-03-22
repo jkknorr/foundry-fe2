@@ -369,16 +369,13 @@ export class FraggedEmpireUtility  {
         switch (munBoost.name) {
           case 'Munition Boost Xd6':
             nbDice += Number(munBoost.system.params.X)
-            console.log('Adding',Number(munBoost.system.params.X),'dice to attack roll')
             break
           case 'Munition Boost +X End/Shield Dmg':
             rollData.endDmgAdd = Number(munBoost.system.params.X)
-            console.log('Adding',Number(munBoost.system.params.X),'to Endurance/Shield Dmg, now',rollData.endDmgAdd)
             break
         }
       }
     }
-    console.log( rollData )
     if ( rollData.mode == 'npcfight' ) {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.npcstats.hit.value);
@@ -389,7 +386,7 @@ export class FraggedEmpireUtility  {
     if ( !myRoll ) { // New rolls only of no rerolls
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
       myRoll = new Roll(formula);
-      console.log()
+
       await myRoll.evaluate();
       await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
       rollData.roll = myRoll
@@ -489,9 +486,7 @@ export class FraggedEmpireUtility  {
     console.log(rollData)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.weapon.system.keywords.filter(keyword => keyword.name === 'Build Momentum')) {
-        console.log('munHitDice was',rollData.munHitDice)
         rollData.munHitDice += -1
-        console.log('munHitDice is now',rollData.munHitDice)
       }
       if (rollData.munHitDice) {
         if (rollData.mode == "spacecraftweapon") {
