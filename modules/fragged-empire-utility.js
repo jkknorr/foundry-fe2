@@ -322,6 +322,7 @@ export class FraggedEmpireUtility  {
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
     let actor = game.actors.get(rollData.actorId);
+    rollData.endDmgAdd = 0;
     // Apply skill effect modifiers
     if (rollData.effectModifiers) {
       const mods = rollData.effectModifiers;
@@ -437,7 +438,6 @@ export class FraggedEmpireUtility  {
         rollData.endDmgAdd += Number(actor.system.attributes.sensors.current)
         break;
     }
-    console.log('Endurance/Shield Dmg now' ,rollData.endDmgAdd)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / rollData.weapon.system.statstotal.range.value) -1 ) *2)
       if (rollData.hasGrit != false) {
@@ -486,8 +486,14 @@ export class FraggedEmpireUtility  {
             .stretchTo(fxTarget, { attachTo: true })
         .play()
     }
+    console.log(rollData)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
-      if (rollData.munHitDice != 0) {
+      if (rollData.weapon.system.keywords.filter(keyword => keyword.name === 'Build Momentum')) {
+        console.log('munHitDice was',rollData.munHitDice)
+        rollData.munHitDice += -1
+        console.log('munHitDice is now',rollData.munHitDice)
+      }
+      if (rollData.munHitDice) {
         if (rollData.mode == "spacecraftweapon") {
           actor.updateShipMunitions(rollData.actorId, rollData.munHitDice);
         } else {

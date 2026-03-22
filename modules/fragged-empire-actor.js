@@ -222,8 +222,10 @@ export class FraggedEmpireActor extends Actor {
   async updateWeaponMunitions(weaponId, amountUsed) {
     let item = this.items.find(item => item._id == weaponId);
     let currentMunitions = Number(item.system.munitions);
-    let decremented = Math.max(0, currentMunitions - amountUsed);
-    let update = { _id: item.id, "system.munitions": String(decremented) };
+    console.log('Munitions started at',currentMunitions,'should be decreased by',amountUsed)
+    let updatedMunitions = currentMunitions - amountUsed;
+    console.log('Munitions should be',updatedMunitions)
+    let update = { _id: item.id, "system.munitions": String(updatedMunitions) };
     await this.updateEmbeddedDocuments('Item', [update]);
   }
 
