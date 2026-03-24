@@ -357,14 +357,18 @@ export class FraggedEmpireUtility  {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
       nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
-    }game.items.filter( item => item.type == 'trait' && item.system.subtype == attr );
-    let munBoosts = rollData.weapon.system.keywords.filter(keyword => keyword.name.includes('Munition Boost'))
+    }
+    
+    if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
+      rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
+    }
 
     if ( rollData.bMHitDice ) {
       nbDice += rollData.bMHitDice 
     }
     if ( rollData.munHitDice) {
       nbDice += rollData.munHitDice
+      let munBoosts = rollData.weapon.system.keywords.filter(keyword => keyword.name.includes('Munition Boost'))
       for (const munBoost of munBoosts) {
         switch (munBoost.name) {
           case 'Munition Boost Xd6':
