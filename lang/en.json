@@ -460,7 +460,8 @@
         "NotTrained": "Not Trained (-2)",
         "SkillDifficulty": "Skill difficulty",
         "ArcaneRoll": "Arcane Roll (+2 penalty)",
-        "UseSTP": "Use Spare Time Point?"
+        "UseSTP": "Use Spare Time Point?",
+        "AcquisitionRoll": "Acquisition Roll?"
       },
       "Buttons": {
         "Roll": "Roll !",

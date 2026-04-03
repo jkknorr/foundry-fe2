@@ -102,6 +102,9 @@ export class FraggedEmpireRoll {
         el.querySelector("#isArcane")?.addEventListener("change", (e) => {
           rollData.isArcane = e.currentTarget.checked;
         });
+        el.querySelector("#isAcquisition")?.addEventListener("change", (e) => {
+          rollData.isAcquisition = e.currentTarget.checked;
+        });
         el.querySelector("#useSTP")?.addEventListener("change", (e) => {
           rollData.useSTP = e.currentTarget.checked;
         });

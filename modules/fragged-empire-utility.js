@@ -355,7 +355,11 @@ export class FraggedEmpireUtility  {
     // Bonus/Malus total
     rollData.weaponHit = 0;
     rollData.finalBM = rollData.bonusMalus;
-    if (rollData.acquisitionMod) rollData.finalBM += rollData.acquisitionMod;
+    if (rollData.isAcquisition) {
+      console.log(actor._computed.acquisitionMod)
+      rollData.finalBM += actor._computed.acquisitionMod;
+      console.log('Adding acquisition modifier',actor._computed.acquisitionMod,"for a total of",rollData.finalBM)
+    }
     if (rollData.isArcane) {
       let arcanePenalty = 2 + (rollData.arcaneMod || 0);
       if (arcanePenalty < 0) arcanePenalty = 0;

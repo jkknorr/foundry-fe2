@@ -247,6 +247,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     actor._baseValues.movementBase = this.attributes.mobility.current;
     actor._computed.movement = mods ? Math.round(applyModifiers(this.attributes.mobility.current, mods.movement)) : this.attributes.mobility.current;
     actor._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition, false)) : 0;
+    console.log('Derived acquisition mod is',actor._computed.acquisitionMod)
     actor._computed.arcaneMod = mods ? Math.round(applyModifiers(0, mods.arcane, false)) : 0;
     actor._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill, false)) : 0;
     actor._computed.primarySkillMod = mods ? Math.round(applyModifiers(0, mods.allPrimarySkills, false)) : 0;
