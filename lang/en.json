@@ -68,6 +68,7 @@
         "Equipment": "Equipment",
         "Influence": "Influence",
         "Resources": "Resources",
+        "Knowledge": "Knowledge",
         "StrongHits": "Strong Hits",
         "TradeGoods": "Trade goods",
         "PostToChat": "Post to Chat",
@@ -77,6 +78,7 @@
       },
       "Character": {
         "Resources": "Resources",
+        "Knowledge": "Knowledge",
         "SpareTimePoints": "Spare Time Points",
         "Languages": "Languages",
         "PrimarySkills": "Primary Skills",

@@ -68,6 +68,10 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         traitId: new f.StringField({ initial: "" })
       }),
 
+      knowledge: new f.SchemaField({
+        value: new f.NumberField({ initial: 0 })
+      }),
+
       sparetimepoints: new f.SchemaField({
         value: new f.NumberField({ initial: 0 })
       }),
