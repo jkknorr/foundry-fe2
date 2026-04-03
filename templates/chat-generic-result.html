@@ -81,8 +81,9 @@
       {{/each}}
     </li>
     {{/if}}
-    {{#if gritRerollsMax}}
+    {{#if (eq nbStrongHitUsed 0)}}
     <li><strong>{{localize "FE2.Sheet.Character.GritRerolls"}}: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
+    {{#if (gt gritRerollsLeft 0)}}<li><strong><a class="grit-reroll" data-actor-id={{@root.actorId}}>Grit it!</a></strong></li>{{/if}}
     {{/if}}
     {{#if nbStrongHit}}
     <li><strong>{{localize "FE2.Chat.Stats.StrongHitsUsed"}}: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>

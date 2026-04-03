@@ -35,10 +35,16 @@ export class FraggedEmpireUtility  {
   static async chatListeners(html) {
 
     html.addEventListener("click", event => {
+      console.log(event)
       if (event.target.className == 'dice-image-reroll chat-dice') {
         const diceIndex = event.target.parentElement.dataset.diceIndex;
         const actorId = event.target.parentElement.dataset.actorId;
         FraggedEmpireUtility.rerollDice(actorId, diceIndex)
+      }
+      if (event.target.className == 'grit-reroll') {
+        console.log('We are using grit!')
+        const actorId = event.target.dataset.actorId;
+        FraggedEmpireUtility.rerollGrit(actorId)
       }
     });
   }
@@ -355,11 +361,7 @@ export class FraggedEmpireUtility  {
     // Bonus/Malus total
     rollData.weaponHit = 0;
     rollData.finalBM = rollData.bonusMalus;
-    if (rollData.isAcquisition) {
-      console.log(actor._computed.acquisitionMod)
-      rollData.finalBM += actor._computed.acquisitionMod;
-      console.log('Adding acquisition modifier',actor._computed.acquisitionMod,"for a total of",rollData.finalBM)
-    }
+    if (rollData.isAcquisition) rollData.finalBM += actor._computed.acquisitionMod;
     if (rollData.isArcane) {
       let arcanePenalty = 2 + (rollData.arcaneMod || 0);
       if (arcanePenalty < 0) arcanePenalty = 0;
@@ -435,11 +437,11 @@ export class FraggedEmpireUtility  {
     // Stockage resultats
     rollData.nbStrongHit = nbStrongHit;
     rollData.nbDice = nbDice;
-    if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
+    //if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
       rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
-    } else {
-      rollData.strongHitAvailable = true;
-    }
+    //} else {
+    //  rollData.strongHitAvailable = true;
+    //}
     
     
     switch (actor.type) {
@@ -453,20 +455,18 @@ export class FraggedEmpireUtility  {
         rollData.endDmgAdd += Number(actor.system.attributes.sensors.current)
         break;
     }
+    switch (actor.type) {
+      case "character":
+        rollData.gritRerollsLeft = actor.system.gritreroll.value
+        rollData.gritRerollsMax = actor.system.gritreroll.max
+        break;
+      case "spacecraft":
+        rollData.gritRerollsLeft = actor.system.fight.gritreroll.value
+        rollData.gritRerollsMax = 2
+        break;
+    }
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / rollData.weapon.system.statstotal.range.value) -1 ) *2)
-      if (rollData.hasGrit != false) {
-        switch (actor.type) {
-          case "character":
-            rollData.gritRerollsLeft = actor.system.gritreroll.value
-            rollData.gritRerollsMax = actor.system.gritreroll.max
-            break;
-          case "spacecraft":
-            rollData.gritRerollsLeft = actor.system.fight.gritreroll.value
-            rollData.gritRerollsMax = 2
-            break;
-        }
-      }
       if (rollData.target.type == "npc"){
         rollData.targetDefence = (rollData.target._computed?.defence ?? rollData.target.system.fight.defence.value) + (rollData.intmod * rollData.cover)
         rollData.targetArmor = rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value
@@ -642,6 +642,19 @@ export class FraggedEmpireUtility  {
       rollData.roll = undefined;
     }
     rollData.nbStrongHitUsed++
+    this.rollFraggedEmpire( rollData );
+  }
+
+  static async rerollGrit( actorId ) {
+    let actor = game.actors.get(actorId);
+    let rollData = actor.getRollData();
+    let newFormula = rollData.diceResults.length + "d6"
+    let newRoll = new Roll(newFormula)
+    
+    await newRoll.evaluate();
+    await this.showDiceSoNice(newRoll, game.settings.get("core", "rollMode") );
+    actor.decrementGritRerolls();
+    rollData.roll = newRoll;
     this.rollFraggedEmpire( rollData );
   }
 
