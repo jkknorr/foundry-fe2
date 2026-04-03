@@ -167,10 +167,13 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       this.resources.total = restotal;
       actor.update({ 'system.resources.total': restotal });
     }
+    // Resources available (acquired from play, somewhere between 0 and max)
+    let resavail = this.resources.value;
 
-    // Resources allotted (sum from embedded equipment) and current (max - allotted)
+    // Resources allotted (sum from embedded equipment) and current (available - allotted)
     actor._computed.resourcesAllotted = this.getResourcesAllotted();
-    actor._computed.resourcesCurrent = restotal - actor._computed.resourcesAllotted;
+    actor._computed.resourcesCurrent = resavail - actor._computed.resourcesAllotted;
+    console.log(actor._computed.resourcesCurrent)
 
     // Influence total
     let inftotal = this.level.value + 3;

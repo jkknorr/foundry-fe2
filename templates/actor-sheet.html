@@ -67,6 +67,20 @@
 
             <div class="">
 
+              <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Resources"}}</h3>
+              <ul>
+                <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{system.influence.traitId}}">
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+                  {{numericStepper name="system.resources.value" value=system.resources.value min=0 max=system.resources.total}}</span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.influence.total baseValues.influenceTotal}}">{{system.resources.total}}</span></span></span>
+                  <div class="item-controls">
+                    {{#if (ne system.resources.traitId "")}}
+                    <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
+                    {{/if}}
+                  </div>
+                </li>
+              </ul>
+
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Influence"}}</h3>
               <ul>
                 <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{system.influence.traitId}}">
@@ -516,7 +530,7 @@
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Resources"}}</h3>
               <ul>
                 <li class="item flexrow list-item packed-left" data-attr-key="fate" data-item-id="{{system.resources.traitId}}">
-                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} : {{computed.resourcesCurrent}}</span></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Available"}} : {{computed.resourcesCurrent}}</span></span>
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Alloted"}} : {{computed.resourcesAllotted}}</span></span>
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.resources.total baseValues.resourcesTotal}}">{{system.resources.total}}</span></span></span>
                   <div class="item-controls">
