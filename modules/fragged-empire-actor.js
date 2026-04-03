@@ -228,6 +228,12 @@ export class FraggedEmpireActor extends Actor {
     await this.updateEmbeddedDocuments('Item', [update]);
   }
 
+  async updateSpareTime(actorId, amountUsed) {
+    console.log(this)
+    let decremented = Math.max(0, this.system.sparetimepoints.value - amountUsed);
+    this.update({ 'system.sparetimepoints.value': decremented });
+  }
+
   /* ====================================================================== */
   /*  ACTIVE EFFECTS                                                        */
   /* ====================================================================== */

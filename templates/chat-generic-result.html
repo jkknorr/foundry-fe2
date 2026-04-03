@@ -6,7 +6,7 @@
 </div>
 
 <h4>
-  {{#if (eq mode "skill")}}  
+  {{#if (eq mode "skill")}}
   {{localize "FE2.Chat.Headers.Skill"}} : {{skill.name}} ({{skill.system.total}}) {{#if nbStrongHitUsed}}({{localize "FE2.Chat.Headers.StrongHitReroll"}}){{/if}}
   {{else}}
     {{#if (eq mode "weapon")}}
@@ -63,6 +63,10 @@
     {{/if}}
 
     <li><strong>{{localize "FE2.Chat.Stats.TotalRoll"}} : {{rollTotal}}</strong></li>
+    {{#if (eq mode "skill")}}
+    {{#if (gte rollTotal difficulty)}}<li class="fe2-alert"><strong>{{localize "FE2.Chat.Results.SkillSuccess"}}</strong></li>{{/if}}
+    {{#if (lt rollTotal difficulty)}}<li class="fe2-alert"><strong>{{localize "FE2.Chat.Results.SkillFail"}}</strong></li>{{/if}}
+    {{/if}}
     {{#if target}}
     <li><strong>{{localize "FE2.Chat.Stats.TargetDefense"}}: {{targetDefence}}</strong></li>
     {{#if (gt rollTotal targetDefence)}}<li><strong>{{localize "FE2.Chat.Results.AttackLands"}}</strong></li>

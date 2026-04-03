@@ -458,7 +458,9 @@
         "MunitionsEmpty": "Munitions zero, chamber is empty!",
         "Trained": "Trained (+1)",
         "NotTrained": "Not Trained (-2)",
-        "ArcaneRoll": "Arcane Roll (+2 penalty)"
+        "SkillDifficulty": "Skill difficulty",
+        "ArcaneRoll": "Arcane Roll (+2 penalty)",
+        "UseSTP": "Use Spare Time Point?"
       },
       "Buttons": {
         "Roll": "Roll !",
@@ -469,6 +471,13 @@
         "LightCover": "Light Cover",
         "HeavyCover": "Heavy Cover",
         "EntrenchedCover": "Entrenched Cover"
+      },
+      "SkillDifficulty": {
+        "Moderate": "Moderately difficult (12)",
+        "Default": "Difficult (14)",
+        "Very": "Very Difficult (16)",
+        "Extreme": "Extremely Difficult (18)",
+        "Unreasonable": "Unreasonably Difficult (26)"
       }
     },
     "Chat": {
@@ -495,7 +504,9 @@
         "CriticalHitOrBoost": "Endurance 0, Critical Hit or Critical Boost!",
         "Welcome": "Welcome !",
         "GMOnly": "Message only to the GM",
-        "BlindMessage": "Blind message of {name}"
+        "BlindMessage": "Blind message of {name}",
+        "SkillSuccess": "Skill check successful!",
+        "SkillFail": "Skill check failed!"
       }
     },
     "Notifications": {

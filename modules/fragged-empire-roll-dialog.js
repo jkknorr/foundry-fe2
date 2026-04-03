@@ -33,6 +33,7 @@ export class FraggedEmpireRoll {
     // Determine template
     let templatePath;
     if (rollData.mode === "skill") {
+      rollData.optionsSkillDifficulty = FraggedEmpireUtility.buildSkillDiffChoices();
       templatePath = "systems/foundry-fe2/templates/roll-dialog-skill.html";
     } else if (rollData.mode === "weapon") {
       templatePath = "systems/foundry-fe2/templates/roll-dialog-weapon.html";
@@ -91,11 +92,18 @@ export class FraggedEmpireRoll {
         el.querySelector("#useDedicatedworkshop")?.addEventListener("change", (e) => {
           rollData.useDedicatedworkshop = e.currentTarget.checked;
         });
-        el.querySelector("#difficulty")?.addEventListener("change", (e) => {
+        el.querySelector("#skillDiff")?.addEventListener("change", (e) => {
+          console.log('SkillDiff changed, changing rollData.difficulty')
           rollData.difficulty = Number(e.currentTarget.value);
+        });
+        el.querySelector("#skillDiff")?.addEventListener("change", (e) => {
+          rollData.skilldifficulty = Number(e.currentTarget.value);
         });
         el.querySelector("#isArcane")?.addEventListener("change", (e) => {
           rollData.isArcane = e.currentTarget.checked;
+        });
+        el.querySelector("#useSTP")?.addEventListener("change", (e) => {
+          rollData.useSTP = e.currentTarget.checked;
         });
         el.querySelector("#skillId")?.addEventListener("change", (e) => {
           rollData.skillId = e.currentTarget.value;

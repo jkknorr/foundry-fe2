@@ -38,8 +38,20 @@
     </div>
 
     <div class="flexrow">
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.SkillDifficulty"}} : </span>
+      <select class="competence-base flexrow" type="text" id="skillDiff" name="skillDiff" value="difficulty" data-dtype="Number">
+        {{selectOptions optionsSkillDifficulty selected=skillDiff}}
+      </select>
+    </div>
+
+    <div class="flexrow">
       <label class="generic-label">{{localize "FE2.Roll.Labels.ArcaneRoll"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" id="isArcane" name="isArcane"/></label>
+    </div>
+
+    <div class="flexrow">
+      <label class="generic-label">{{localize "FE2.Roll.Labels.UseSTP"}}</label>
+      <label class="attribute-value checkbox"><input type="checkbox" id="useSTP" name="useSTP"/></label>
     </div>
 
     {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}

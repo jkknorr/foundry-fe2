@@ -229,6 +229,16 @@ export class FraggedEmpireUtility  {
     };
   }
 
+  static buildSkillDiffChoices() {
+    return {
+      "12": game.i18n.localize("FE2.Roll.SkillDifficulty.Moderate"),
+      "14": game.i18n.localize("FE2.Roll.SkillDifficulty.Default"),
+      "16": game.i18n.localize("FE2.Roll.SkillDifficulty.Very"),
+      "18": game.i18n.localize("FE2.Roll.SkillDifficulty.Extreme"),
+      "26": game.i18n.localize("FE2.Roll.SkillDifficulty.Unreasonable")
+    };
+  }
+
   /* -------------------------------------------- */
   static async getTraitFromCompendium( itemId) {
     let trait = game.items.find( item => item.type == 'trait' && item.id == itemId );
@@ -521,6 +531,19 @@ export class FraggedEmpireUtility  {
             let draw = await table.draw();
           }
         }
+      }
+    }
+    if (rollData.mode == "skill") {
+      if (rollData.useSTP) {
+        actor.updateSpareTime(rollData.actorId, 1);
+      }
+      if (rollData.rollTotal >= rollData.difficulty + 4) {
+        let table = game.tables.find( t => t.name === 'Positive Consequences' );
+        let draw = await table.draw();
+      }
+      if (rollData.rollTotal < rollData.difficulty - 4) {
+        let table = game.tables.find( t => t.name === 'Negative Consequences' );
+        let draw = await table.draw();
       }
     }
   }
