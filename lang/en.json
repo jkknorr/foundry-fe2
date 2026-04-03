@@ -507,7 +507,8 @@
         "GMOnly": "Message only to the GM",
         "BlindMessage": "Blind message of {name}",
         "SkillSuccess": "Skill check successful!",
-        "SkillFail": "Skill check failed!"
+        "SkillFail": "Skill check failed!",
+        "GritIt": "Grit it!"
       }
     },
     "Notifications": {

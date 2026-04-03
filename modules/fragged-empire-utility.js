@@ -35,14 +35,12 @@ export class FraggedEmpireUtility  {
   static async chatListeners(html) {
 
     html.addEventListener("click", event => {
-      console.log(event)
       if (event.target.className == 'dice-image-reroll chat-dice') {
         const diceIndex = event.target.parentElement.dataset.diceIndex;
         const actorId = event.target.parentElement.dataset.actorId;
         FraggedEmpireUtility.rerollDice(actorId, diceIndex)
       }
       if (event.target.className == 'grit-reroll') {
-        console.log('We are using grit!')
         const actorId = event.target.dataset.actorId;
         FraggedEmpireUtility.rerollGrit(actorId)
       }
