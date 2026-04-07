@@ -35,6 +35,7 @@ export class FraggedEmpireUtility  {
   static async chatListeners(html) {
 
     html.addEventListener("click", event => {
+      console.log(event)
       if (event.target.className == 'dice-image-reroll chat-dice') {
         const diceIndex = event.target.parentElement.dataset.diceIndex;
         const actorId = event.target.parentElement.dataset.actorId;
@@ -43,6 +44,11 @@ export class FraggedEmpireUtility  {
       if (event.target.className == 'grit-reroll') {
         const actorId = event.target.dataset.actorId;
         FraggedEmpireUtility.rerollGrit(actorId)
+      }
+      if (event.target.className == 'stronghit-use') {
+        const actorId = event.target.dataset.actorId;
+        const hitId = event.target.dataset.hitId;
+        FraggedEmpireUtility.invokeStrongHit(actorId,hitId);
       }
     });
   }
@@ -513,6 +519,15 @@ export class FraggedEmpireUtility  {
       }
     }
 
+    if (rollData.strongHitAvailable) {
+      rollData.hitsAvailable = actor.getStrongHits();
+      rollData.hitsAvailable.push(game.items.find(item => (item.name === 'Critical Hit')));
+      if ((rollData.targetEnd - rollData.totalEndDmg) < 1) {
+        rollData.hitsAvailable.push(game.items.find(item => (item.name === 'Critical Boost')));
+      }
+      console.log(rollData.hitsAvailable);
+    }
+
     let chatRollFlags = FraggedEmpireUtility.buildRollChatFlags(rollData);
     this.createChatWithRollMode( rollData.alias, {
       content: await foundry.applications.handlebars.renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData),
@@ -656,6 +671,17 @@ export class FraggedEmpireUtility  {
     this.rollFraggedEmpire( rollData );
   }
 
+  static async invokeStrongHit( actorId, hitId ) {
+    console.log('Enter invokeStrongHit for',actorId,hitId)
+    let actor = game.actors.get(actorId);
+    let rollData = actor.getRollData();
+    let strongHit = game.items.find(item => (item.id === hitId));
+
+    let strongHitBanner = 'Strong hit ' + strongHit.name + ' used by ' + actor.name
+    ui.notifications.info(strongHitBanner);
+    //this.rollFraggedEmpire( rollData );
+  }
+
   /* -------------------------------------------- */
   static getUsers(filter) {
     return game.users.filter(filter).map(user => user.id);
@@ -711,7 +737,8 @@ export class FraggedEmpireUtility  {
       totalEndDmg: rollData.totalEndDmg,
       critDmg: rollData.critDmg,
       gritRerollsLeft: rollData.gritRerollsLeft,
-      gritRerollsMax: rollData.gritRerollsMax
+      gritRerollsMax: rollData.gritRerollsMax,
+      hitsAvailable: rollData.hitsAvailable
     };
     if (rollData.skill) {
       flags.skill = { name: rollData.skill.name, system: { total: rollData.skill.system.total } };
