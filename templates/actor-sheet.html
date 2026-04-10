@@ -683,12 +683,12 @@
           <hr>
           <h3 class="fe2-section-header">{{localize "FE2.Tabs.Biography"}}</h3>
           <div class="small-editor item-text-long-line">
-            <prose-mirror button="true" toggled="true" name="system.biosystem.description" value="{{system.biosystem.description}}">{{{enrichedBioDescription}}}</prose-mirror>
+            <prose-mirror button="true" toggled="true" name="system.biodata.description" value="{{system.biodata.description}}">{{{enrichedBioDescription}}}</prose-mirror>
           </div>
           <hr>
           <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Notes"}}</h3>
           <div class="small-editor item-text-long-line">
-            <prose-mirror button="true" toggled="true" name="system.biosystem.notes" value="{{system.biosystem.notes}}">{{{enrichedBioNotes}}}</prose-mirror>
+            <prose-mirror button="true" toggled="true" name="system.biodata.notes" value="{{system.biodata.notes}}">{{{enrichedBioNotes}}}</prose-mirror>
           </div>
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html" engine="prosemirror"}}

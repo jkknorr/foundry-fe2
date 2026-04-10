@@ -121,7 +121,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
 
     // Enrich HTML for prose-mirror collapsed display
     const enrichOptions = { async: true, relativeTo: actor };
-    context.enrichedBioDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(actor.system.biosystem?.description ?? "", enrichOptions);
+    context.enrichedBioDescription = await foundry.applications.ux.TextEditor.implementation.enrichHTML(actor.system.biodata.description ?? "", enrichOptions);
     context.enrichedBioNotes = await foundry.applications.ux.TextEditor.implementation.enrichHTML(actor.system.biosystem?.notes ?? "", enrichOptions);
     context.enrichedGMNotes = await foundry.applications.ux.TextEditor.implementation.enrichHTML(actor.system.gmnotes ?? "", enrichOptions);
 
