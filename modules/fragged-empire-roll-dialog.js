@@ -93,7 +93,6 @@ export class FraggedEmpireRoll {
           rollData.useDedicatedworkshop = e.currentTarget.checked;
         });
         el.querySelector("#skillDiff")?.addEventListener("change", (e) => {
-          console.log('SkillDiff changed, changing rollData.difficulty')
           rollData.difficulty = Number(e.currentTarget.value);
         });
         el.querySelector("#skillDiff")?.addEventListener("change", (e) => {

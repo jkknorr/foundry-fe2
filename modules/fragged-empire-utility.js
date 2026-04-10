@@ -241,6 +241,7 @@ export class FraggedEmpireUtility  {
 
   static buildSkillDiffChoices() {
     return {
+      "10": game.i18n.localize("FE2.Roll.SkillDifficulty.Assist"),
       "12": game.i18n.localize("FE2.Roll.SkillDifficulty.Moderate"),
       "14": game.i18n.localize("FE2.Roll.SkillDifficulty.Default"),
       "16": game.i18n.localize("FE2.Roll.SkillDifficulty.Very"),

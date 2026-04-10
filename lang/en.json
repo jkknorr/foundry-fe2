@@ -474,7 +474,8 @@
         "EntrenchedCover": "Entrenched Cover"
       },
       "SkillDifficulty": {
-        "Moderate": "Moderately difficult (12)",
+        "Assist": "Skill Assist (10)",
+        "Moderate": "Moderately Difficult (12)",
         "Default": "Difficult (14)",
         "Very": "Very Difficult (16)",
         "Extreme": "Extremely Difficult (18)",
