@@ -46,6 +46,7 @@ export class FraggedEmpireRoll {
     } else {
       templatePath = "systems/foundry-fe2/templates/roll-dialog-skill.html";
     }
+    console.log(rollData)
 
     const html = await foundry.applications.handlebars.renderTemplate(templatePath, rollData);
 
