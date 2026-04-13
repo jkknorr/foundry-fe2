@@ -663,6 +663,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     }
 
     let intstat = 0;
+    let rangemult = 1;
     if (target.actor.type == 'npc' && target.actor.system.npctype == 'henchman') {
       intstat = target.actor.system.stats.Attribute.value;
     } else {
@@ -710,7 +711,9 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       rollData.conditionalEffects = getRelevantConditionalEffects(actor, rollData.mode, { skillType: 'personalcombat', skillId: combatSkill?.id });
       rollData.selectedConditionalEffects = [];
       let shotpath = canvas.grid.measurePath([target.actor.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
-      rollData.distance = shotpath.distance
+      let activeOutfit = rollData.target.items.find(outfit => outfit.system.carryState === 'active')
+      if (findKeywordOnItem(rollData.target.items.find(outfit => outfit.system.carryState === 'active'), 'deflctfield')) { rangemult = 2 };
+      rollData.distance = shotpath.distance * rangemult;
       rollData.rangepenalty = ((Math.ceil(shotpath.distance / weapon.system.statstotal.range.value) -1 ) *2)
       await FraggedEmpireRoll.create(actor, rollData);
     } else {

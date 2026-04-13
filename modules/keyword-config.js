@@ -67,8 +67,12 @@ export function getKeywordParam(kw, param) {
  * @returns {object|undefined} The keyword entry, or undefined
  */
 export function findKeywordOnItem(item, keywordId) {
-  const keywords = Array.isArray(item.system?.keywords) ? item.system.keywords : [];
-  return keywords.find(kw => getKeywordId(kw) === keywordId);
+  if (item) {
+    const keywords = Array.isArray(item.system?.keywords) ? item.system.keywords : [];
+    return keywords.find(kw => getKeywordId(kw) === keywordId);
+  } else {
+    return null;
+  }
 }
 
 /**

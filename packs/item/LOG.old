@@ -1,3 +1,5 @@
-2026/02/19-22:14:17.438 fac Recovering log #57
-2026/02/19-22:14:17.442 fac Delete type=0 #57
-2026/02/19-22:14:17.442 fac Delete type=3 #56
+2026/04/13-11:13:34.231 a8c8 Log #308: 0 ops saved to Table #311 OK
+2026/04/13-11:13:34.233 a8c8 Archiving C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item/000308.log: OK
+2026/04/13-11:13:34.233 a8c8 Table #310: 8 entries OK
+2026/04/13-11:13:34.233 a8c8 Archiving C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item/MANIFEST-000306: OK
+2026/04/13-11:13:34.236 a8c8 **** Repaired leveldb C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item; recovered 1 files; 3653 bytes. Some data may have been lost. ****

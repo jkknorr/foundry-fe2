@@ -223,7 +223,7 @@ export class FraggedEmpireActor extends Actor {
     let item = this.items.find(item => item._id == weaponId);
     let currentMunitions = Number(item.system.munitions);
     let updatedMunitions = currentMunitions - amountUsed;
-
+    console.log(currentMunitions, updatedMunitions)
     let update = { _id: item.id, "system.munitions": String(updatedMunitions) };
     await this.updateEmbeddedDocuments('Item', [update]);
   }

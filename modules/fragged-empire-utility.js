@@ -35,7 +35,6 @@ export class FraggedEmpireUtility  {
   static async chatListeners(html) {
 
     html.addEventListener("click", event => {
-      console.log(event)
       if (event.target.className == 'dice-image-reroll chat-dice') {
         const diceIndex = event.target.parentElement.dataset.diceIndex;
         const actorId = event.target.parentElement.dataset.actorId;
@@ -508,7 +507,8 @@ export class FraggedEmpireUtility  {
     }
     console.log(rollData)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
-      if (rollData.weapon.system.keywords.filter(keyword => keyword.name === 'Build Momentum')) {
+      if (rollData.weapon.system.keywords.find(keyword => keyword.name === 'Build Momentum')) {
+        console.log("This is a Build Momentum attack")
         rollData.munHitDice += -1
       }
       if (rollData.munHitDice) {
@@ -673,7 +673,6 @@ export class FraggedEmpireUtility  {
   }
 
   static async invokeStrongHit( actorId, hitId ) {
-    console.log('Enter invokeStrongHit for',actorId,hitId)
     let actor = game.actors.get(actorId);
     let rollData = actor.getRollData();
     let strongHit = game.items.find(item => (item.id === hitId));

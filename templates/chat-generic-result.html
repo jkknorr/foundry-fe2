@@ -88,11 +88,11 @@
     {{#if nbStrongHit}}
     <li><strong>{{localize "FE2.Chat.Stats.StrongHitsUsed"}}: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
     {{/if}}
-    {{#if (gt hitsAvailable 0)}}
+    {{#if (gt hitsAvailable.length 0)}}{{#if (gt nbStrongHit nbStrongHitUsed)}}
       {{#each hitsAvailable}}
         <li><a class="stronghit-use" data-hit-id={{_id}} data-actor-id={{@root.actorId}}>{{name}} available!</a></li>
       {{/each}}
-    {{/if}}
+    {{/if}}{{/if}}
   </ul>
 </div>
 </div>
