@@ -55,7 +55,7 @@ export class FraggedEmpireRoll {
       ? game.i18n.localize("FE2.Chat.Headers.Skill")
       : game.i18n.localize("FE2.Roll.Buttons.RollTitle");
 
-    return foundry.applications.api.DialogV2.wait({
+    return foundry.applications.({
       window: { title },
       classes: ["fraggedempiredialog"],
       position: { width: 600, height: "auto" },

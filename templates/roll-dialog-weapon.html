@@ -3,7 +3,7 @@
 
   <div class="flexcol">
     <div class="flexrow">
-      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}   {{localize "FE2.Roll.Labels.RangePenalty"}} : -{{ rangepenalty }}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}   {{localize "FE2.Roll.Labels.RangePenalty"}} :<div id="foo">-{{ rangepenalty }}</div></span>
     </div>
 
     {{#if weaponSkillChoices}}
@@ -14,6 +14,13 @@
       </select>
     </div>
     {{/if}}
+
+    <div class="flexrow">
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.ShotType"}} : </span>
+      <select class="competence-base flexrow" type="text" id="shotType" name="shotType" value="shotType" data-dtype="String">
+        {{selectOptions optionsShotType selected=shotType}}
+      </select>
+    </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>

@@ -442,6 +442,7 @@
     "Roll": {
       "Labels": {
         "BonusMalus": "Bonus/Malus",
+        "ShotType": "Shot type",
         "HitBonus": "Hit bonus",
         "RangePenalty": "Range penalty",
         "SkillToUse": "Skill to use",
@@ -480,6 +481,11 @@
         "Very": "Very Difficult (16)",
         "Extreme": "Extremely Difficult (18)",
         "Unreasonable": "Unreasonably Difficult (26)"
+      },
+      "ShotType": {
+        "Overwatch": "Overwatch (Range +",
+        "SnapShot": "Snap Shot",
+        "SightedShot": "Sighted Shot (Range +"
       }
     },
     "Chat": {

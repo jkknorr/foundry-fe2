@@ -249,6 +249,14 @@ export class FraggedEmpireUtility  {
     };
   }
 
+  static buildShotTypeChoices(ref, focus) {
+    return {
+      "overwatch": game.i18n.localize("FE2.Roll.ShotType.Overwatch") + ref + ")",
+      "snap": game.i18n.localize("FE2.Roll.ShotType.SnapShot"),
+      "sighted": game.i18n.localize("FE2.Roll.ShotType.SightedShot") + ref + " Hit +" + focus + ")"
+    };
+  }
+
   /* -------------------------------------------- */
   static async getTraitFromCompendium( itemId) {
     let trait = game.items.find( item => item.type == 'trait' && item.id == itemId );
@@ -378,6 +386,9 @@ export class FraggedEmpireUtility  {
       rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
       nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
     }
+    if ( rollData.shotType == 'sighted') {
+      rollData.finalBM += actor.system.attributes.focus.current
+    }
     
     if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
       rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
@@ -469,8 +480,11 @@ export class FraggedEmpireUtility  {
         rollData.gritRerollsMax = 2
         break;
     }
+
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
-      rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / rollData.weapon.system.statstotal.range.value) -1 ) *2)
+      let effectiveRange = rollData.weapon.system.statstotal.range.value;
+      if (rollData.shotType == 'overwatch' || rollData.shotType == 'sighted') { effectiveRange += actor.system.attributes.reflexes.current}
+      rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / effectiveRange) -1 ) *2)
       if (rollData.target.type == "npc"){
         rollData.targetDefence = (rollData.target._computed?.defence ?? rollData.target.system.fight.defence.value) + (rollData.intmod * rollData.cover)
         rollData.targetArmor = rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value
@@ -637,6 +651,21 @@ export class FraggedEmpireUtility  {
 
     return applied;
   }
+  /* -------------------------------------------- */
+  static calculateRangePenalty (rollData, actor ) {
+    let rangemult = 1;
+    let weaponRange = Number(rollData.weapon.system.statstotal.range.value);
+    console.log(rollData.shotType);
+    if ( rollData.shotType != "snap" ) { weaponRange += Number(actor.system.attributes.reflexes.current) }
+    let shotpath = canvas.grid.measurePath([rollData.target.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
+    if (findKeywordOnItem(rollData.target.items.find(outfit => outfit.system.carryState === 'active'), 'deflctfield')) { rangemult = 2 };
+    rollData.distance = shotpath.distance * rangemult;
+    console.log('Distance is ',rollData.distance,'range is',weaponRange)
+    rollData.rangepenalty = ((Math.ceil(shotpath.distance / weaponRange) -1 ) *2)
+    let newRollData = rollData
+    return newRollData
+  }
+  /* -------------------------------------------- */
 
   /* -------------------------------------------- */
   static async rerollDice( actorId, diceIndex=-1 ) {

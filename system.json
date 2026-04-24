@@ -8,8 +8,8 @@
   }],
   "compatibility": {
     "minimum": 13,
-    "verified": 13,
-    "maximum": 13
+    "verified": 14,
+    "maximum": 14
   },
   "description": "Fragged Empire 2E system for FoundryVTT",
   "download": "https://github.com/jkknorr/foundry-fe2/releases/latest/download/foundry-fe2.zip",
@@ -94,6 +94,6 @@
   "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
-  "version": "1.11",
+  "version": "1.12",
   "background" : "./systems/foundry-fe2/images/ui/FE_Welcome_Page.webp"
 }
