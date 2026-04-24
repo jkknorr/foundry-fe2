@@ -687,6 +687,24 @@ Hooks.on("combatRound", (combat, prior, current) => {
   if (combat.combatant?.actor.type == 'spacecraft') {
   }
   combat.turns.forEach((theGuy) => {
+    if (theGuy.actor) {
+      let npcTypeTrait = theGuy.actor.items.find(item => item.type === "trait" && item.name === "Skilled" || item.name === "Nemesis")
+      if (npcTypeTrait) { 
+        let munitionsAllowance = 0;
+        switch (npcTypeTrait.name) {
+          case "Skilled":
+            munitionsAllowance = -1;
+            break
+          case "Nemesis":
+            munitionsAllowance = -2;
+            break
+        }
+        let npcWeapons = theGuy.actor.items.filter(item => item.type === "weapon")
+        for (let key in npcWeapons) {
+          theGuy.actor.updateWeaponMunitions(npcWeapons[key]._id, munitionsAllowance)
+        }
+      }
+    }
     combat.rollInitiative(theGuy.id);
   })
 });
