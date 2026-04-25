@@ -505,6 +505,11 @@ export class FraggedEmpireUtility  {
         rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
       }
     }
+
+    if (findKeywordOnItem(rollData.weapon, "disruptor")) {
+      console.log(rollData.weapon.name,'is a disruptor!')
+      rollData.nbStrongHit += this.checkDisruptorVulnerable(rollData.target);
+    }
     
     actor.saveRollData( rollData );
 
@@ -664,6 +669,34 @@ export class FraggedEmpireUtility  {
     rollData.rangepenalty = ((Math.ceil(shotpath.distance / weaponRange) -1 ) *2)
     let newRollData = rollData
     return newRollData
+  }
+  /* -------------------------------------------- */
+
+  /* -------------------------------------------- */
+  static checkDisruptorVulnerable (actor) {
+    let disruptorCount = 0;
+    console.log('Checking for potential disruptor effects on',actor)
+    switch (actor.getRaces()[0].name) {
+      case "Mechonid": disruptorCount++;  break;
+      case "Palantor": disruptorCount++;  break;
+      case "Twi-Far": disruptorCount++;  break;
+    }
+    let vulnDisadString = game.i18n.localize("FE2.Keywords.DisruptorVulnerable")
+    let actorTraits = actor.getTraits()
+    for (let actorTrait of actorTraits) {
+      if (actorTrait.system.disadvantages.includes(vulnDisadString)) { disruptorCount++; }
+    }
+    const equippableItems = actor.items.filter(item =>
+      item.type === 'outfit' || item.type === 'utility' || item.type === 'weapon' || item.type === 'equipment'
+    );
+    for (const item of equippableItems) {
+      const state = item.system.carryState || "carried";
+      if (state === "inHand" || state === "active") {
+        if (findKeywordOnItem(item, "disruptorvulnerable")) { disruptorCount++;}
+      }
+    }
+    console.log('Disruptor vuln added',disruptorCount)
+    return disruptorCount;
   }
   /* -------------------------------------------- */
 

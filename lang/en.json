@@ -315,6 +315,7 @@
       "Remove": "Remove",
       "NoKeywords": "No keywords",
       "NotApplicable": "N/A",
+      "DisruptorVulnerable": "Disruptors deal 1 auto Strong Hit against you (Stacks).",
       "Categories": {
         "Narrative": "Narrative",
         "ItemProperty": "Item Property",
