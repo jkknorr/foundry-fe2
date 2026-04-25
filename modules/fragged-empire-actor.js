@@ -229,9 +229,15 @@ export class FraggedEmpireActor extends Actor {
   }
 
   async updateSpareTime(actorId, amountUsed) {
-    console.log(this)
     let decremented = Math.max(0, this.system.sparetimepoints.value - amountUsed);
     this.update({ 'system.sparetimepoints.value': decremented });
+  }
+
+  isAttributeDamaged() {
+    for (let key in this.system.attributes) {
+      if (this.system.attributes[key].current < this.system.attributes[key].value) { return true }
+    }
+    return false;
   }
 
   /* ====================================================================== */

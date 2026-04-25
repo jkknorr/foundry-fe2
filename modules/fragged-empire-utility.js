@@ -417,6 +417,9 @@ export class FraggedEmpireUtility  {
       rollData.rofBonus = rollData.rofValue - 1;
       nbDice += rollData.rofBonus;
     }
+    if (actor.items.find(item => item.type === "trait" && item.name === "Killer")) {
+      if (rollData.target.isAttributeDamaged()) { nbDice++ }
+    }
     let myRoll = rollData.roll;
     if ( !myRoll ) { // New rolls only of no rerolls
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
@@ -510,6 +513,8 @@ export class FraggedEmpireUtility  {
       console.log(rollData.weapon.name,'is a disruptor!')
       rollData.nbStrongHit += this.checkDisruptorVulnerable(rollData.target);
     }
+
+
     
     actor.saveRollData( rollData );
 
@@ -695,7 +700,6 @@ export class FraggedEmpireUtility  {
         if (findKeywordOnItem(item, "disruptorvulnerable")) { disruptorCount++;}
       }
     }
-    console.log('Disruptor vuln added',disruptorCount)
     return disruptorCount;
   }
   /* -------------------------------------------- */
