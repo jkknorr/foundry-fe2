@@ -86,7 +86,7 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     context.optionsBase = FraggedEmpireUtility.createDirectOptionList(0, 20);
 
     // Keyword enrichment for item types that support keywords
-    const KEYWORD_ITEM_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
+    const KEYWORD_ITEM_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification","trait"]);
     if (KEYWORD_ITEM_TYPES.has(item.type)) {
       const activeKeywords = Array.isArray(itemData.system.keywords) ? itemData.system.keywords : [];
       context.keywordsEnriched = activeKeywords.map((kw, idx) => {
@@ -199,7 +199,8 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
           { value: "outfit", label: game.i18n.localize("FE2.Items.Types.Outfit"), checked: itemData.system.itemTypes?.includes("outfit") },
           { value: "utility", label: game.i18n.localize("FE2.Items.Types.Utility"), checked: itemData.system.itemTypes?.includes("utility") },
           { value: "equipment", label: game.i18n.localize("FE2.Items.Types.Equipment"), checked: itemData.system.itemTypes?.includes("equipment") },
-          { value: "spacecraftweapon", label: game.i18n.localize("FE2.Items.Types.SpacecraftWeapon"), checked: itemData.system.itemTypes?.includes("spacecraftweapon") }
+          { value: "spacecraftweapon", label: game.i18n.localize("FE2.Items.Types.SpacecraftWeapon"), checked: itemData.system.itemTypes?.includes("spacecraftweapon") },
+          { value: "trait", label: game.i18n.localize("FE2.Items.Types.Trait"), checked: itemData.system.itemTypes?.includes("trait") }
         ];
         context.statModEntries = [
           { key: "slots", label: game.i18n.localize("FE2.Item.Slots"), mode: itemData.system.statModifiers?.slots?.mode ?? "", value: itemData.system.statModifiers?.slots?.value ?? "" },
@@ -628,11 +629,12 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     }
 
     // Keyword item: embed onto applicable parent items
-    const KEYWORD_PARENT_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
+    const KEYWORD_PARENT_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification","trait"]);
     if (droppedItem.type === "keyword" && KEYWORD_PARENT_TYPES.has(item.type)) {
       // Validate applicability: check keyword's itemTypes against resolved parent type
       const resolvedType = VAR_MOD_PARENT_MAP[item.type] ?? item.type;
       const kwItemTypes = droppedItem.system.itemTypes ?? [];
+      console.log(kwItemTypes.length, kwItemTypes)
       if (kwItemTypes.length > 0 && !kwItemTypes.includes(resolvedType)) {
         ui.notifications.warn(`Keyword "${droppedItem.name}" is not applicable to ${resolvedType} items.`);
         return;

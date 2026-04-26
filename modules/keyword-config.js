@@ -31,7 +31,8 @@ export const VAR_MOD_PARENT_MAP = Object.freeze({
   variationoutfit: "outfit",
   modificationoutfit: "outfit",
   spacecraftweaponvariation: "spacecraftweapon",
-  spacecraftweaponmodification: "spacecraftweapon"
+  spacecraftweaponmodification: "spacecraftweapon",
+  trait: "trait"
 });
 
 /* -------------------------------------------- */

@@ -741,3 +741,4 @@ Hooks.on("modifyTokenAttribute", (data, updates, actor) => {
     })
   }
 });
+

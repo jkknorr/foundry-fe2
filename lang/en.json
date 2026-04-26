@@ -653,6 +653,13 @@
         "ArcaneMod": "Arcane Modifier",
         "UntrainedSkillMod": "Untrained Skill Modifier",
         "AttributeMax": "Attribute Maximum"
+      },
+      "Statuses": {
+        "LockedOn": "Locked On",
+        "Burn": "Burn",
+        "Bleeding": "Bleeding",
+        "Suppressed": "Suppressed",
+        "Stealthed": "Stealted"
       }
     },
     "CarryState": {

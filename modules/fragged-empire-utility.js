@@ -23,6 +23,45 @@ export class FraggedEmpireUtility  {
   static async ready() {
     const skills = await FraggedEmpireUtility.loadCompendium(FraggedEmpireUtility.getSkillsCompendiumName());
     this.compendiumSkills  = skills.map(i => i.toObject());
+    let fe2StatusEffects = [
+    {
+      img: 'icons/svg/target.svg',
+      id: 'lockedon',
+      name: game.i18n.localize("FE2.Effects.Statuses.LockedOn"),
+      description: '<p>Enemy Weapons with the Lock On Keyword gain an advantage against you, and enemy characters know where you are (so you can’t Stealth).</p>',
+      tooltip: '<p>Enemy Weapons with the Lock On Keyword gain an advantage against you, and enemy characters know where you are (so you can’t Stealth).</p>',
+    },
+    {
+      img: 'icons/svg/fire.svg',
+      id: 'burn',
+      name: game.i18n.localize("FE2.Effects.Statuses.Burn"),
+      description: '<p>You suffer 3 General Damage (Stacks) at the start of their Turn until an appropriate Skill Roll of 12 is made.</p>',
+      tooltip: '<p>You suffer 3 General Damage (Stacks) at the start of their Turn until an appropriate Skill Roll of 12 is made.</p>',
+    },
+    {
+      img: 'icons/svg/blood.svg',
+      id: 'bleeding',
+      name: game.i18n.localize("FE2.Effects.Statuses.Bleeding"),
+      description: '<p>You suffer 1 damage to a random (1d6) Attribute at the start of your Turn until a suitable Skill Roll of 12 is performed on you (Stacks).</p>',
+      tooltip: '<p> All damaged characters suffer 3 General Damage (Stacks) at the start of their Turn until an appropriate Skill Roll of 12 is made.</p>',
+    },
+    {
+      img: 'icons/svg/paralysis.svg',
+      id: 'suppressed',
+      name: game.i18n.localize("FE2.Effects.Statuses.Suppressed"),
+      description: '<p>You may perform -1 Action during your next Turn (Does not Stack), Stops that Companion Body from moving during their next Turn (does not reduce their Actions), No effect on Ordnance, May be removed with a suitable Skill Roll of 12 by a different character.</p>',
+      tooltip: '<p>You may perform -1 Action during your next Turn (Does not Stack), Stops that Companion Body from moving during their next Turn (does not reduce their Actions), No effect on Ordnance, May be removed with a suitable Skill Roll of 12 by a different character.</p>',
+    },
+    {
+      img: 'icons/svg/invisible.svg',
+      id: 'stealthed',
+      name: game.i18n.localize("FE2.Effects.Statuses.Stealthed"),
+      description: '<p>You move at 1/2 speed. You may not be perceived or Attacked by your enemies.</p>',
+      tooltip: '<p>You move at 1/2 speed. You may not be perceived or Attacked by your enemies.</p>',
+    }
+  ]
+
+  CONFIG.statusEffects = fe2StatusEffects;
   }
 
   /* -------------------------------------------- */
@@ -420,6 +459,27 @@ export class FraggedEmpireUtility  {
     if (actor.items.find(item => item.type === "trait" && item.name === "Killer")) {
       if (rollData.target.isAttributeDamaged()) { nbDice++ }
     }
+
+    if (rollData.target.items.find(item => item.type === "trait" && item.name === "Locked On")) {
+      console.log('Target is Locked On, fuck them up')
+    }
+
+    rollData.target.effects.forEach((value) => {
+      if (value.name == 'Locked On')  { 
+        console.log('Target is Locked On, checking for triggered effects')
+        let lockOnBoost = 0
+        let actorTraits = actor.items.filter(item => item.type === "trait") 
+        actorTraits.forEach((actorTrait) => {
+          let traitLockOnBoost = findKeywordOnItem(actorTrait,'lockonxhitenddmg')
+          if ( traitLockOnBoost ) { lockOnBoost += Number(traitLockOnBoost.system.params.X) }
+        })
+        let wpnLockOnBoost = findKeywordOnItem(rollData.weapon,'lockonxhitenddmg')
+        if ( wpnLockOnBoost ) { lockOnBoost += Number(wpnLockOnBoost.system.params.X) }
+        console.log('Lock On boost was',lockOnBoost)
+        rollData.weaponHit += lockOnBoost
+      }
+    })
+
     let myRoll = rollData.roll;
     if ( !myRoll ) { // New rolls only of no rerolls
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
@@ -513,8 +573,6 @@ export class FraggedEmpireUtility  {
       console.log(rollData.weapon.name,'is a disruptor!')
       rollData.nbStrongHit += this.checkDisruptorVulnerable(rollData.target);
     }
-
-
     
     actor.saveRollData( rollData );
 
@@ -532,7 +590,6 @@ export class FraggedEmpireUtility  {
     console.log(rollData)
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.weapon.system.keywords.find(keyword => keyword.name === 'Build Momentum')) {
-        console.log("This is a Build Momentum attack")
         rollData.munHitDice += -1
       }
       if (rollData.munHitDice) {
