@@ -217,7 +217,9 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
       title: game.i18n.format("FE2.Dialog.AttackTitle", { name: actor.name }),
       weaponRoFOptions: this.buildNPCRoFArray(),
       rofValue: 1,
+      shotType: "snap",
       optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
+      optionsMunitions: FraggedEmpireUtility.buildListOptions(0, Number(weapon.system.munitions)),
       bonusMalus: 0,
       bMHitDice: 0,
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions()
@@ -225,6 +227,7 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
     rollData.effectModifiers = actor._effectModifiers;
     rollData.conditionalEffects = getRelevantConditionalEffects(actor, rollData.mode);
     rollData.selectedConditionalEffects = [];
+    rollData = FraggedEmpireUtility.calculateRangePenalty(rollData, actor)
     await FraggedEmpireRoll.create(actor, rollData);
   }
 
@@ -261,12 +264,14 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
         hasGrit: controller.getGrit(),
         bMHitDice: 0,
         rollMode: game.settings.get("core", "rollMode"),
+        shotType: "snap",
         title: game.i18n.format("FE2.Dialog.AttackTitle", { name: weapon.name }),
         weapon: weapon,
         rofValue: 1,
         cover: 0,
         intmod: 0,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
+        optionsMunitions: FraggedEmpireUtility.buildListOptions(0, Number(weapon.system.munitions)),
         bonusMalus: 0,
         optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions()
       };
@@ -289,6 +294,7 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
       rollData.untrainedSkillMod = controller._computed?.untrainedSkillMod || 0;
       rollData.conditionalEffects = getRelevantConditionalEffects(controller, rollData.mode, { skillType: 'personalcombat', skillId: combatSkill?.id });
       rollData.selectedConditionalEffects = [];
+      rollData = FraggedEmpireUtility.calculateRangePenalty(rollData, actor)
       await FraggedEmpireRoll.create(actor, rollData);
       return;
     }
@@ -306,12 +312,14 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
         hasGrit: this.getGrit(),
         bMHitDice: 0,
         rollMode: game.settings.get("core", "rollMode"),
+        shotType: "snap",
         title: game.i18n.format("FE2.Dialog.AttackTitle", { name: weapon.name }),
         weapon: weapon,
         rofValue: 1,
         cover: 0,
         intmod: 0,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
+        optionsMunitions: FraggedEmpireUtility.buildListOptions(0, Number(weapon.system.munitions)),
         bonusMalus: 2,
         optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions()
       };
@@ -331,6 +339,7 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
       rollData.untrainedSkillMod = actor._computed?.untrainedSkillMod || 0;
       rollData.conditionalEffects = getRelevantConditionalEffects(actor, rollData.mode);
       rollData.selectedConditionalEffects = [];
+      rollData = FraggedEmpireUtility.calculateRangePenalty(rollData, actor)
       await FraggedEmpireRoll.create(actor, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);

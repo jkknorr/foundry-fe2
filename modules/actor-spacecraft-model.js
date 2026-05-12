@@ -410,7 +410,7 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
     } else {
       actorList.push({ id: 0, name: game.i18n.localize("FE2.Sheet.NPC.Commander"), skills: [{ id: 99, name: "NPC Combat", system: { total: 0 } }] });
     }
-
+    console.log(actor)
     if (weapon) {
       let rollData = {
         mode: 'spacecraftweapon',
@@ -421,7 +421,7 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
         rollMode: game.settings.get("core", "rollMode"),
         title: game.i18n.format("FE2.Dialog.SpacecraftAttackTitle", { name: weapon.name }),
         weapon: weapon,
-        munitions: this.fight.munitions.value,
+        optionsMunitions: FraggedEmpireUtility.buildListOptions(0, Number(actor.system.fight.munitions.value)),
         hasGrit: this.getGrit(),
         skillId: actorList[0].skills[0].id,
         skill: actorList[0].skills[0],

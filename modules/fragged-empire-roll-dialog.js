@@ -28,7 +28,16 @@ export class FraggedEmpireRoll {
 
     if (rollData.mode === "weapon") {
       rollData.coverChoices = FraggedEmpireUtility.buildCoverChoices();
-      rollData.optionsShotType = FraggedEmpireUtility.buildShotTypeChoices(actor.system.attributes.reflexes.current,actor.system.attributes.focus.current);
+      let refMod = 0
+      let focusMod = 0
+      if (actor.type == 'npc' && actor.system.npctype == 'henchman') {
+        refMod = actor.system.fight.durability.max
+        focusMod = refMod
+      } else {
+        refMod = actor.system.attributes.reflexes.current
+        focusMod = actor.system.attributes.focus.current
+      }
+      rollData.optionsShotType = FraggedEmpireUtility.buildShotTypeChoices(refMod,focusMod);
     }
 
     // Determine template
@@ -79,9 +88,6 @@ export class FraggedEmpireRoll {
         el.querySelector("#shotType")?.addEventListener("change", async (e) => {
           rollData.shotType = e.currentTarget.value;
           rollData = FraggedEmpireUtility.calculateRangePenalty(rollData, game.actors.get(rollData.actorId));
-          dialog.content = await foundry.applications.handlebars.renderTemplate(templatePath, rollData);
-          console.log(dialog.content)
-          dialog.render(true)
         });
         el.querySelector("#bonusMalus")?.addEventListener("change", (e) => {
           rollData.bonusMalus = Number(e.currentTarget.value);

@@ -289,6 +289,7 @@ export class FraggedEmpireUtility  {
   }
 
   static buildShotTypeChoices(ref, focus) {
+    console.log(ref, focus)
     return {
       "overwatch": game.i18n.localize("FE2.Roll.ShotType.Overwatch") + ref + ")",
       "snap": game.i18n.localize("FE2.Roll.ShotType.SnapShot"),
@@ -459,26 +460,26 @@ export class FraggedEmpireUtility  {
     if (actor.items.find(item => item.type === "trait" && item.name === "Killer")) {
       if (rollData.target.isAttributeDamaged()) { nbDice++ }
     }
-
-    if (rollData.target.items.find(item => item.type === "trait" && item.name === "Locked On")) {
-      console.log('Target is Locked On, fuck them up')
-    }
-
-    rollData.target.effects.forEach((value) => {
-      if (value.name == 'Locked On')  { 
-        console.log('Target is Locked On, checking for triggered effects')
-        let lockOnBoost = 0
-        let actorTraits = actor.items.filter(item => item.type === "trait") 
-        actorTraits.forEach((actorTrait) => {
-          let traitLockOnBoost = findKeywordOnItem(actorTrait,'lockonxhitenddmg')
-          if ( traitLockOnBoost ) { lockOnBoost += Number(traitLockOnBoost.system.params.X) }
-        })
-        let wpnLockOnBoost = findKeywordOnItem(rollData.weapon,'lockonxhitenddmg')
-        if ( wpnLockOnBoost ) { lockOnBoost += Number(wpnLockOnBoost.system.params.X) }
-        console.log('Lock On boost was',lockOnBoost)
-        rollData.weaponHit += lockOnBoost
+    if ( rollData.target ) {
+      if (rollData.target.items.find(item => item.type === "trait" && item.name === "Locked On")) {
+        console.log('Target is Locked On, fuck them up')
       }
-    })
+      rollData.target.effects.forEach((value) => {
+        if (value.name == 'Locked On')  { 
+          console.log('Target is Locked On, checking for triggered effects')
+          let lockOnBoost = 0
+          let actorTraits = actor.items.filter(item => item.type === "trait") 
+          actorTraits.forEach((actorTrait) => {
+            let traitLockOnBoost = findKeywordOnItem(actorTrait,'lockonxhitenddmg')
+            if ( traitLockOnBoost ) { lockOnBoost += Number(traitLockOnBoost.system.params.X) }
+          })
+          let wpnLockOnBoost = findKeywordOnItem(rollData.weapon,'lockonxhitenddmg')
+          if ( wpnLockOnBoost ) { lockOnBoost += Number(wpnLockOnBoost.system.params.X) }
+          console.log('Lock On boost was',lockOnBoost)
+          rollData.weaponHit += lockOnBoost
+        }
+      })
+    }
 
     let myRoll = rollData.roll;
     if ( !myRoll ) { // New rolls only of no rerolls
@@ -722,12 +723,19 @@ export class FraggedEmpireUtility  {
   static calculateRangePenalty (rollData, actor ) {
     let rangemult = 1;
     let weaponRange = Number(rollData.weapon.system.statstotal.range.value);
-    console.log(rollData.shotType);
-    if ( rollData.shotType != "snap" ) { weaponRange += Number(actor.system.attributes.reflexes.current) }
+    let refMod = 0
+    let focusMod = 0
+    if (actor.type == 'npc' && actor.system.npctype == 'henchman') {
+      refMod = actor.system.fight.durability.max
+      focusMod = refMod
+    } else {
+      refMod = actor.system.attributes.reflexes.current
+      focusMod = actor.system.attributes.focus.current
+    }
+    if ( rollData.shotType != "snap" ) { weaponRange += Number(refMod) }
     let shotpath = canvas.grid.measurePath([rollData.target.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
     if (findKeywordOnItem(rollData.target.items.find(outfit => outfit.system.carryState === 'active'), 'deflctfield')) { rangemult = 2 };
-    rollData.distance = shotpath.distance * rangemult;
-    console.log('Distance is ',rollData.distance,'range is',weaponRange)
+    rollData.distance = shotpath.distance * rangemult; 
     rollData.rangepenalty = ((Math.ceil(shotpath.distance / weaponRange) -1 ) *2)
     let newRollData = rollData
     return newRollData

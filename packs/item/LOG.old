@@ -1,5 +1,7 @@
-2026/04/13-11:13:34.231 a8c8 Log #308: 0 ops saved to Table #311 OK
-2026/04/13-11:13:34.233 a8c8 Archiving C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item/000308.log: OK
-2026/04/13-11:13:34.233 a8c8 Table #310: 8 entries OK
-2026/04/13-11:13:34.233 a8c8 Archiving C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item/MANIFEST-000306: OK
-2026/04/13-11:13:34.236 a8c8 **** Repaired leveldb C:\Users\jkkno\AppData\Local\FoundryVTT\Data\systems\foundry-fe2\packs\item; recovered 1 files; 3653 bytes. Some data may have been lost. ****
+2026/05/10-11:49:11.469 7fd4 Recovering log #362
+2026/05/10-11:49:11.472 7fd4 Delete type=0 #362
+2026/05/10-11:49:11.472 7fd4 Delete type=3 #360
+2026/05/10-11:51:14.018 3644 Level-0 table #367: started
+2026/05/10-11:51:14.018 3644 Level-0 table #367: 0 bytes OK
+2026/05/10-11:51:14.019 3644 Delete type=0 #365
+2026/05/10-11:51:14.021 3644 Manual compaction at level-0 from '!items!B5T4GZWXaEqP1FXQ' @ 72057594037927935 : 1 .. '!items!woCh1OxJP6vSBOWC' @ 0 : 0; will stop at (end)
