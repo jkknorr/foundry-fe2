@@ -664,7 +664,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
 
     let intstat = 0;
     let rangemult = 1;
-    if (target.actor.type == 'npc' && target.actor.system.npctype == 'henchman') {
+    if (target.actor.type == 'npc') {
       intstat = target.actor.system.stats.Attribute.value;
     } else {
       intstat = target.actor.system.attributes.intelligence.current;
