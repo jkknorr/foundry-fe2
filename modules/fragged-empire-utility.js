@@ -115,6 +115,9 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/partial-item-keywords-row.html',
       'systems/foundry-fe2/templates/partial-weapon-summary-dialog.html',
       'systems/foundry-fe2/templates/partials/roll-conditional-effects.html',
+      'systems/foundry-fe2/templates/partials/roll-window-footer.html',
+      'systems/foundry-fe2/templates/partials/roll-preview-quantity.html',
+      'systems/foundry-fe2/templates/partials/roll-preview-section.html',
       'systems/foundry-fe2/templates/race-subitem-section.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
@@ -289,11 +292,11 @@ export class FraggedEmpireUtility  {
   }
 
   static buildShotTypeChoices(ref, focus) {
-    console.log(ref, focus)
+    // FE2 rulebook: Overwatch/Sighted add Focus to Range; Sighted adds Reflexes to Hit.
     return {
-      "overwatch": game.i18n.localize("FE2.Roll.ShotType.Overwatch") + ref + ")",
+      "overwatch": game.i18n.localize("FE2.Roll.ShotType.Overwatch") + focus + ")",
       "snap": game.i18n.localize("FE2.Roll.ShotType.SnapShot"),
-      "sighted": game.i18n.localize("FE2.Roll.ShotType.SightedShot") + ref + " Hit +" + focus + ")"
+      "sighted": game.i18n.localize("FE2.Roll.ShotType.SightedShot") + focus + " Hit +" + ref + ")"
     };
   }
 
@@ -387,98 +390,28 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
    static async rollFraggedEmpire( rollData ) {
 
-    let skillLevel = rollData.skill?.system.total ||  0;
-    let nbDice = 3;
     let actor = game.actors.get(rollData.actorId);
     rollData.endDmgAdd = 0;
-    // Apply skill effect modifiers
-    if (rollData.effectModifiers) {
-      const mods = rollData.effectModifiers;
-      const skillId = rollData.skill?.id;
-      const skillMods = [...(mods.skills[skillId] || []), ...(mods.skills.all || [])];
-      if (skillMods.length) {
-        skillLevel = Math.round(applyModifiers(skillLevel, skillMods));
-      }
-      if (rollData.skill && !rollData.skill.system.trained && rollData.untrainedSkillMod) {
-        skillLevel += rollData.untrainedSkillMod;
-      }
-    }
 
-    // Apply selected conditional effects
+    // Apply selected conditional effects (mutates bonusMalus / effectHitBonus /
+    // effectEndDmg) BEFORE the to-hit derivation reads them.
     if (rollData.selectedConditionalEffects?.length && rollData.conditionalEffects?.length) {
-      const applied = FraggedEmpireUtility.applySelectedConditionalEffects(rollData);
-      rollData.appliedConditionalEffects = applied;
+      rollData.appliedConditionalEffects = FraggedEmpireUtility.applySelectedConditionalEffects(rollData);
     }
 
-    // Bonus/Malus total
-    rollData.weaponHit = 0;
-    rollData.finalBM = rollData.bonusMalus;
-    if (rollData.isAcquisition) rollData.finalBM += actor._computed.acquisitionMod;
-    if (rollData.isArcane) {
-      let arcanePenalty = 2 + (rollData.arcaneMod || 0);
-      if (arcanePenalty < 0) arcanePenalty = 0;
-      rollData.finalBM -= arcanePenalty;
-    }
-    if ( rollData.useToolbox) rollData.finalBM += 1;
-    if ( rollData.useDedicatedworkshop) rollData.finalBM += 2;
-    if ( rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
-      rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
-      rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
-      nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
-    }
-    if ( rollData.shotType == 'sighted') {
-      rollData.finalBM += actor.system.attributes.focus.current
-    }
-    
     if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
       rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
     }
 
-    if ( rollData.bMHitDice ) {
-      nbDice += rollData.bMHitDice 
-    }
-    if ( rollData.munHitDice) {
-      nbDice += rollData.munHitDice
-      let munBoosts = rollData.weapon.system.keywords.filter(keyword => keyword.name.includes('Munition Boost'))
-      for (const munBoost of munBoosts) {
-        switch (munBoost.name) {
-          case 'Munition Boost Xd6':
-            nbDice += Number(munBoost.system.params.X)
-            break
-          case 'Munition Boost +X End/Shield Dmg':
-            rollData.endDmgAdd = Number(munBoost.system.params.X)
-            break
-        }
-      }
-    }
-    if ( rollData.mode == 'npcfight' ) {
-      rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
-      rollData.weaponHit = Number(rollData.npcstats.hit.value);
-      rollData.rofBonus = rollData.rofValue - 1;
-      nbDice += rollData.rofBonus;
-    }
-    if (actor.items.find(item => item.type === "trait" && item.name === "Killer")) {
-      if (rollData.target.isAttributeDamaged()) { nbDice++ }
-    }
-    if ( rollData.target ) {
-      if (rollData.target.items.find(item => item.type === "trait" && item.name === "Locked On")) {
-        console.log('Target is Locked On, fuck them up')
-      }
-      rollData.target.effects.forEach((value) => {
-        if (value.name == 'Locked On')  { 
-          console.log('Target is Locked On, checking for triggered effects')
-          let lockOnBoost = 0
-          let actorTraits = actor.items.filter(item => item.type === "trait") 
-          actorTraits.forEach((actorTrait) => {
-            let traitLockOnBoost = findKeywordOnItem(actorTrait,'lockonxhitenddmg')
-            if ( traitLockOnBoost ) { lockOnBoost += Number(traitLockOnBoost.system.params.X) }
-          })
-          let wpnLockOnBoost = findKeywordOnItem(rollData.weapon,'lockonxhitenddmg')
-          if ( wpnLockOnBoost ) { lockOnBoost += Number(wpnLockOnBoost.system.params.X) }
-          console.log('Lock On boost was',lockOnBoost)
-          rollData.weaponHit += lockOnBoost
-        }
-      })
+    // SSOT: the same derivation helpers the roll window previews (FR-006/SC-002).
+    // computeToHit sets rollData.weaponHit / finalBM / skillLevel; computeHitDice returns the dice count.
+    FraggedEmpireUtility.computeToHit(rollData, actor);
+    let skillLevel = rollData.skillLevel;
+    let nbDice = FraggedEmpireUtility.computeHitDice(rollData, actor);
+
+    // Munition Boost: +X End/Shield Dmg (damage side; the +Xd6 dice are handled by computeHitDice).
+    if (rollData.munHitDice && rollData.weapon) {
+      rollData.endDmgAdd = FraggedEmpireUtility.getMunitionBoosts(rollData.weapon).bonusEndDmg;
     }
 
     let myRoll = rollData.roll;
@@ -546,32 +479,34 @@ export class FraggedEmpireUtility  {
     }
 
     if (rollData.mode != "skill" && rollData.mode != "genericskill") {
-      let effectiveRange = rollData.weapon.system.statstotal.range.value;
-      if (rollData.shotType == 'overwatch' || rollData.shotType == 'sighted') { effectiveRange += actor.system.attributes.reflexes.current}
-      rollData.rollTotal = rollData.rollTotal - ((Math.ceil(rollData.distance / effectiveRange) -1 ) *2)
-      if (rollData.target.type == "npc"){
-        rollData.targetDefence = (rollData.target._computed?.defence ?? rollData.target.system.fight.defence.value) + (rollData.intmod * rollData.cover)
-        rollData.targetArmor = rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value
-        rollData.targetEnd = rollData.target._computed?.endurance ?? rollData.target.system.fight.endurance.value
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current) + (rollData.effectEndDmg || 0)
-        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - (rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value)
-      } else if (rollData.target.type == "spacecraft") {
-        rollData.targetDefence = rollData.target.system.fight.defence.total
-        rollData.targetArmor = rollData.target.system.fight.armour.total
-        rollData.targetEnd = rollData.target.system.fight.shield.total
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.shielddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
-        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.total
-      } else {
-        rollData.targetDefence = rollData.target.system.defensebonus.total + (rollData.intmod * rollData.cover)
-        rollData.targetArmor = rollData.target.system.armourbonus.total
-        rollData.targetEnd = rollData.target.system.endurance.value
-        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.armourbonus.total
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
+      // SSOT: the range penalty was already computed and stored on rollData by
+      // calculateRangePenalty (the sole authority — Focus-adjusted range + Deflector
+      // Field penalty-value doubling). Apply that single value; default 0 when no
+      // weapon/target/tokens (FR-006/FR-010/FR-011; spacecraft carries no range penalty).
+      rollData.rollTotal = rollData.rollTotal - Number(rollData.rangepenalty || 0);
+
+      if (rollData.target) {
+        rollData.targetDefence = FraggedEmpireUtility.computeTargetDefence(rollData);
+        if (rollData.target.type == "npc"){
+          rollData.targetArmor = rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value
+          rollData.targetEnd = rollData.target._computed?.endurance ?? rollData.target.system.fight.endurance.value
+          rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current) + (rollData.effectEndDmg || 0)
+          rollData.critDmg = rollData.weapon.system.statstotal.crit.value - (rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value)
+        } else if (rollData.target.type == "spacecraft") {
+          rollData.targetArmor = rollData.target.system.fight.armour.total
+          rollData.targetEnd = rollData.target.system.fight.shield.total
+          rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.shielddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
+          rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.total
+        } else {
+          rollData.targetArmor = rollData.target.system.armourbonus.total
+          rollData.targetEnd = rollData.target.system.endurance.value
+          rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.armourbonus.total
+          rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
+        }
       }
     }
 
     if (findKeywordOnItem(rollData.weapon, "disruptor")) {
-      console.log(rollData.weapon.name,'is a disruptor!')
       rollData.nbStrongHit += this.checkDisruptorVulnerable(rollData.target);
     }
     
@@ -588,8 +523,7 @@ export class FraggedEmpireUtility  {
             .stretchTo(fxTarget, { attachTo: true })
         .play()
     }
-    console.log(rollData)
-    if (rollData.mode != "skill" && rollData.mode != "genericskill") {
+    if (rollData.weapon && rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.weapon.system.keywords.find(keyword => keyword.name === 'Build Momentum')) {
         rollData.munHitDice += -1
       }
@@ -608,7 +542,6 @@ export class FraggedEmpireUtility  {
       if ((rollData.targetEnd - rollData.totalEndDmg) < 1) {
         rollData.hitsAvailable.push(game.items.find(item => (item.name === 'Critical Boost')));
       }
-      console.log(rollData.hitsAvailable);
     }
 
     let chatRollFlags = FraggedEmpireUtility.buildRollChatFlags(rollData);
@@ -617,7 +550,7 @@ export class FraggedEmpireUtility  {
       flags: { "foundry-fe2": { rollData: chatRollFlags } }
     });
 
-    if (rollData.mode != "skill" && rollData.mode != "genericskill") {
+    if (rollData.target && rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.target.type == "npc"){
         if (rollData.weapon.system.statstotal.crit.value >= rollData.target.system.fight.durability.value) { }
       } else { if (rollData.target.type == "spacecraft") {
@@ -721,31 +654,203 @@ export class FraggedEmpireUtility  {
   }
   /* -------------------------------------------- */
   static calculateRangePenalty (rollData, actor ) {
-    let rangemult = 1;
+    // Sole authority for the range penalty (preview AND roll consume rollData.rangepenalty).
+    rollData.rangepenalty = 0;
+
+    // No-target / no-token guard (FR-010): stay interactive, treat range as unavailable.
+    if (!rollData.weapon || !rollData.target) return rollData;
+    const targetToken = rollData.target.getActiveTokens?.()[0];
+    const actorToken = actor.getActiveTokens?.()[0];
+    if (!targetToken || !actorToken) return rollData;
+
+    // Effective range: non-snap shots add the attacker's FOCUS (FE2 rulebook; corrects
+    // the prior Reflexes transposition). Henchman surrogate mirrors computeToHit.
     let weaponRange = Number(rollData.weapon.system.statstotal.range.value);
-    let refMod = 0
-    let focusMod = 0
-    if (actor.type == 'npc' && actor.system.npctype == 'henchman') {
-      refMod = actor.system.fight.durability.max
-      focusMod = refMod
-    } else {
-      refMod = actor.system.attributes.reflexes.current
-      focusMod = actor.system.attributes.focus.current
+    if (rollData.shotType != "snap") weaponRange += FraggedEmpireUtility.resolveFocus(actor);
+
+    const shotpath = canvas.grid.measurePath([targetToken.center, actorToken.center]);
+    rollData.distance = shotpath.distance; // true measured distance (no distance-doubling)
+
+    // Divide-by-zero / non-finite range guard (FR-011): no penalty, stay interactive.
+    if (!(weaponRange > 0)) return rollData;
+
+    const basePenalty = Math.max(0, (Math.ceil(shotpath.distance / weaponRange) - 1)) * 2;
+
+    // Deflector Field doubles the PENALTY VALUE (not the distance) for non-Splash
+    // weapons (FR-017/FR-018). On a 0 base penalty the multiplier stays 0.
+    const targetDeflector = findKeywordOnItem(
+      rollData.target.items.find(outfit => outfit.system.carryState === 'active'), 'deflctfield');
+    const weaponSplash = findKeywordOnItem(rollData.weapon, 'splash');
+    const deflectorMult = (targetDeflector && !weaponSplash) ? 2 : 1;
+
+    rollData.rangepenalty = basePenalty * deflectorMult;
+    return rollData;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * Resolve the attacker's Reflexes, using the NPC-henchman surrogate (durability.max)
+   * where the actor has no Reflexes attribute. Mirrors resolveFocus / calculateRangePenalty.
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static resolveReflexes(actor) {
+    if (actor.type == 'npc' && actor.system.npctype == 'henchman') return Number(actor.system.fight.durability.max);
+    return Number(actor.system.attributes?.reflexes?.current) || 0;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * Resolve the attacker's Focus, using the NPC-henchman surrogate (durability.max)
+   * where the actor has no Focus attribute.
+   * @param {Actor} actor
+   * @returns {number}
+   */
+  static resolveFocus(actor) {
+    if (actor.type == 'npc' && actor.system.npctype == 'henchman') return Number(actor.system.fight.durability.max);
+    return Number(actor.system.attributes?.focus?.current) || 0;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * SSOT helper: static to-hit bonus added to the 3d6 (weaponHit + finalBM + skillLevel),
+   * excluding the dice. Sets rollData.weaponHit, rollData.finalBM and rollData.skillLevel
+   * so the roll and chat consume the same numbers as the preview (FR-006/SC-002).
+   * Reads documents but mutates no game state; conditional effects must already be folded
+   * into rollData.bonusMalus / effectHitBonus by the caller.
+   * @param {object} rollData
+   * @param {Actor}  actor
+   * @returns {number} weaponHit + finalBM + skillLevel
+   */
+  static computeToHit(rollData, actor) {
+    // Skill level (+ skill effect modifiers, + untrained penalty).
+    let skillLevel = rollData.skill?.system.total || 0;
+    if (rollData.effectModifiers) {
+      const mods = rollData.effectModifiers;
+      const skillId = rollData.skill?.id;
+      const skillMods = [...(mods.skills?.[skillId] || []), ...(mods.skills?.all || [])];
+      if (skillMods.length) skillLevel = Math.round(applyModifiers(skillLevel, skillMods));
+      if (rollData.skill && !rollData.skill.system.trained && rollData.untrainedSkillMod) {
+        skillLevel += rollData.untrainedSkillMod;
+      }
     }
-    if ( rollData.shotType != "snap" ) { weaponRange += Number(refMod) }
-    let shotpath = canvas.grid.measurePath([rollData.target.getActiveTokens()[0].center, actor.getActiveTokens()[0].center])
-    if (findKeywordOnItem(rollData.target.items.find(outfit => outfit.system.carryState === 'active'), 'deflctfield')) { rangemult = 2 };
-    rollData.distance = shotpath.distance * rangemult; 
-    rollData.rangepenalty = ((Math.ceil(shotpath.distance / weaponRange) -1 ) *2)
-    let newRollData = rollData
-    return newRollData
+
+    // Weapon hit bonus (npcfight uses its stat block; skill/genericskill add nothing).
+    let weaponHit = 0;
+    if (rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
+      weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
+    } else if (rollData.mode == 'npcfight') {
+      weaponHit = Number(rollData.npcstats.hit.value);
+    }
+
+    // Lock On hit boost — only when the target carries the Locked On effect.
+    if (rollData.target && rollData.weapon) {
+      const targetLockedOn = rollData.target.effects.some(e => e.name == 'Locked On');
+      if (targetLockedOn) {
+        let lockOnBoost = 0;
+        for (const trait of actor.items.filter(i => i.type === "trait")) {
+          const traitBoost = findKeywordOnItem(trait, 'lockonxhitenddmg');
+          if (traitBoost) lockOnBoost += Number(traitBoost.system.params.X);
+        }
+        const wpnBoost = findKeywordOnItem(rollData.weapon, 'lockonxhitenddmg');
+        if (wpnBoost) lockOnBoost += Number(wpnBoost.system.params.X);
+        weaponHit += lockOnBoost;
+      }
+    }
+
+    // Bonus/Malus aggregation.
+    let finalBM = Number(rollData.bonusMalus) || 0;
+    if (rollData.isAcquisition) finalBM += actor._computed.acquisitionMod;
+    if (rollData.isArcane) {
+      let arcanePenalty = 2 + (rollData.arcaneMod || 0);
+      if (arcanePenalty < 0) arcanePenalty = 0;
+      finalBM -= arcanePenalty;
+    }
+    if (rollData.useToolbox) finalBM += 1;
+    if (rollData.useDedicatedworkshop) finalBM += 2;
+    // Sighted shots add the attacker's REFLEXES to the attack (corrects the prior Focus transposition).
+    if (rollData.shotType == 'sighted') finalBM += FraggedEmpireUtility.resolveReflexes(actor);
+
+    rollData.weaponHit = weaponHit;
+    rollData.finalBM = finalBM;
+    rollData.skillLevel = skillLevel;
+    return weaponHit + finalBM + skillLevel;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * SSOT helper: number of d6 the attack rolls. Reads documents but applies no munitions
+   * side effects (ammo decrement stays in rollFraggedEmpire).
+   * @param {object} rollData
+   * @param {Actor}  actor
+   * @returns {number}
+   */
+  static computeHitDice(rollData, actor) {
+    let nbDice = 3;
+    if (rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
+      nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0, 1));
+    }
+    if (rollData.bMHitDice) nbDice += Number(rollData.bMHitDice);
+    if (rollData.munHitDice) {
+      nbDice += Number(rollData.munHitDice);
+      if (rollData.weapon) nbDice += FraggedEmpireUtility.getMunitionBoosts(rollData.weapon).bonusDice;
+    }
+    if (rollData.mode == 'npcfight') {
+      const rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
+      nbDice += rofValue - 1;
+    }
+    if (rollData.target && actor.items.find(i => i.type === "trait" && i.name === "Killer")) {
+      if (rollData.target.isAttributeDamaged()) nbDice++;
+    }
+    return nbDice;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * SSOT helper: target's effective defence including cover, per target type.
+   * @param {object} rollData
+   * @returns {number|null} null when there is no valid target (caller hides the row, FR-010)
+   */
+  static computeTargetDefence(rollData) {
+    const target = rollData.target;
+    if (!target) return null;
+    const coverMod = (Number(rollData.intmod) || 0) * (Number(rollData.cover) || 0);
+    if (target.type == "npc") {
+      return (target._computed?.defence ?? target.system.fight.defence.value) + coverMod;
+    } else if (target.type == "spacecraft") {
+      return target.system.fight.defence.total; // cover not applied (matches current code)
+    }
+    return target.system.defensebonus.total + coverMod;
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * Read a weapon's Munition Boost keywords into roll contributions.
+   * @param {Item} weapon
+   * @returns {{bonusDice: number, bonusEndDmg: number}}
+   */
+  static getMunitionBoosts(weapon) {
+    let bonusDice = 0;
+    let bonusEndDmg = 0;
+    if (!weapon) return { bonusDice, bonusEndDmg };
+    const munBoosts = weapon.system.keywords.filter(keyword => keyword.name.includes('Munition Boost'));
+    for (const munBoost of munBoosts) {
+      switch (munBoost.name) {
+        case 'Munition Boost Xd6':
+          bonusDice += Number(munBoost.system.params.X);
+          break;
+        case 'Munition Boost +X End/Shield Dmg':
+          bonusEndDmg = Number(munBoost.system.params.X);
+          break;
+      }
+    }
+    return { bonusDice, bonusEndDmg };
   }
   /* -------------------------------------------- */
 
   /* -------------------------------------------- */
   static checkDisruptorVulnerable (actor) {
     let disruptorCount = 0;
-    console.log('Checking for potential disruptor effects on',actor)
     switch (actor.getRaces()[0].name) {
       case "Mechonid": disruptorCount++;  break;
       case "Palantor": disruptorCount++;  break;

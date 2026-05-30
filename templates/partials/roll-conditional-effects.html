@@ -3,7 +3,7 @@
   <h4>{{localize "FE2.Effects.UI.ConditionalEffects"}}</h4>
   {{#each conditionalEffects}}
   <label class="conditional-effect-toggle-label">
-    <input type="checkbox" class="conditional-effect-toggle" data-effect-id="{{this.effectId}}" />
+    <input type="checkbox" class="conditional-effect-toggle" data-effect-id="{{this.effectId}}" {{checked this.selected}} />
     <img src="{{this.img}}" width="16" height="16" />
     {{this.name}} ({{this.summary}})
   </label>

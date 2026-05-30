@@ -446,6 +446,8 @@
         "ShotType": "Shot type",
         "HitBonus": "Hit bonus",
         "RangePenalty": "Range penalty",
+        "HitDice": "Hit Dice",
+        "TargetDefence": "Target Defence",
         "SkillToUse": "Skill to use",
         "HitDiceModifier": "Hit Dice Modifier",
         "RateOfFire": "Rate of Fire",

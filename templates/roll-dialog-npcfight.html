@@ -2,9 +2,7 @@
   <h2 class="dialog-roll-title">{{title}}</h2>
 
   <div class="flexcol">
-    <div class="flexrow">
-      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{npcstats.hit.value}}</span>
-    </div>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-section.html"}}
 
     {{#if weaponRoFOptions}}
     <div class="flexrow">
