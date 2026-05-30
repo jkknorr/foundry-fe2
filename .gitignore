@@ -4,4 +4,7 @@
 specs/
 CLAUDE.md
 foundry-fe2.code-workspace
-packs/
+# Ignore pack runtime contents (LevelDB dirs, lock/log files) but keep the
+# source .db compendiums (skills.db, skills-pt-br.db, etc.)
+packs/*
+!packs/*.db
