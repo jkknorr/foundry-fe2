@@ -76,14 +76,15 @@ export function createEmptyModifiers() {
  * Add a modifier entry to the appropriate bucket in the modifiers map.
  * @param {object} modifiers - The modifiers map from createEmptyModifiers()
  * @param {{ targetType: string, targetId: string|null }} parsed - Parsed key result
- * @param {object} change - The effect change object { key, value, mode }
+ * @param {object} change - The effect change object { key, value, type }
  * @param {string} effectName - Display name of the source effect
  * @param {string} effectId - ID of the source effect
  */
 export function addModifier(modifiers, parsed, change, effectName, effectId) {
   const entry = {
     value: Number(change.value) || 0,
-    mode: change.mode,
+    // mode: change.mode,
+    type: change.type,
     effectName,
     effectId
   };
