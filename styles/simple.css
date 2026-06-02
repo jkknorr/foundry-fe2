@@ -1022,6 +1022,13 @@ ul, li {
   background: var(--fe2-highlight);
   color: var(--fe2-text-heading);
 }
+/* Roll! is the primary/emphasized action; Cancel keeps the default look */
+.fraggedempiredialog .form-footer > button[data-action="roll"] {
+  background: var(--fe2-btn-primary-bg);
+  border-color: var(--fe2-btn-primary-bg);
+  color: var(--fe2-btn-primary-text);
+  font-weight: 700;
+}
 
 /* DialogV2 form fills available space */
 .fraggedempiredialog .dialog-form {
@@ -1031,22 +1038,22 @@ ul, li {
   overflow: hidden;
 }
 
-/* Content area scrolls */
-.fraggedempiredialog .dialog-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--fe2-space-sm);
-}
-
-/* Button footer stays pinned at bottom */
+/* Button footer stays pinned at bottom, Roll!/Cancel side by side at equal width */
 .fraggedempiredialog .form-footer {
   flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fe2-space-sm);
+}
+
+.fraggedempiredialog .form-footer > button {
+  flex: 1;
 }
 
 /* Roll dialog system styling */
 .fe2-roll-dialog {
   background: var(--fe2-bg);
-  padding: var(--fe2-space-md);
   font-family: var(--fe2-font-body);
   color: var(--fe2-text);
 }
@@ -1085,6 +1092,49 @@ ul, li {
 .fe2-roll-dialog .competence-base {
   font-size: var(--fe2-font-size-sm);
   color: var(--fe2-text);
+}
+
+/* Live-preview top row: all visible quantities evenly distributed on one line,
+   wrapping as whole pairs when the window is too narrow (FR-001/003/003a) */
+.fe2-roll-dialog .fe2-preview-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: baseline;
+  gap: var(--fe2-space-sm) var(--fe2-space-md);
+  padding-bottom: var(--fe2-space-sm);
+  margin-bottom: var(--fe2-space-sm);
+  border-bottom: 1px solid var(--fe2-border);
+}
+
+/* Each label+value pair stays intact (never internally line-breaks) when wrapping */
+.fe2-roll-dialog .fe2-preview-pair {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--fe2-space-xs);
+  white-space: nowrap;
+}
+
+/* Live-preview quantities (To-Hit, Hit Dice, Range Penalty, Target Defence) */
+.fe2-roll-dialog .fe2-preview-quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  font-weight: 600;
+  color: var(--fe2-text-value);
+}
+
+/* The "→" glyph is the non-color cue that a value changed (WCAG 1.4.1) */
+.fe2-roll-dialog .fe2-arrow {
+  color: var(--fe2-gray-text);
+  font-weight: 400;
+}
+
+/* Additive color highlight on the adjusted value */
+.fe2-roll-dialog .fe2-preview-changed {
+  color: var(--fe2-highlight);
+  font-weight: 700;
 }
 
 /* Dialog window — remove border and match actor/item sheet background */

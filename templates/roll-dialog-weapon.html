@@ -2,9 +2,7 @@
   <h2 class="dialog-roll-title">{{title}}</h2>
 
   <div class="flexcol">
-    <div class="flexrow">
-      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}   {{localize "FE2.Roll.Labels.RangePenalty"}} :<div id="foo">-{{ rangepenalty }}</div></span>
-    </div>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-section.html"}}
 
     {{#if weaponSkillChoices}}
     <div class="flexrow">

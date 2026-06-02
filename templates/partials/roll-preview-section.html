@@ -1,0 +1,29 @@
+{{!-- Shared single-row live-preview block. Each visible quantity is one atomic,
+      non-wrapping label+value pair; absent pairs (e.g. range/defence in 2-value
+      windows) simply don't render. Pairs wrap as whole units (FR-003a). --}}
+<div class="fe2-preview-section">
+  {{#if preview.toHit}}
+  <span class="fe2-preview-pair">
+    <span class="competence-base">{{localize "FE2.Roll.Labels.HitBonus"}} :</span>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-quantity.html" preview.toHit}}
+  </span>
+  {{/if}}
+  {{#if preview.hitDice}}
+  <span class="fe2-preview-pair">
+    <span class="competence-base">{{localize "FE2.Roll.Labels.HitDice"}} :</span>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-quantity.html" preview.hitDice}}
+  </span>
+  {{/if}}
+  {{#if preview.rangePenalty}}
+  <span class="fe2-preview-pair">
+    <span class="competence-base">{{localize "FE2.Roll.Labels.RangePenalty"}} :</span>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-quantity.html" preview.rangePenalty}}
+  </span>
+  {{/if}}
+  {{#if preview.targetDefence}}
+  <span class="fe2-preview-pair">
+    <span class="competence-base">{{localize "FE2.Roll.Labels.TargetDefence"}} :</span>
+    {{> "systems/foundry-fe2/templates/partials/roll-preview-quantity.html" preview.targetDefence}}
+  </span>
+  {{/if}}
+</div>
