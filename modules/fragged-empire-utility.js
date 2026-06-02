@@ -402,6 +402,13 @@ export class FraggedEmpireUtility  {
     if ( rollData.mode == "skill" || rollData.mode == "genericskill") {
       rollData.strongHitAvailable = ( rollData.nbStrongHitUsed < rollData.nbStrongHit);
     }
+    for (const trait of actor.items.filter(i => i.type === "trait")) {
+      const traitBoost = findKeywordOnItem(trait, 'lockonxhitenddmg');
+      if (traitBoost) rollData.endDmgAdd += Number(traitBoost.system.params.X);
+    }
+    
+    const wpnBoost = findKeywordOnItem(rollData.weapon, 'lockonxhitenddmg');
+    if (wpnBoost) rollData.endDmgAdd += Number(wpnBoost.system.params.X);
 
     // SSOT: the same derivation helpers the roll window previews (FR-006/SC-002).
     // computeToHit sets rollData.weaponHit / finalBM / skillLevel; computeHitDice returns the dice count.
@@ -749,10 +756,13 @@ export class FraggedEmpireUtility  {
       if (targetLockedOn) {
         let lockOnBoost = 0;
         for (const trait of actor.items.filter(i => i.type === "trait")) {
-          const traitBoost = findKeywordOnItem(trait, 'lockonxhitenddmg');
+          let traitBoost = findKeywordOnItem(trait, 'lockonxhitenddmg');
+          if (!traitBoost) { traitBoost = findKeywordOnItem(trait, 'lockonxhit') };
           if (traitBoost) lockOnBoost += Number(traitBoost.system.params.X);
         }
-        const wpnBoost = findKeywordOnItem(rollData.weapon, 'lockonxhitenddmg');
+        
+        let wpnBoost = findKeywordOnItem(rollData.weapon, 'lockonxhit');
+        if (!wpnBoost) { wpnBoost = findKeywordOnItem(rollData.weapon, 'lockonxhitenddmg'); }
         if (wpnBoost) lockOnBoost += Number(wpnBoost.system.params.X);
         weaponHit += lockOnBoost;
       }
