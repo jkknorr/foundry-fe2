@@ -83,7 +83,7 @@ export function createEmptyModifiers() {
 export function addModifier(modifiers, parsed, change, effectName, effectId) {
   const entry = {
     value: Number(change.value) || 0,
-    // mode: change.mode,
+    mode: change.mode,
     type: change.type,
     effectName,
     effectId

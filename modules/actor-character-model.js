@@ -240,6 +240,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
 
     // Computed modifier values (not persisted, for rolls and display — base is 0, only effects contribute)
     // Pure bonuses/penalties use clamp=false since their results can be negative
+
     actor._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus, false)) : 0;
     actor._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage, false)) : 0;
     actor._computed.utilitiesMax = mods ? Math.round(applyModifiers(1, mods.utilitiesMax)) : 1;
