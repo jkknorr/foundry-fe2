@@ -427,7 +427,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     for (const item of equipItems) {
       let cost = 0;
       if (item.type === 'equipment') {
-        cost = Number(item.system.acquire) || 0;
+        cost = Number(item.system.resource) || 0;
       } else if (item.type === 'utility') {
         cost = Number(item.system.statstotal?.resources?.value || item.system.stats?.resources?.value) || 0;
       } else {

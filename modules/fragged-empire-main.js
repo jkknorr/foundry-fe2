@@ -20,6 +20,8 @@ import { FraggedEmpireEffectSheet } from "./effects/fragged-empire-effect-sheet.
 import { CharacterDataModel } from "./actor-character-model.js";
 import { NPCDataModel } from "./actor-npc-model.js";
 import { SpacecraftDataModel } from "./actor-spacecraft-model.js";
+import { registerFE2Tests } from "./fragged-empire-tests.js";
+import { importNexusChar } from "./fragged-empire-importer.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -742,3 +744,8 @@ Hooks.on("modifyTokenAttribute", (data, updates, actor) => {
   }
 });
 
+Hooks.on("quenchReady", (quench) => {
+  console.log("Quench ready hook fired");
+  console.log("Quench object:", quench);
+  registerFE2Tests(quench)
+});
