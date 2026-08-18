@@ -79,6 +79,8 @@
       "Character": {
         "Resources": "Resources",
         "Knowledge": "Knowledge",
+        "Research": "Research",
+        "Networking": "Networking",
         "SpareTimePoints": "Spare Time Points",
         "Languages": "Languages",
         "PrimarySkills": "Primary Skills",
@@ -96,7 +98,6 @@
         "CharacterTraitsList": "Character Traits List",
         "SkillsTraitsList": "Skills Traits List",
         "Slots": "Slots",
-        "Research": "Research",
         "Race": "Specie",
         "GritRerolls": "Grit re-rolls",
         "CombatOrderModifier": "Combat Order modifier",

@@ -76,6 +76,14 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         value: new f.NumberField({ initial: 0 })
       }),
 
+      research: new f.SchemaField({
+        value: new f.NumberField({ initial: 0 })
+      }),
+
+      networking: new f.SchemaField({
+        value: new f.NumberField({ initial: 0 })
+      }),
+
       attributes: new f.SchemaField({
         strength: _attrField("FE2.Attributes.Strength"),
         reflexes: _attrField("FE2.Attributes.Reflexes"),
