@@ -8,3 +8,4 @@ foundry-fe2.code-workspace
 # source .db compendiums (skills.db, skills-pt-br.db, etc.)
 packs/*
 !packs/*.db
+.vscode/deploy.ps1
