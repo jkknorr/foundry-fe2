@@ -9,3 +9,4 @@ foundry-fe2.code-workspace
 packs/*
 !packs/*.db
 .vscode/deploy.ps1
+.vscode/build.ps1
