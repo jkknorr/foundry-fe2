@@ -749,3 +749,17 @@ Hooks.on("quenchReady", (quench) => {
   console.log("Quench object:", quench);
   registerFE2Tests(quench)
 });
+
+Hooks.on("updateActor", (actor, data, options, userId) => {
+  if (actor.type == "npc" && actor.system.npctype == "henchman") {
+    console.log("Henchman was modified, checking for endurance changes...");
+    if (data.system?.fight?.endurance?.value) {
+      console.log(`Henchman ${actor.name} endurance changed to ${data.system.fight.endurance.value}, updating tokens...`);
+      canvas.scene.tokens.forEach((st) => {
+        if (st.name == actor.name && st.id != actor.parent.id) {
+          st.actor.update(data)
+        }
+      })
+    }
+  }
+});
