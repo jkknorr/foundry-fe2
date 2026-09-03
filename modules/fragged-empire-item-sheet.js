@@ -500,7 +500,7 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   async #viewEmbeddedItem(arrayName, itemId) {
     const itemData = this.document.system[arrayName]?.find(item => item._id === itemId);
     if (!itemData) return;
-    const tempItem = await Item.create(itemData, { temporary: true });
+    const tempItem = new Item(itemData);
     tempItem.sheet.render(true);
   }
 
