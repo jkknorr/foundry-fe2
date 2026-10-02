@@ -665,6 +665,32 @@ Hooks.once("ready", async function () {
     }
   }
 
+  // Migration 1.16: Clean up spaceship stats
+  if (foundry.utils.isNewerVersion("1.16", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    const allShips = [...game.actors];
+/*     for (const actor of game.actors) {
+      if (actor.type === "spacecraft") { allShips.push(actor); }
+    } */
+
+    for (const ship of allShips) {
+      if (ship.type === "spacecraft") {
+        try {
+            console.log(`Processing ship: ${ship.name}, ${ship.type}`)
+            await ship.update({'system.stats.secretcargo': _del})
+            await ship.update({'system.stats.resupply': _del})
+            await ship.update({'system.fight.defence.derivated': _del})
+            await ship.update({'system.fight.armour.derivated.vsboarding': _del})
+            await ship.update({'system.fight.boarded': _del})
+            await ship.update({'system.fight.launchedbodies': _del})
+            await ship.update({'system.fight.bodies': _del})
+        } catch (error) {
+          error.message = `Failed migration for Actor ${ship.name}: ${error.message} `;
+          console.error(error);
+        }
+      }
+    }
+  }
+
   await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
   ui.notifications.notify(game.i18n.localize("FE2.Notifications.MigrationComplete"));
 

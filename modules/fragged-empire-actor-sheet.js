@@ -243,9 +243,8 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     if (itemId && itemId !== "" && this._formData) {
       const itemData = this._formData.skillsTraits.find(item => item._id === itemId);
       if (itemData) {
-        Item.create(itemData, { temporary: true }).then(trait => {
-          trait.sheet.render(true);
-        });
+        const tempItem = new Item(itemData);
+        tempItem.sheet.render(true);
       }
     }
   }

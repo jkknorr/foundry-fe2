@@ -99,21 +99,11 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
           bonus: new f.NumberField({ initial: 0 }),
           max: new f.NumberField({ initial: 0 })
         }),
-        secretcargo: new f.SchemaField({
-          label: new f.StringField({ initial: "FE2.Sheet.Spacecraft.SecretCargo" }),
-          value: new f.NumberField({ initial: 0 })
-        }),
         weaponsslot: new f.SchemaField({
           label: new f.StringField({ initial: "FE2.Sheet.Spacecraft.WeaponsSlot" }),
           value: new f.NumberField({ initial: 0 }),
           bonus: new f.NumberField({ initial: 0 }),
           max: new f.NumberField({ initial: 0 })
-        }),
-        resupply: new f.SchemaField({
-          label: new f.StringField({ initial: "FE2.Sheet.Spacecraft.Resupply" }),
-          value: new f.NumberField({ initial: 0 }),
-          max: new f.NumberField({ initial: 0 }),
-          bonus: new f.NumberField({ initial: 0 })
         })
       }),
 
@@ -128,23 +118,14 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
       }),
 
       fight: new f.SchemaField({
-        defence: _fightStatField("FE2.Fight.Spacecraft.Defence", {
-          derivated: {
-            vsordinance: _derivatedField("FE2.Fight.Spacecraft.VsOrdinance"),
-            vsboarding: _derivatedField("FE2.Fight.Spacecraft.VsBoarding")
-          }
-        }),
+        defence: _fightStatField("FE2.Fight.Spacecraft.Defence", { valueonly: true }),
         armour: _fightStatField("FE2.Fight.Spacecraft.Armour", {
           derivated: {
-            vsboarding: _derivatedField("FE2.Fight.Spacecraft.VsBoarding"),
             at0shield: _derivatedField("FE2.Fight.Spacecraft.At0Shield")
           }
         }),
         munitions: _fightStatField("FE2.Fight.Spacecraft.Munitions", { valueonly: true }),
         gritreroll: _fightStatField("FE2.Fight.Spacecraft.GritRerolls", { valueonly: true }),
-        boarded: _fightStatField("FE2.Fight.Spacecraft.Boarded", { valueonly: true }),
-        launchedbodies: _fightStatField("FE2.Fight.Spacecraft.LaunchedBodies", { valueonly: true }),
-        bodies: _fightStatField("FE2.Fight.Spacecraft.Bodies", { valueonly: true }),
         shield: _fightStatField("FE2.Fight.Spacecraft.Shield", {
           derivated: {
             regen: _derivatedField("FE2.Fight.Spacecraft.Regen", true)
@@ -185,15 +166,6 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
     if (slotmax != this.stats.weaponsslot.max) {
       this.stats.weaponsslot.max = slotmax;
       actor.update({ 'system.stats.weaponsslot.max': slotmax });
-    }
-
-    // Resupply max
-    let resupmax = (this.size.value * 2) + this.stats.resupply.bonus;
-    actor._baseValues.statMaxes.resupply = resupmax;
-    if (mods) resupmax = Math.round(applyModifiers(resupmax, mods.resupplyMax));
-    if (resupmax != this.stats.resupply.max) {
-      this.stats.resupply.max = resupmax;
-      actor.update({ 'system.stats.resupply.max': resupmax });
     }
 
     // Velocity max
@@ -248,20 +220,6 @@ export class SpacecraftDataModel extends foundry.abstract.TypeDataModel {
     // Shield regen
     if (mods && mods.shieldRegen.length) {
       actor._computed.shieldRegen = Math.round(applyModifiers(this.fight.shield.derivated.regen.value, mods.shieldRegen));
-    }
-
-    // Vs ordinance
-    let vsordinance = this.fight.defence.total + this.fight.defence.derivated.vsordinance.bonus;
-    if (vsordinance != this.fight.defence.derivated.vsordinance.total) {
-      this.fight.defence.derivated.vsordinance.total = vsordinance;
-      actor.update({ 'system.fight.defence.derivated.vsordinance.total': vsordinance });
-    }
-
-    // Vs boarding (uses effective crew)
-    let vsboarding = 10 + this.size.value + ea.crew.value + this.fight.defence.derivated.vsboarding.bonus;
-    if (vsboarding != this.fight.defence.derivated.vsboarding.total) {
-      this.fight.defence.derivated.vsboarding.total = vsboarding;
-      actor.update({ 'system.fight.defence.derivated.vsboarding.total': vsboarding });
     }
 
     // At 0 shield
