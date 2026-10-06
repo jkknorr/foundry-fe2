@@ -65,6 +65,14 @@ function registerNexusImporterTestBatch(quench) {
                             expect(value.alloted).to.equal(actorNew.system.attributes[value.name.toLowerCase()].value);
                         }
                     }
+					for (const [key, value] of Object.entries(sourceJson.combatSkills)) {
+						const skill = actorNew.items.find(item => item.name.toLowerCase() == value.name.toLowerCase());
+						if (skill) {
+							expect(value.toolbox).to.equal(skill.system.toolbox);
+							expect(value.trained).to.equal(skill.system.trained);
+							expect(value.workshop).to.equal(skill.system.workshop);
+						}
+                    }
 				});
 			});
 		},

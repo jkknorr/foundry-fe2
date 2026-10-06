@@ -777,13 +777,15 @@ Hooks.on("quenchReady", (quench) => {
 });
 
 Hooks.on("updateActor", (actor, data, options, userId) => {
-  if (actor.type == "npc" && actor.system.npctype == "henchman") {
-    if (data.system?.fight?.endurance?.value) {
-      canvas.scene.tokens.forEach((st) => {
-        if (st.name == actor.name && st.id != actor.parent.id) {
-          st.actor.update(data)
-        }
-      })
+  if (game.user.isGM) {
+    if (actor.type == "npc" && actor.system.npctype == "henchman") {
+      if (data.system?.fight?.endurance?.value) {
+        canvas.scene.tokens.forEach((st) => {
+          if (st.name == actor.name && st.id != actor.parent.id) {
+            st.actor.update(data)
+          }
+        })
+      }
     }
   }
 });

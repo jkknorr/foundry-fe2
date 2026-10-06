@@ -164,86 +164,88 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     const actor = this.parent;
     const mods = actor._effectModifiers;
-
-    // Compute effective attributes (not persisted, avoids form-binding compound bug)
-    const defaultMaxes = this.attributemax || {};
-    actor._baseValues.attributeMaxes = { ...defaultMaxes };
-    actor._effectiveAttributes = actor._computeEffectiveAttributes(CHARACTER_ATTRIBUTES, mods, defaultMaxes);
-    const ea = actor._effectiveAttributes;
-
-    // Resources total
-    let restotal = this.level.value + 3;
-    actor._baseValues.resourcesTotal = restotal;
-    if (mods) restotal = Math.round(applyModifiers(restotal, mods.resourcesMax));
-    if (restotal != this.resources.total) {
-      this.resources.total = restotal;
-      actor.update({ 'system.resources.total': restotal });
-    }
-    // Resources available (acquired from play, somewhere between 0 and max)
-    let resavail = this.resources.value;
-
-    // Resources allotted (sum from embedded equipment) and current (available - allotted)
-    actor._computed.resourcesAllotted = this.getResourcesAllotted();
-    actor._computed.resourcesCurrent = resavail - actor._computed.resourcesAllotted;
-
-    // Influence total
-    let inftotal = this.level.value + 3;
-    actor._baseValues.influenceTotal = inftotal;
-    if (mods) inftotal = Math.round(applyModifiers(inftotal, mods.influenceMax));
-    if (inftotal != this.influence.total) {
-      this.influence.total = inftotal;
-      actor.update({ 'system.influence.total': inftotal });
-    }
-
-    // Endurance max (uses effective strength + active outfit endurance bonus)
-    let endmax = 10 + (ea.strength.value * 5);
     let activeOutfits = actor.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
-    for (let item of activeOutfits) {
-      if (!isNaN(item.system.statstotal?.endurance?.value)) {
-        endmax += Number(item.system.statstotal.endurance.value);
+    if (actor.canUserModify(game.user, "update")) {
+
+      // Compute effective attributes (not persisted, avoids form-binding compound bug)
+      const defaultMaxes = this.attributemax || {};
+      actor._baseValues.attributeMaxes = { ...defaultMaxes };
+      actor._effectiveAttributes = actor._computeEffectiveAttributes(CHARACTER_ATTRIBUTES, mods, defaultMaxes);
+      const ea = actor._effectiveAttributes;
+
+      // Resources total
+      let restotal = this.level.value + 3;
+      actor._baseValues.resourcesTotal = restotal;
+      if (mods) restotal = Math.round(applyModifiers(restotal, mods.resourcesMax));
+      if (restotal != this.resources.total) {
+        this.resources.total = restotal;
+        actor.update({ 'system.resources.total': restotal });
       }
-    }
-    actor._baseValues.enduranceMax = endmax;
-    if (mods) endmax = Math.round(applyModifiers(endmax, mods.enduranceMax));
-    if (endmax != this.endurance.max) {
-      this.endurance.max = endmax;
-      actor.update({ 'system.endurance.max': endmax });
-    }
+      // Resources available (acquired from play, somewhere between 0 and max)
+      let resavail = this.resources.value;
 
-    // Defense total (uses effective reflexes, intelligence)
-    let coverBonus = coverBonusTable[this.defensebonus.cover] * this.attributes.intelligence.current;
-    let outfitDefBonus = 0;
-    for (let item of activeOutfits) {
-      if (!isNaN(item.system.statstotal?.defence?.value)) {
-        outfitDefBonus += Number(item.system.statstotal.defence.value);
+      // Resources allotted (sum from embedded equipment) and current (available - allotted)
+      actor._computed.resourcesAllotted = this.getResourcesAllotted();
+      actor._computed.resourcesCurrent = resavail - actor._computed.resourcesAllotted;
+
+      // Influence total
+      let inftotal = this.level.value + 3;
+      actor._baseValues.influenceTotal = inftotal;
+      if (mods) inftotal = Math.round(applyModifiers(inftotal, mods.influenceMax));
+      if (inftotal != this.influence.total) {
+        this.influence.total = inftotal;
+        actor.update({ 'system.influence.total': inftotal });
       }
-    }
-    let defBase = 10 + this.attributes.reflexes.current + outfitDefBonus;
-    actor._baseValues.defenseBase = defBase;
-    let defTotal = defBase + coverBonus;
-    actor._baseValues.defenseTotal = defTotal;
-    if (mods) defTotal = Math.round(applyModifiers(defTotal, mods.defense));
-    if (defTotal != this.defensebonus.total) {
-      this.defensebonus.total = defTotal;
-      actor.update({ 'system.defensebonus.total': defTotal });
-    }
 
-    // Recovery (uses current grit)
-    let recovery = this.attributes.grit.current;
-    actor._baseValues.recovery = recovery;
-    if (mods) recovery = Math.round(applyModifiers(recovery, mods.recovery));
-    if (recovery != this.endurance.recovery) {
-      this.endurance.recovery = recovery;
-      actor.update({ 'system.endurance.recovery': recovery });
-    }
+      // Endurance max (uses effective strength + active outfit endurance bonus)
+      let endmax = 10 + (ea.strength.value * 5);
+      for (let item of activeOutfits) {
+        if (!isNaN(item.system.statstotal?.endurance?.value)) {
+          endmax += Number(item.system.statstotal.endurance.value);
+        }
+      }
+      actor._baseValues.enduranceMax = endmax;
+      if (mods) endmax = Math.round(applyModifiers(endmax, mods.enduranceMax));
+      if (endmax != this.endurance.max) {
+        this.endurance.max = endmax;
+        actor.update({ 'system.endurance.max': endmax });
+      }
 
-    // Grit rerolls (uses effective grit)
-    let gritreroll = ea.grit.value;
-    actor._baseValues.gritRerollMax = gritreroll;
-    if (mods) gritreroll = Math.round(applyModifiers(gritreroll, mods.gritReroll));
-    if (gritreroll != this.gritreroll.max) {
-      this.gritreroll.max = gritreroll;
-      actor.update({ 'system.gritreroll.max': gritreroll });
+      // Defense total (uses effective reflexes, intelligence)
+      let coverBonus = coverBonusTable[this.defensebonus.cover] * this.attributes.intelligence.current;
+      let outfitDefBonus = 0;
+      for (let item of activeOutfits) {
+        if (!isNaN(item.system.statstotal?.defence?.value)) {
+          outfitDefBonus += Number(item.system.statstotal.defence.value);
+        }
+      }
+      let defBase = 10 + this.attributes.reflexes.current + outfitDefBonus;
+      actor._baseValues.defenseBase = defBase;
+      let defTotal = defBase + coverBonus;
+      actor._baseValues.defenseTotal = defTotal;
+      if (mods) defTotal = Math.round(applyModifiers(defTotal, mods.defense));
+      if (defTotal != this.defensebonus.total) {
+        this.defensebonus.total = defTotal;
+        actor.update({ 'system.defensebonus.total': defTotal });
+      }
+
+      // Recovery (uses current grit)
+      let recovery = this.attributes.grit.current;
+      actor._baseValues.recovery = recovery;
+      if (mods) recovery = Math.round(applyModifiers(recovery, mods.recovery));
+      if (recovery != this.endurance.recovery) {
+        this.endurance.recovery = recovery;
+        actor.update({ 'system.endurance.recovery': recovery });
+      }
+
+      // Grit rerolls (uses effective grit)
+      let gritreroll = ea.grit.value;
+      actor._baseValues.gritRerollMax = gritreroll;
+      if (mods) gritreroll = Math.round(applyModifiers(gritreroll, mods.gritReroll));
+      if (gritreroll != this.gritreroll.max) {
+        this.gritreroll.max = gritreroll;
+        actor.update({ 'system.gritreroll.max': gritreroll });
+      }
     }
 
     // Computed modifier values (not persisted, for rolls and display — base is 0, only effects contribute)
