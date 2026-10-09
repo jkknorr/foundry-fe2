@@ -89,10 +89,15 @@ function registerTestPCTestBatch(quench) {
 			const { describe, it, assert, expect, should } = context;
 			describe("TestPC Suite", function () {
 				let actor = game.actors.find(actor => actor.name === "TestPC");
+				let testSkill = actor.items.find(item => item.name === "Bio Tech")
+				let sortedSkills = actor.getSortedSkills();
 				it("Resource allocation", function () {
 					console.log(actor._computed)
 					expect(actor._computed.resourcesAllotted).to.equal(3);
 					expect(actor._computed.resourcesCurrent).to.equal(0);
+				});
+				it("Primary skill traits roll up", function () {
+					expect(testSkill.system._effectiveTotal).to.equal(4);
 				});
 			});
 		},
