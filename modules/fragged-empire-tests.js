@@ -65,6 +65,20 @@ function registerNexusImporterTestBatch(quench) {
                             expect(value.alloted).to.equal(actorNew.system.attributes[value.name.toLowerCase()].value);
                         }
                     }
+					for (const [key, value] of Object.entries(sourceJson.combatSkills)) {
+						const skill = actorNew.items.find(item => item.name.toLowerCase() == value.name.toLowerCase());
+						if (skill) {
+							expect(value.toolbox).to.equal(skill.system.toolbox);
+							expect(value.trained).to.equal(skill.system.trained);
+							expect(value.workshop).to.equal(skill.system.workshop);
+						}
+                    }
+					for (const [key, value] of Object.entries(sourceJson.traits)) {
+						const trait = actorNew.items.find(item => item.name.toLowerCase() == value.name.toLowerCase());
+						if (trait) {
+							expect(value.value).to.equal(trait.system.value);
+						}
+					}
 				});
 			});
 		},
@@ -81,10 +95,18 @@ function registerTestPCTestBatch(quench) {
 			const { describe, it, assert, expect, should } = context;
 			describe("TestPC Suite", function () {
 				let actor = game.actors.find(actor => actor.name === "TestPC");
+				let testSkill = actor.items.find(item => item.name === "Bio Tech")
+				let sortedSkills = actor.getSortedSkills();
 				it("Resource allocation", function () {
 					console.log(actor._computed)
 					expect(actor._computed.resourcesAllotted).to.equal(3);
 					expect(actor._computed.resourcesCurrent).to.equal(0);
+				});
+				it("Primary skill traits roll up", function () {
+					expect(testSkill.system._effectiveTotal).to.equal(4);
+				});
+				it("0 Endurance armor", function () {
+					expect(actor._computed.armourZeroEnd).to.equal(3);
 				});
 			});
 		},

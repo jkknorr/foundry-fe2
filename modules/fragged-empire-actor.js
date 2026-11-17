@@ -2,6 +2,7 @@
 import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { createEmptyModifiers, addModifier, applyModifiers, isEquipSuppressed } from "./effects/fragged-empire-effect-helpers.js";
 import { parseEffectKey } from "./effects/fragged-empire-effect-types.js";
+import { FraggedEmpireEffect } from "./effects/fragged-empire-effect.js";
 
 /* -------------------------------------------- */
 /* -------------------------------------------- */
@@ -48,7 +49,19 @@ export class FraggedEmpireActor extends Actor {
   applyActiveEffects() {
     this._effectModifiers = createEmptyModifiers();
     this._conditionalEffects = [];
-    for (const effect of this.appliedEffects) {
+    let cumulativeEffects = this.appliedEffects
+    for (const skill of this.items.filter(item => item.type === "skill")) {
+      if (skill.system.traits) {
+        for (const trait of skill.system.traits) {
+          for (const effectObj of trait.effects) {
+            let effect = new FraggedEmpireEffect(effectObj)
+            cumulativeEffects.push(effect)
+          }
+        }
+      }
+    }
+
+    for (const effect of cumulativeEffects) {
       if (effect.disabled) continue;
       if (isEquipSuppressed(effect, this)) continue;
       if (effect.isConditional) {
