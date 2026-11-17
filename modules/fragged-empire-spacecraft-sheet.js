@@ -51,6 +51,7 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     context.limited = actor.limited;
     context.weapons = actor.getSpacecraftWeapons();
     context.tradeGoods = actor.getTradeGoods();
+    context.cargo = actor.system.stats.cargo.max;
     context.cargoSpaceUsed = actor.getCargoSpaceUsed();
     context.defenseBase = actor.getDefenseBase();
     context.armourBase = actor.getBaseArmour();
