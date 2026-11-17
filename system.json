@@ -32,7 +32,7 @@
       "path": "lang/pt-BR.json"
     }
   ],
-  "manifest": "https://github.com/jkknorr/foundry-fe2/releases/download/1.15/system.json",
+  "manifest": "https://github.com/jkknorr/foundry-fe2/releases/download/1.16/system.json",
   "packs": [
     {
       "entity": "Item",

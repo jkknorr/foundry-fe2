@@ -46,5 +46,26 @@ export async function importNexusChar(filePath) {
     if (!foundry.utils.isEmpty(updateData)) {
         await actor.update(updateData, { enforceTypes: false });
     }
+    for (const [key, value] of Object.entries(sourceJson.traits)) {
+        let traitName = value.name.slice(0,value.name.indexOf("(")-1)
+        let traitParentName = value.name.slice(value.name.indexOf("(")+1,value.name.indexOf(")"))
+        console.log("Importing trait:", traitName, "with parent:", traitParentName);
+        let trait = game.items.find(item => item.name.toLowerCase() == traitName.toLowerCase());
+        let parentSkill = actor.items.find(item => item.name.toLowerCase() == traitParentName.toLowerCase());
+        if (trait) {
+            console.log("Found parent skill:", parentSkill);
+        } else {
+            console.warn(`Trait ${traitName} not found in the game items collection.`);
+            if (parentSkill) {
+                let traitData = foundry.utils.deepClone(trait.toObject());
+                traitData.system.value = value.value;
+                traitData.system.parentSkillId = parentSkill.id;
+                await actor.createEmbeddedDocuments("Item", [traitData]);
+                console.log(`Trait ${traitName} created successfully under parent skill ${traitParentName}!`);
+            } else {
+                console.warn(`Parent skill ${traitParentName} not found for trait ${traitName}.`);
+            }
+        }
     return actor;
+    }
 }

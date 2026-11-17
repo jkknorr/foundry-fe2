@@ -73,6 +73,12 @@ function registerNexusImporterTestBatch(quench) {
 							expect(value.workshop).to.equal(skill.system.workshop);
 						}
                     }
+					for (const [key, value] of Object.entries(sourceJson.traits)) {
+						const trait = actorNew.items.find(item => item.name.toLowerCase() == value.name.toLowerCase());
+						if (trait) {
+							expect(value.value).to.equal(trait.system.value);
+						}
+					}
 				});
 			});
 		},
@@ -98,6 +104,9 @@ function registerTestPCTestBatch(quench) {
 				});
 				it("Primary skill traits roll up", function () {
 					expect(testSkill.system._effectiveTotal).to.equal(4);
+				});
+				it("0 Endurance armor", function () {
+					expect(actor._computed.armourZeroEnd).to.equal(3);
 				});
 			});
 		},
